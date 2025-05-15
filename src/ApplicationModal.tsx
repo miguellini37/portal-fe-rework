@@ -1,6 +1,6 @@
 export const ApplicationModal = () => {
     return (
-      <div className="ApplicationModal">
+      <div className="ApplicationModal">        
                 <div className="modal-content">
           <span className="modal-close" onClick={() => {}}>×</span>
           <h3 id="modal-title" className="text-2xl font-bold mb-4"></h3>

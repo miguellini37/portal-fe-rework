@@ -1,6 +1,7 @@
+
 export const Homepage = () => {
     return (
-      <div className="Homepage">
+      <div className="Homepage">      
         <div className="hero-section">
           <div className="hero-content">
             <h1 className="text-5xl font-bold text-white mb-4 hero-text">Launch Your Career with Portal</h1>

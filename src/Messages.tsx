@@ -1,3 +1,5 @@
+import { Sidebar } from "./Sidebar";
+
 export const Messages = () => {
     return (
       <div className="Messages">

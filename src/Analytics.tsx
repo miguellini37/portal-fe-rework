@@ -1,6 +1,9 @@
+import { Sidebar } from "./Sidebar";
+
 export const Analytics = () => {
     return (
-      <div className="Analytics">
+      <div className="Analytics">        
+      
                 <div className="mb-8">
           <h2 className="text-4xl font-bold">Your Analytics</h2>
           <p className="text-gray-400 mt-2">Track your progress and boost your visibility!</p>

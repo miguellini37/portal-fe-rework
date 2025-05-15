@@ -1,3 +1,5 @@
+import { Sidebar } from "./Sidebar";
+
 export const ProfileSetup = () => {
     return (
       <div className="ProfileSetup">

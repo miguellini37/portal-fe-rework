@@ -1,3 +1,5 @@
+import { Sidebar } from "./Sidebar";
+
 export const Internships = () => {
     return (
       <div className="Internships">

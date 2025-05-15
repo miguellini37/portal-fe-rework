@@ -1,6 +1,9 @@
+import { Sidebar } from "./Sidebar"
+
 export const Alumni = () => {
     return (
       <div className="Alumni">
+        
                 <div className="mb-8">
           <h2 className="text-3xl font-bold text-white">UCLA Bruins Community</h2>
           <p className="text-gray-400 mt-2 max-w-2xl">Connect with fellow UCLA student-athletes and alumni to share achievements, network, and stay engaged.</p>

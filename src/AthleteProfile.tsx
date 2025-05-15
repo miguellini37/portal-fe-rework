@@ -1,3 +1,5 @@
+import { Sidebar } from "./Sidebar";
+
 export const AthleteProfile = () => {
     return (
       <div className="AthleteProfile">
