@@ -1,0 +1,781 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal - NCAA Athlete Career Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    
+  </style>
+</head>
+<body>
+  <div class="flex">
+
+    </div>
+  </div>
+
+  <script>
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+    function filledCell(cell) {
+      return cell !== '' && cell != null;
+    }
+    function loadFileData(filename) {
+      if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+        try {
+          var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+          var firstSheetName = workbook.SheetNames[0];
+          var worksheet = workbook.Sheets[firstSheetName];
+          var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+          var filteredData = jsonData.filter(row => row.some(filledCell));
+          var headerRowIndex = filteredData.findIndex((row, index) =>
+            row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+          );
+          if (headerRowIndex === -1 || headerRowIndex > 25) {
+            headerRowIndex = 0;
+          }
+          var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+          csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+          return csv;
+        } catch (e) {
+          console.error(e);
+          return "";
+        }
+      }
+      return gk_fileData[filename] || "";
+    }
+
+    const alumni = [
+      {
+        id: 1,
+        name: "Jane Doe",
+        sport: "Basketball",
+        position: "Point Guard",
+        school: "UCLA",
+        major: "Business",
+        gpa: 3.8,
+        division: "D1",
+        accolades: "All-Conference",
+        teamRole: "Captain",
+        coachability: "High",
+        industry: "Logistics",
+        relocation: "Yes",
+        graduationDate: "May 2024",
+        stats: { points: 15.2, assists: 6.1 },
+        internships: [
+          "Mastery Logistics Systems, Supply Chain Intern, Summer 2024",
+          "Coyote Logistics, Sales Intern, Summer 2023"
+        ],
+        postGraduation: {
+          jobTitle: "Supply Chain Manager",
+          company: "Coyote Logistics",
+          location: "Chicago, IL",
+          description: "Leads a team optimizing freight logistics."
+        }
+      }
+    ];
+
+    const jobs = [
+      {
+        company: "Coyote Logistics",
+        position: "Carrier Sales Representative",
+        major: "Business",
+        location: "Chicago, IL",
+        salary: "$50,000–$65,000",
+        benefit: "Build freight brokerage skills",
+        industry: "Logistics",
+        description: "Manage client relationships and coordinate freight logistics.",
+        requirements: "1-2 years of sales experience preferred."
+      },
+      {
+        company: "Mastery Logistics Systems",
+        position: "Supply Chain Analyst",
+        major: "Business or Engineering",
+        location: "Remote",
+        salary: "$60,000–$75,000",
+        benefit: "Optimize TMS for efficiency",
+        industry: "Logistics",
+        description: "Analyze supply chain data to improve logistics operations.",
+        requirements: "Proficiency in data analysis tools."
+      },
+      {
+        company: "Total Quality Logistics (TQL)",
+        position: "Logistics Account Executive",
+        major: "Business",
+        location: "Cincinnati, OH",
+        salary: "$45,000–$60,000",
+        benefit: "Develop client relations",
+        industry: "Logistics",
+        description: "Build and maintain client relationships to drive logistics solutions.",
+        requirements: "Strong communication skills."
+      },
+      {
+        company: "Stryker",
+        position: "Medical Device Sales Associate",
+        major: "Business or Biology",
+        location: "Dallas, TX",
+        salary: "$55,000–$70,000",
+        benefit: "Gain surgical sales experience",
+        industry: "Healthcare",
+        description: "Sell medical devices to healthcare providers.",
+        requirements: "Knowledge of medical terminology."
+      },
+      {
+        company: "Medtronic",
+        position: "Sales Representative",
+        major: "Business or Health Sciences",
+        location: "Minneapolis, MN",
+        salary: "$60,000–$80,000",
+        benefit: "Sell innovative devices",
+        industry: "Healthcare",
+        description: "Promote advanced medical devices to hospitals.",
+        requirements: "Experience in healthcare sales."
+      },
+      {
+        company: "Johnson & Johnson",
+        position: "Medical Sales Specialist",
+        major: "Business",
+        location: "New Brunswick, NJ",
+        salary: "$65,000–$85,000",
+        benefit: "Lead client engagements",
+        industry: "Healthcare",
+        description: "Drive sales of medical products through client relationships.",
+        requirements: "Proven sales track record."
+      },
+      {
+        company: "Goldman Sachs",
+        position: "Investment Banking Analyst",
+        major: "Finance or Economics",
+        location: "New York, NY",
+        salary: "$80,000–$110,000",
+        benefit: "Advise on M&A deals",
+        industry: "Finance",
+        description: "Support mergers, acquisitions, and financial advisory services.",
+        requirements: "Strong analytical skills."
+      },
+      {
+        company: "JPMorgan Chase",
+        position: "Associate Analyst",
+        major: "Finance",
+        location: "Chicago, IL",
+        salary: "$75,000–$100,000",
+        benefit: "Analyze financial markets",
+        industry: "Finance",
+        description: "Conduct market analysis and support investment strategies.",
+        requirements: "Familiarity with financial modeling."
+      },
+      {
+        company: "Morgan Stanley",
+        position: "Investment Banking Associate",
+        major: "Business or Economics",
+        location: "San Francisco, CA",
+        salary: "$85,000–$115,000",
+        benefit: "Structure complex deals",
+        industry: "Finance",
+        description: "Lead financial structuring for high-profile deals.",
+        requirements: "Experience in investment banking."
+      },
+      {
+        company: "Pfizer",
+        position: "Pharmaceutical Sales Rep",
+        major: "Biology or Business",
+        location: "Philadelphia, PA",
+        salary: "$60,000–$75,000",
+        benefit: "Promote new drugs",
+        industry: "Healthcare",
+        description: "Market pharmaceutical products to healthcare professionals.",
+        requirements: "Knowledge of pharmaceuticals."
+      },
+      {
+        company: "Merck",
+        position: "Healthcare Sales Associate",
+        major: "Health Sciences",
+        location: "Boston, MA",
+        salary: "$55,000–$70,000",
+        benefit: "Build provider networks",
+        industry: "Healthcare",
+        description: "Develop relationships with healthcare providers.",
+        requirements: "Experience in healthcare sales."
+      },
+      {
+        company: "Salesforce",
+        position: "Account Executive",
+        major: "Business or Communications",
+        location: "Austin, TX",
+        salary: "$65,000–$75,000",
+        benefit: "Drive SaaS sales growth",
+        industry: "Technology",
+        description: "Manage client accounts and drive software sales.",
+        requirements: "Experience in SaaS sales."
+      },
+      {
+        company: "Nike",
+        position: "Marketing Coordinator",
+        major: "Communications or Business",
+        location: "Portland, OR",
+        salary: "$55,000–$70,000",
+        benefit: "Shape sports marketing campaigns",
+        industry: "Marketing",
+        description: "Develop marketing campaigns for athletic apparel and events.",
+        requirements: "Strong creative and communication skills."
+      },
+      {
+        company: "Deloitte",
+        position: "Business Analyst",
+        major: "Business or Economics",
+        location: "Boston, MA",
+        salary: "$70,000–$90,000",
+        benefit: "Solve complex business challenges",
+        industry: "Consulting",
+        description: "Analyze client business processes and recommend strategic improvements.",
+        requirements: "Strong problem-solving and analytical skills."
+      },
+      {
+        company: "Amazon",
+        position: "Operations Associate",
+        major: "Business or Engineering",
+        location: "Seattle, WA",
+        salary: "$65,000–$80,000",
+        benefit: "Optimize supply chain operations",
+        industry: "Technology",
+        description: "Support logistics and operations for Amazon’s fulfillment centers.",
+        requirements: "Experience with process optimization."
+      },
+      {
+        company: "Bank of America",
+        position: "Financial Advisor",
+        major: "Finance or Economics",
+        location: "Charlotte, NC",
+        salary: "$70,000–$95,000",
+        benefit: "Guide client investments",
+        industry: "Finance",
+        description: "Provide financial planning and investment advice to clients.",
+        requirements: "Knowledge of financial markets and client relations."
+      },
+      {
+        company: "Gilead Sciences",
+        position: "Biotech Sales Representative",
+        major: "Biology or Health Sciences",
+        location: "San Francisco, CA",
+        salary: "$60,000–$80,000",
+        benefit: "Promote cutting-edge therapies",
+        industry: "Healthcare",
+        description: "Market biotechnological products to healthcare providers.",
+        requirements: "Understanding of biotech products."
+      },
+      {
+        company: "Accenture",
+        position: "Technology Consultant",
+        major: "Engineering or Business",
+        location: "Chicago, IL",
+        salary: "$75,000–$100,000",
+        benefit: "Implement tech solutions",
+        industry: "Consulting",
+        description: "Assist clients in adopting technology solutions to enhance business performance.",
+        requirements: "Experience with IT systems and consulting."
+      },
+      {
+        company: "Under Armour",
+        position: "Brand Partnership Associate",
+        major: "Communications or Business",
+        location: "Baltimore, MD",
+        salary: "$50,000–$65,000",
+        benefit: "Build sports partnerships",
+        industry: "Marketing",
+        description: "Manage partnerships with athletes and teams to promote brand initiatives.",
+        requirements: "Strong networking and negotiation skills."
+      }
+    ];
+
+    const internships = [
+      {
+        company: "Coyote Logistics",
+        position: "Sales Intern",
+        major: "Business",
+        location: "Chicago, IL",
+        compensation: "$20–$25/hour",
+        benefit: "Gain sales experience",
+        industry: "Logistics",
+        description: "Support carrier sales team in client outreach and logistics coordination.",
+        requirements: "Strong communication skills, interest in sales."
+      },
+      {
+        company: "Mastery Logistics Systems",
+        position: "Supply Chain Intern",
+        major: "Business or Engineering",
+        location: "Remote",
+        compensation: "$18–$22/hour",
+        benefit: "Learn supply chain analytics",
+        industry: "Logistics",
+        description: "Assist in analyzing supply chain data to optimize operations.",
+        requirements: "Basic knowledge of data analysis tools."
+      },
+      {
+        company: "Stryker",
+        position: "Medical Device Sales Intern",
+        major: "Business or Biology",
+        location: "Dallas, TX",
+        compensation: "$20–$24/hour",
+        benefit: "Explore healthcare sales",
+        industry: "Healthcare",
+        description: "Support sales of medical devices to healthcare providers.",
+        requirements: "Interest in medical sales, basic medical terminology."
+      }
+    ];
+
+    const communityPosts = [
+      {
+        id: 1,
+        author: "Emily R. (Student)",
+        content: "Named Player of the Week for women's soccer! Scored two goals against USC!",
+        date: "May 3, 2025",
+        comments: [
+          { author: "John B. ('18)", content: "Congrats, Emily! Keep shining!" },
+          { author: "Sarah K. ('22)", content: "Amazing job! Go Bruins!" }
+        ]
+      },
+      {
+        id: 2,
+        author: "John B. ('18)",
+        content: "Just got promoted to Senior Logistics Manager at Coyote Logistics!",
+        date: "May 2, 2025",
+        comments: [
+          { author: "Emily R. (Student)", content: "That's huge, John! Congrats!" },
+          { author: "Michael C. ('20)", content: "Well deserved! Let's catch up soon." }
+        ]
+      },
+      {
+        id: 3,
+        author: "Sarah K. ('22)",
+        content: "Got married last weekend! Feeling on top of the world!",
+        date: "May 1, 2025",
+        comments: [
+          { author: "Jane Doe (Student)", content: "Congratulations, Sarah! Wishing you all the happiness!" },
+          { author: "David L. (Student)", content: "So happy for you!" }
+        ]
+      }
+    ];
+
+    const schoolEvents = [
+      {
+        id: 1,
+        title: "UCLA vs. USC Football Game",
+        type: "Sports Game",
+        date: "November 15, 2025",
+        location: "Rose Bowl Stadium",
+        description: "Join fellow Bruins for the annual rivalry game against USC! Tickets available at uclabruins.com."
+      },
+      {
+        id: 2,
+        title: "UCLA Quiz Bowl Regional Championship",
+        type: "School Competition",
+        date: "May 10, 2025",
+        location: "UCLA Campus",
+        description: "Support the UCLA Quiz Bowl team as they compete in literature, science, and history categories."
+      },
+      {
+        id: 3,
+        title: "Alumni Weekend & Networking Gala",
+        type: "Alumni Event",
+        date: "October 24-25, 2025",
+        location: "UCLA Campus",
+        description: "Reconnect with alumni at workshops and the gala dinner. Register at alumni.ucla.edu."
+      },
+      {
+        id: 4,
+        title: "UCLA Women's Basketball vs. Stanford",
+        type: "Sports Game",
+        date: "May 12, 2025",
+        location: "Pauley Pavilion",
+        description: "Cheer on the Bruins women's basketball team against Stanford. Tickets at uclabruins.com."
+      },
+      {
+        id: 5,
+        title: "UCLA Robotics Competition",
+        type: "School Competition",
+        date: "May 15, 2025",
+        location: "UCLA Engineering Building",
+        description: "Watch UCLA’s robotics club showcase their autonomous designs in a national challenge."
+      },
+      {
+        id: 6,
+        title: "UCLA Career Fair",
+        type: "Alumni Event",
+        date: "December 5, 2025",
+        location: "Ackerman Union",
+        description: "Meet top employers like Coyote Logistics. Open to students and alumni."
+      }
+    ];
+
+    function renderJobs(filteredJobs = jobs) {
+      const grid = document.getElementById('job-grid');
+      grid.innerHTML = '';
+      filteredJobs.forEach(job => {
+        const card = document.createElement('div');
+        card.className = 'job-card bg-gray-800 p-6 rounded-lg';
+        card.innerHTML = `
+          <h3 class="text-xl font-bold">${job.company}</h3>
+          <p class="text-gray-400">${job.position}</p>
+          <p><span class="font-semibold">Preferred Major:</span> ${job.major}</p>
+          <p><span class="font-semibold">Location:</span> ${job.location}</p>
+          <p><span class="font-semibold">Salary Range:</span> ${job.salary}</p>
+          <p><span class="font-semibold">Career Benefit:</span> ${job.benefit}</p>
+          <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="openJobModal('${job.company}', '${job.position}', '${job.major}', '${job.location}', '${job.salary}', '${job.benefit}', '${job.description}', '${job.requirements}')">Apply</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterJobs() {
+      const majorFilter = document.getElementById('filter-major').value;
+      const locationFilter = document.getElementById('filter-location').value;
+      const industryFilter = document.getElementById('filter-industry').value;
+
+      const filteredJobs = jobs.filter(job => {
+        const matchesMajor = !majorFilter || job.major.includes(majorFilter);
+        const matchesLocation = !locationFilter || job.location === locationFilter;
+        const matchesIndustry = !industryFilter || job.industry === industryFilter;
+        return matchesMajor && matchesLocation && matchesIndustry;
+      });
+
+      renderJobs(filteredJobs);
+    }
+
+    function resetFilters() {
+      document.getElementById('filter-major').value = '';
+      document.getElementById('filter-location').value = '';
+      document.getElementById('filter-industry').value = '';
+      renderJobs();
+    }
+
+    function renderInternships(filteredInternships = internships) {
+      const grid = document.getElementById('internship-grid');
+      grid.innerHTML = '';
+      filteredInternships.forEach(internship => {
+        const card = document.createElement('div');
+        card.className = 'internship-card bg-gray-800 p-6 rounded-lg';
+        card.innerHTML = `
+          <h3 class="text-xl font-bold">${internship.company}</h3>
+          <p class="text-gray-400">${internship.position}</p>
+          <p><span class="font-semibold">Preferred Major:</span> ${internship.major}</p>
+          <p><span class="font-semibold">Location:</span> ${internship.location}</p>
+          <p><span class="font-semibold">Compensation:</span> ${internship.compensation}</p>
+          <p><span class="font-semibold">Career Benefit:</span> ${internship.benefit}</p>
+          <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="openInternshipModal('${internship.company}', '${internship.position}', '${internship.major}', '${internship.location}', '${internship.compensation}', '${internship.benefit}', '${internship.description}', '${internship.requirements}')">Apply</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterInternships() {
+      const majorFilter = document.getElementById('filter-internship-major').value;
+      const locationFilter = document.getElementById('filter-internship-location').value;
+      const industryFilter = document.getElementById('filter-internship-industry').value;
+
+      const filteredInternships = internships.filter(internship => {
+        const matchesMajor = !majorFilter || internship.major.includes(majorFilter);
+        const matchesLocation = !locationFilter || internship.location === locationFilter;
+        const matchesIndustry = !industryFilter || internship.industry === industryFilter;
+        return matchesMajor && matchesLocation && matchesIndustry;
+      });
+
+      renderInternships(filteredInternships);
+    }
+
+    function resetInternshipFilters() {
+      document.getElementById('filter-internship-major').value = '';
+      document.getElementById('filter-internship-location').value = '';
+      document.getElementById('filter-internship-industry').value = '';
+      renderInternships();
+    }
+
+    function renderAlumni() {
+      // Render school events
+      const eventsGrid = document.getElementById('school-events');
+      eventsGrid.innerHTML = '';
+      schoolEvents.forEach(event => {
+        const eventCard = document.createElement('div');
+        eventCard.className = 'event-card bg-gray-800 p-5 rounded-xl shadow-lg';
+        eventCard.innerHTML = `
+          <h4 class="text-base font-semibold text-white">${event.title}</h4>
+          <p class="text-gray-400 text-sm mt-1">${event.type}</p>
+          <p class="text-gray-400 text-sm mt-1"><span class="font-semibold">Date:</span> ${event.date}</p>
+          <p class="text-gray-400 text-sm"><span class="font-semibold">Location:</span> ${event.location}</p>
+          <p class="text-gray-400 text-sm mt-2 line-clamp-2">${event.description}</p>
+        `;
+        eventsGrid.appendChild(eventCard);
+      });
+
+      // Render community posts
+      const feed = document.getElementById('community-feed');
+      feed.innerHTML = '';
+      communityPosts.forEach(post => {
+        const postCard = document.createElement('div');
+        postCard.className = 'post-card bg-gray-800 p-6 rounded-xl shadow-lg';
+        postCard.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+                ${post.author[0]}
+              </div>
+              <div>
+                <h4 class="text-base font-semibold text-white">${post.author}</h4>
+                <p class="text-xs text-gray-500">${post.date}</p>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-300 text-sm mb-4">${post.content}</p>
+          <div class="comments mb-4 space-y-2">
+            ${post.comments.map(comment => `
+              <div class="flex items-start space-x-2">
+                <div class="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center text-xs text-white">
+                  ${comment.author[0]}
+                </div>
+                <p class="text-gray-400 text-xs"><span class="font-semibold">${comment.author}:</span> ${comment.content}</p>
+              </div>
+            `).join('')}
+          </div>
+          <form class="comment-form flex items-center space-x-2" onsubmit="handleCommentSubmit(event, ${post.id})">
+            <input type="text" class="form-input flex-1 text-sm py-1.5" placeholder="Add a comment..." required>
+            <button type="submit" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 text-sm">Comment</button>
+          </form>
+        `;
+        feed.appendChild(postCard);
+      });
+    }
+
+    function handlePostSubmit(event) {
+      event.preventDefault();
+      const content = document.getElementById('post-content').value;
+      const newPost = {
+        id: communityPosts.length + 1,
+        author: "Jane Doe (Student)",
+        content,
+        date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        comments: []
+      };
+      communityPosts.unshift(newPost);
+      document.getElementById('post-content').value = '';
+      renderAlumni();
+    }
+
+    function handleCommentSubmit(event, postId) {
+      event.preventDefault();
+      const form = event.target;
+      const commentContent = form.querySelector('input').value;
+      const post = communityPosts.find(p => p.id === postId);
+      if (post) {
+        post.comments.push({
+          author: "Jane Doe (Student)",
+          content: commentContent
+        });
+        form.querySelector('input').value = '';
+        renderAlumni();
+      }
+    }
+
+    function showAthleteProfile(alumniId) {
+      const alumni = alumni.find(a => a.id === alumniId);
+      if (!alumni) return;
+
+      const profileContent = document.getElementById('profile-content');
+      profileContent.innerHTML = `
+        <div class="profile-card bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-2xl font-bold">${alumni.name}</h3>
+          <p class="text-gray-400">${alumni.sport} - ${alumni.position}</p>
+          <p><span class="font-semibold">School:</span> ${alumni.school}</p>
+          <p><span class="font-semibold">Major:</span> ${alumni.major} (GPA: ${alumni.gpa})</p>
+          <p><span class="font-semibold">Graduation Date:</span> ${alumni.graduationDate}</p>
+          <p><span class="font-semibold">Division:</span> ${alumni.division}</p>
+          <p><span class="font-semibold">Team Role:</span> ${alumni.teamRole}</p>
+          <p><span class="font-semibold">Coachability:</span> ${alumni.coachability}</p>
+          <p><span class="font-semibold">Industry Preference:</span> ${alumni.industry}</p>
+          <p><span class="font-semibold">Accolades:</span> ${alumni.accolades}</p>
+          <p><span class="font-semibold">Relocation:</span> ${alumni.relocation}</p>
+          <p><span class="font-semibold">Internships:</span> ${alumni.internships.length > 0 ? alumni.internships.join('; ') : 'None'}</p>
+          <p><span class="font-semibold">Post-Graduation:</span> Currently working as a ${alumni.postGraduation.jobTitle} at ${alumni.postGraduation.company} in ${alumni.postGraduation.location}. ${alumni.postGraduation.description}</p>
+          <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="showPage('alumni')">Back to Alumni Network</button>
+        </div>
+      `;
+      showPage('athlete-profile');
+    }
+
+    function handleProfileSubmit(event) {
+      event.preventDefault();
+      alert('Profile submitted successfully!');
+      showPage('dashboard');
+    }
+
+    function handleJobApply(company, position) {
+      alert(`Application submitted for ${position} at ${company}!`);
+      updateRecentActivity(`Applied: ${company}, ${position} – ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`);
+    }
+
+    function handleInternshipApply(company, position) {
+      alert(`Application submitted for ${position} at ${company}!`);
+      updateRecentActivity(`Applied for Internship: ${company}, ${position} – ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`);
+    }
+
+    function handleNILApply(company, deal) {
+      alert(`Application submitted for ${deal} at ${company}!`);
+      updateRecentActivity(`Applied for NIL Deal: ${company}, ${deal} – ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`);
+    }
+
+    function updateRecentActivity(activity) {
+      const activityContainer = document.getElementById('recent-activity');
+      const newActivity = document.createElement('p');
+      newActivity.innerHTML = `<span class="font-semibold">${activity.split(':')[0]}:</span> ${activity.split(':')[1]}`;
+      activityContainer.insertBefore(newActivity, activityContainer.firstChild);
+    }
+
+    function openJobModal(company, position, major, location, salary, benefit, description, requirements) {
+      const modal = document.getElementById('deal-modal');
+      document.getElementById('modal-title').textContent = company;
+      document.getElementById('modal-position').textContent = position;
+      document.getElementById('modal-major').innerHTML = `<span class="font-semibold">Preferred Major:</span> ${major}`;
+      document.getElementById('modal-location').innerHTML = `<span class="font-semibold">Location:</span> ${location}`;
+      document.getElementById('modal-compensation').innerHTML = `<span class="font-semibold">Salary Range:</span> ${salary}`;
+      document.getElementById('modal-benefit').innerHTML = `<span class="font-semibold">Career Benefit:</span> ${benefit}`;
+      document.getElementById('modal-description').innerHTML = `<span class="font-semibold">Job Description:</span> ${description}`;
+      document.getElementById('modal-requirements').innerHTML = `<span class="font-semibold">Requirements:</span> ${requirements}`;
+      const applyButton = document.getElementById('modal-apply-now');
+      applyButton.setAttribute('onclick', `applyForJob('${company}', '${position}')`);
+      const requestButton = document.getElementById('modal-request-info');
+      requestButton.setAttribute('onclick', `requestJobInfo('${company}', '${position}')`);
+      modal.style.display = 'flex';
+    }
+
+    function openInternshipModal(company, position, major, location, compensation, benefit, description, requirements) {
+      const modal = document.getElementById('deal-modal');
+      document.getElementById('modal-title').textContent = company;
+      document.getElementById('modal-position').textContent = position;
+      document.getElementById('modal-major').innerHTML = `<span class="font-semibold">Preferred Major:</span> ${major}`;
+      document.getElementById('modal-location').innerHTML = `<span class="font-semibold">Location:</span> ${location}`;
+      document.getElementById('modal-compensation').innerHTML = `<span class="font-semibold">Compensation:</span> ${compensation}`;
+      document.getElementById('modal-benefit').innerHTML = `<span class="font-semibold">Career Benefit:</span> ${benefit}`;
+      document.getElementById('modal-description').innerHTML = `<span class="font-semibold">Description:</span> ${description}`;
+      document.getElementById('modal-requirements').innerHTML = `<span class="font-semibold">Requirements:</span> ${requirements}`;
+      const applyButton = document.getElementById('modal-apply-now');
+      applyButton.setAttribute('onclick', `applyForInternship('${company}', '${position}')`);
+      const requestButton = document.getElementById('modal-request-info');
+      requestButton.setAttribute('onclick', `requestInternshipInfo('${company}', '${position}')`);
+      modal.style.display = 'flex';
+    }
+
+    function openNILModal(company, deal, compensation, description, requirements) {
+      const modal = document.getElementById('deal-modal');
+      document.getElementById('modal-title').textContent = company;
+      document.getElementById('modal-position').textContent = deal;
+      document.getElementById('modal-major').innerHTML = '';
+      document.getElementById('modal-location').innerHTML = '';
+      document.getElementById('modal-compensation').innerHTML = `<span class="font-semibold">Compensation:</span> ${compensation}`;
+      document.getElementById('modal-benefit').innerHTML = '';
+      document.getElementById('modal-description').innerHTML = `<span class="font-semibold">Description:</span> ${description}`;
+      document.getElementById('modal-requirements').innerHTML = `<span class="font-semibold">Requirements:</span> ${requirements}`;
+      const applyButton = document.getElementById('modal-apply-now');
+      applyButton.setAttribute('onclick', `applyForNIL('${company}', '${deal}')`);
+      const requestButton = document.getElementById('modal-request-info');
+      requestButton.setAttribute('onclick', `requestNILInfo('${company}', '${deal}')`);
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('deal-modal');
+      modal.style.display = 'none';
+    }
+
+    function applyForJob(company, position) {
+      alert(`Application submitted for ${position} at ${company}!`);
+      updateRecentActivity(`Applied: ${company}, ${position} – ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`);
+      closeModal();
+    }
+
+    function applyForInternship(company, position) {
+      alert(`Application submitted for ${position} at ${company}!`);
+      updateRecentActivity(`Applied for Internship: ${company}, ${position} – ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`);
+      closeModal();
+    }
+
+    function applyForNIL(company, deal) {
+      alert(`Application submitted for ${deal} at ${company}!`);
+      updateRecentActivity(`Applied for NIL Deal: ${company}, ${deal} – ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`);
+      closeModal();
+    }
+
+    function requestJobInfo(company, position) {
+      alert(`Request for more information about ${position} at ${company} sent!`);
+      closeModal();
+    }
+
+    function requestInternshipInfo(company, position) {
+      alert(`Request for more information about ${position} at ${company} sent!`);
+      closeModal();
+    }
+
+    function requestNILInfo(company, deal) {
+      alert(`Request for more information about ${deal} at ${company} sent!`);
+      closeModal();
+    }
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const page = document.getElementById(pageId);
+      if (page) {
+        page.classList.add('active');
+        if (pageId === 'alumni') {
+          renderAlumni();
+        } else if (pageId === 'jobs') {
+          renderJobs();
+        } else if (pageId === 'internships') {
+          renderInternships();
+        }
+      } else {
+        console.error(`Page with ID ${pageId} not found`);
+      }
+    }
+
+    showPage('home');
+  </script>
+</body>
+</html>
