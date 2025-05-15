@@ -15,7 +15,7 @@ import { SidebarLayout } from "./SidebarLayout";
 
 const App = () => {
   const routes = [
-    { path: '/', element: <Homepage />, withSidebar: false },
+    { path: '/', element: <Homepage />, withSidebar: true },
     { path: '/home', element: <Homepage />, withSidebar: true },
     { path: '/dashboard', element: <Dashboard />, withSidebar: true },
     { path: '/alumni', element: <Alumni />, withSidebar: true },
