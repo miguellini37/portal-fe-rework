@@ -1,4 +1,15 @@
+import { useEffect } from 'react';
+import { sendRandomRequest } from '../api/api';
+
 export const Homepage = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await sendRandomRequest();
+      console.log(res);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="Homepage">
       <div className="hero-section">
