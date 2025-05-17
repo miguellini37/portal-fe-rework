@@ -1,17 +1,14 @@
-import { Homepage } from "./Homepage";
-import {
-  Route, BrowserRouter, Routes
-} from 'react-router-dom';
-import './styles.css'
-import { Dashboard } from "./Dashboard";
-import { Alumni } from "./Alumni";
-import { Jobs } from "./Jobs";
-import { Internships } from "./Internships";
-import { NIL } from "./NilDeals";
-import { Analytics } from "./Analytics";
-import { CareerDevelopment } from "./CareerDevelopment";
-import { Messages } from "./Messages";
-import { SidebarLayout } from "./SidebarLayout";
+import { Homepage } from './views/Homepage';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Dashboard } from './views/Dashboard';
+import { Alumni } from './views/Alumni';
+import { Jobs } from './views/Jobs';
+import { Internships } from './views/Internships';
+import { NIL } from './views/NilDeals';
+import { Analytics } from './views/Analytics';
+import { CareerDevelopment } from './views/CareerDevelopment';
+import { Messages } from './views/Messages';
+import { SidebarLayout } from './components/SidebarLayout';
 
 const App = () => {
   const routes = [
@@ -28,26 +25,26 @@ const App = () => {
   ];
 
   return (
-    <div style={{height:'100vh'}}>
-    {/* <AuthProvider authType = {'cookie'}
+    <div style={{ height: '100vh' }}>
+      {/* <AuthProvider authType = {'cookie'}
             authName={'_auth'}
             cookieDomain={window.location.hostname}
             cookieSecure={window.location.protocol === "https:"}
             refresh={refreshApi}> */}
-        <BrowserRouter>
-            <Routes>
-            {routes.map(({ path, element, withSidebar }) => (
+      <BrowserRouter>
+        <Routes>
+          {routes.map(({ path, element, withSidebar }) => (
             <Route
               key={path}
               path={path}
               element={withSidebar ? <SidebarLayout>{element}</SidebarLayout> : element}
             />
           ))}
-            </Routes>
-        </BrowserRouter>
-    {/* </AuthProvider> */}
-</div>
+        </Routes>
+      </BrowserRouter>
+      {/* </AuthProvider> */}
+    </div>
   );
-}
+};
 
 export default App;
