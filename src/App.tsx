@@ -9,11 +9,25 @@ import { Analytics } from './views/Analytics';
 import { CareerDevelopment } from './views/CareerDevelopment';
 import { Messages } from './views/Messages';
 import { SidebarLayout } from './components/SidebarLayout';
+import AuthProvider from 'react-auth-kit';
+import RequireAuth from '@auth-kit/react-router/RequireAuth';
+import { JSX } from 'react';
+import { authStore, IUserData } from './api/store';
+import { LoginPage } from './views/Login/Login';
+import { ProfileSetup } from './views/ProfileSetup';
 
-const App = () => {
-  const routes = [
-    { path: '/', element: <Homepage />, withSidebar: true },
-    { path: '/home', element: <Homepage />, withSidebar: true },
+type PageRoute = {
+  path: string;
+  element: JSX.Element;
+  withSidebar: boolean;
+  noAuth?: boolean;
+};
+
+export const App = () => {
+  const routes: PageRoute[] = [
+    { path: '/login', element: <LoginPage />, withSidebar: false, noAuth: true },
+    { path: '/register', element: <ProfileSetup />, withSidebar: false, noAuth: true },
+    { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
     { path: '/dashboard', element: <Dashboard />, withSidebar: true },
     { path: '/alumni', element: <Alumni />, withSidebar: true },
     { path: '/jobs', element: <Jobs />, withSidebar: true },
@@ -22,29 +36,30 @@ const App = () => {
     { path: '/analytics', element: <Analytics />, withSidebar: true },
     { path: '/careerDevelopment', element: <CareerDevelopment />, withSidebar: true },
     { path: '/messages', element: <Messages />, withSidebar: true },
+    { path: '*', element: <Homepage />, withSidebar: true, noAuth: true },
   ];
 
   return (
     <div style={{ height: '100vh' }}>
-      {/* <AuthProvider authType = {'cookie'}
-            authName={'_auth'}
-            cookieDomain={window.location.hostname}
-            cookieSecure={window.location.protocol === "https:"}
-            refresh={refreshApi}> */}
-      <BrowserRouter>
-        <Routes>
-          {routes.map(({ path, element, withSidebar }) => (
-            <Route
-              key={path}
-              path={path}
-              element={withSidebar ? <SidebarLayout>{element}</SidebarLayout> : element}
-            />
-          ))}
-        </Routes>
-      </BrowserRouter>
-      {/* </AuthProvider> */}
+      <AuthProvider<IUserData> store={authStore}>
+        <BrowserRouter>
+          <Routes>
+            {routes.map(({ path, element, withSidebar, noAuth }) => {
+              let content = element;
+
+              if (withSidebar) {
+                content = <SidebarLayout> {element} </SidebarLayout>;
+              }
+
+              if (!noAuth) {
+                content = <RequireAuth fallbackPath={'/login'}>{content}</RequireAuth>;
+              }
+
+              return <Route key={path} path={path} element={content} />;
+            })}
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 };
-
-export default App;

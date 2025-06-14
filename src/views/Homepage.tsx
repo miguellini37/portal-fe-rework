@@ -1,14 +1,7 @@
-import { useEffect } from 'react';
-import { sendRandomRequest } from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 export const Homepage = () => {
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await sendRandomRequest();
-      console.log(res);
-    };
-    fetchData();
-  }, []);
+  const navigate = useNavigate();
 
   return (
     <div className="Homepage">
@@ -23,7 +16,9 @@ export const Homepage = () => {
           <div className="space-x-4">
             <button
               className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
-              onClick={() => {}}
+              onClick={() => {
+                navigate('/register');
+              }}
             >
               Join Now (Athletes)
             </button>

@@ -1,0 +1,152 @@
+@import url("https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700");
+
+.form-center-section {
+  padding: 4rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* full viewport height */
+  background-color: #1a202c; /* match body bg */
+  font-family: 'Inter', sans-serif;
+}
+
+.form-container {
+  max-width: 40rem;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.form {
+  background-color: #2d3748; /* matches modal, sidebar bg */
+  border-radius: 0.5rem;
+  padding: 2rem;
+  display: grid;
+  grid-gap: 1rem;
+  min-width: 30rem;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  color: #e2e8f0;
+}
+
+.form-header h2 {
+  font-weight: 600;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #e2e8f0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #cbd5e1; /* lighter text */
+}
+
+.form-input {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.375rem;
+  color: #e2e8f0;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-input::placeholder {
+  color: #718096;
+  opacity: 1;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6; /* bright blue focus */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.form-button {
+  cursor: pointer;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 0.375rem;
+  color: white;
+  font-weight: 700;
+  padding: 1rem;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+  font-family: inherit;
+}
+
+.form-button:hover {
+  background-color: #2563eb;
+}
+
+.form-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
+}
+
+.form-field-link {
+  text-decoration: none;
+  color: #3b82f6;
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.form-field-link:hover {
+  color: #60a5fa;
+}
+
+.double-form-field-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 16px;
+  grid-row-gap: 0px;
+}
+
+#form-error {
+  display: none;
+  background-color: #feb2b2; /* red-300 */
+  color: #721c24; /* red-900 */
+  padding: 1rem;
+  text-align: center;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.form-checkbox-field > label {
+  position: relative;
+  top: 1px;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.form-checkbox {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: 'Inter', serif;
+  width: 16px;
+  height: 16px;
+  margin-right: 0.75rem;
+  cursor: pointer;
+}
+
+.form a {
+  text-decoration: underline;
+  color: #3b82f6; /* keep your blue color */
+  transition: color 0.2s;
+}
+
+.form a:hover {
+  color: #60a5fa;
+}
