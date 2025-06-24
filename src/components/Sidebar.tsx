@@ -81,12 +81,22 @@ export const Sidebar = () => {
             </li>
           </ul>
         ) : (
-          <button
-            onClick={handleLogout}
-            className="text-red-400 hover:text-red-300 focus:outline-none"
-          >
-            Logout
-          </button>
+          <ul>
+            <li className="mb-4">
+              <NavLink to="/profile" className="text-blue-400 hover:text-blue-300">
+                Profile
+              </NavLink>
+            </li>
+
+            <li className="mb-4">
+              <button
+                onClick={handleLogout}
+                className="text-red-400 hover:text-red-300 focus:outline-none"
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
         )}
       </div>
     </div>

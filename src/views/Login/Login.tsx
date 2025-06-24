@@ -91,7 +91,7 @@ export const LoginPage = () => {
               Submit
             </button>
             <p>
-              Don't have an account? <a href="/register">Register here</a>
+              Don't have an account? <a href="/register/athlete">Register here</a>
             </p>
           </form>
         </div>

@@ -1,10 +1,15 @@
 import createStore from 'react-auth-kit/createStore';
 import { refreshToken } from './refreshToken';
 
+export enum USER_PERMISSIONS {
+  ATHLETE = 'athlete',
+  COMPANY = 'company',
+  SCHOOL = 'school',
+}
 export interface IUserData {
   id: string;
   email: string;
-  permission: string;
+  permission: USER_PERMISSIONS;
 }
 
 export const authStore = createStore<IUserData>({

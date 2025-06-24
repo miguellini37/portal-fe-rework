@@ -17,13 +17,22 @@ export const Homepage = () => {
             <button
               className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
               onClick={() => {
-                navigate('/register');
+                navigate('/register/athlete');
               }}
             >
               Join Now (Athletes)
             </button>
-            <button className="bg-gray-700 text-white px-6 py-3 rounded hover:bg-gray-600">
+            <button
+              className="bg-gray-700 text-white px-6 py-3 rounded hover:bg-gray-600"
+              onClick={() => navigate('/register/company')}
+            >
               Hire Talent (Employers)
+            </button>
+            <button
+              className="bg-gray-700 text-white px-6 py-3 rounded hover:bg-gray-600"
+              onClick={() => navigate('/register/school')}
+            >
+              Help Students (Schools)
             </button>
           </div>
         </div>

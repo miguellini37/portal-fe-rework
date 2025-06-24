@@ -35,3 +35,36 @@ export const createAthlete = async (data: ICreateAthletePayload): Promise<IUserD
 
   return response.data;
 };
+
+export type IUpdateAthletePayload = Omit<
+  ICreateAthletePayload,
+  'email' | 'password' | 'firstName' | 'lastName'
+>;
+
+export const updateAthlete = async (
+  data: IUpdateAthletePayload,
+  authHeader: string | null
+): Promise<IUserData> => {
+  const response = await axios.put(`${url}/athlete/`, data, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};
+
+export const getAthleteById = async (
+  id: number,
+  authHeader: string | null
+): Promise<IUpdateAthletePayload> => {
+  const response = await axios.get(`${url}/athlete/${id}`, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};
