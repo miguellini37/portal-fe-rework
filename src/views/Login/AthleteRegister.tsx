@@ -2,60 +2,20 @@ import { useState } from 'react';
 import { createAthlete, ICreateAthletePayload } from '../../api/athlete';
 import { useNavigate } from 'react-router-dom';
 
-export const AthleteRegister = () => {
+class AthleteProps {
+  isCreate?: boolean;
+}
+
+export const AthleteRegister = ({ isCreate = false }: AthleteProps) => {
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [sport, setSport] = useState('');
-  const [position, setPosition] = useState('');
-  const [school, setSchool] = useState('');
-  const [major, setMajor] = useState('');
-  const [gpa, setGpa] = useState<number | undefined>();
-  const [division, setDivision] = useState('');
-  const [accolades, setAccolades] = useState('');
-  const [teamRole, setTeamRole] = useState('');
-  const [coachability, setCoachability] = useState('');
-  const [industry, setIndustry] = useState('');
-  const [graduationDate, setGraduationDate] = useState('');
-  const [points, setPoints] = useState<number | undefined>();
-  const [assists, setAssists] = useState<number | undefined>();
-  const [jobTitle, setJobTitle] = useState('');
-  const [company, setCompany] = useState('');
-  const [location, setLocation] = useState('');
-  const [description, setDescription] = useState('');
+  const [athlete, setAthlete] = useState<ICreateAthletePayload>();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payload: ICreateAthletePayload = {
-      email,
-      password,
-      firstName,
-      lastName,
-      sport,
-      position,
-      school,
-      major,
-      gpa,
-      division,
-      accolades,
-      teamRole,
-      coachability,
-      industry,
-      graduationDate,
-      points,
-      assists,
-      jobTitle,
-      company,
-      location,
-      description,
-    };
-
     try {
-      await createAthlete(payload);
+      await createAthlete(athlete as ICreateAthletePayload);
       navigate('/login');
     } catch (error) {
       console.error('Error creating athlete:', error);
@@ -72,10 +32,10 @@ export const AthleteRegister = () => {
         <div className="absolute top-4 right-8 text-sm text-gray-400 text-right">
           <div>Not an athlete? Register as</div>
           <a href="/register/company" className="block text-blue-400 underline hover:text-blue-300">
-            Company
+            Company Employee
           </a>
           <a href="/register/school" className="block text-blue-400 underline hover:text-blue-300">
-            School
+            School Employee
           </a>
         </div>
         <form
@@ -85,16 +45,16 @@ export const AthleteRegister = () => {
           {/* Auth fields */}
           <input
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={athlete?.email}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, email: e.target.value }))}
             required
             className="form-input"
           />
           <input
             placeholder="Password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={athlete?.password}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, password: e.target.value }))}
             required
             className="form-input"
           />
@@ -102,15 +62,15 @@ export const AthleteRegister = () => {
           {/* Name */}
           <input
             placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={athlete?.firstName}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, firstName: e.target.value }))}
             required
             className="form-input"
           />
           <input
             placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={athlete?.lastName}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, lastName: e.target.value }))}
             required
             className="form-input"
           />
@@ -118,29 +78,29 @@ export const AthleteRegister = () => {
           {/* Athlete Info */}
           <input
             placeholder="Sport"
-            value={sport}
-            onChange={(e) => setSport(e.target.value)}
+            value={athlete?.sport}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, sport: e.target.value }))}
             required
             className="form-input"
           />
           <input
             placeholder="Position"
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
+            value={athlete?.position}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, position: e.target.value }))}
             required
             className="form-input"
           />
           <input
             placeholder="School"
-            value={school}
-            onChange={(e) => setSchool(e.target.value)}
+            value={athlete?.schoolName}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, schoolName: e.target.value }))}
             required
             className="form-input"
           />
           <input
             placeholder="Major"
-            value={major}
-            onChange={(e) => setMajor(e.target.value)}
+            value={athlete?.major}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, major: e.target.value }))}
             required
             className="form-input"
           />
@@ -148,14 +108,16 @@ export const AthleteRegister = () => {
             type="number"
             step="0.1"
             placeholder="GPA"
-            value={gpa ?? ''}
-            onChange={(e) => setGpa(parseFloat(e.target.value))}
+            value={athlete?.gpa ?? ''}
+            onChange={(e) =>
+              setAthlete((prev) => ({ ...prev, gpa: e.target.value as unknown as number }))
+            }
             required
             className="form-input"
           />
           <select
-            value={division}
-            onChange={(e) => setDivision(e.target.value)}
+            value={athlete?.division}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, division: e.target.value }))}
             required
             className="form-select"
           >
@@ -168,76 +130,30 @@ export const AthleteRegister = () => {
           {/* Extras */}
           <input
             placeholder="Accolades"
-            value={accolades}
-            onChange={(e) => setAccolades(e.target.value)}
+            value={athlete?.accolades}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, accolades: e.target.value }))}
             className="form-input"
           />
           <input
             placeholder="Team Role"
-            value={teamRole}
-            onChange={(e) => setTeamRole(e.target.value)}
-            className="form-input"
-          />
-          <input
-            placeholder="Coachability"
-            value={coachability}
-            onChange={(e) => setCoachability(e.target.value)}
-            className="form-input"
-          />
-          <input
-            placeholder="Industry Preference"
-            value={industry}
-            onChange={(e) => setIndustry(e.target.value)}
+            value={athlete?.teamRole}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, teamRole: e.target.value }))}
             className="form-input"
           />
           <input
             placeholder="Graduation Date"
-            value={graduationDate}
-            onChange={(e) => setGraduationDate(e.target.value)}
+            value={athlete?.graduationDate}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, graduationDate: e.target.value }))}
             className="form-input"
           />
 
           {/* Stats */}
           <input
-            type="number"
-            placeholder="Points Per Game"
-            value={points ?? ''}
-            onChange={(e) => setPoints(parseFloat(e.target.value))}
+            type="textarea"
+            placeholder="Stats"
+            value={athlete?.statistics}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, statistics: e.target.value }))}
             className="form-input"
-          />
-          <input
-            type="number"
-            placeholder="Assists Per Game"
-            value={assists ?? ''}
-            onChange={(e) => setAssists(parseFloat(e.target.value))}
-            className="form-input"
-          />
-
-          {/* Work Experience */}
-          <input
-            placeholder="Job Title"
-            value={jobTitle}
-            onChange={(e) => setJobTitle(e.target.value)}
-            className="form-input"
-          />
-          <input
-            placeholder="Company"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="form-input"
-          />
-          <input
-            placeholder="Location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="form-input"
-          />
-          <textarea
-            placeholder="Internship/Job Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="form-textarea md:col-span-2"
-            rows={4}
           />
 
           <div className="md:col-span-2 flex gap-4 mt-4">

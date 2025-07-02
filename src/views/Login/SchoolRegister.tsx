@@ -1,44 +1,40 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createSchool, ICreateSchoolPayload } from '../../api/school';
+import { createSchoolEmployee, ICreateSchoolEmployeePayload } from '../../api/schoolEmployee';
+import { SchoolDropdown } from '../../components/SchoolDropdown';
 
 export const SchoolRegister = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [schoolName, setSchoolName] = useState('');
+  const [schoolEmployee, setSchoolEmployee] = useState<ICreateSchoolEmployeePayload>();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payload: ICreateSchoolPayload = {
-      email,
-      password,
-      schoolName,
-    };
-
     try {
-      await createSchool(payload);
+      await createSchoolEmployee(schoolEmployee as ICreateSchoolEmployeePayload);
       navigate('/login');
     } catch (error) {
-      console.error('Error creating athlete:', error);
+      console.error('Error creating school employee:', error);
     }
   };
 
   return (
     <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
       <div className="ProfileSetup">
-        <h2 className="text-4xl font-bold mb-2">Create Your School Profile</h2>
+        <h2 className="text-4xl font-bold mb-2">Create Your School Employee Profile</h2>
         <p className="text-gray-400 mb-6">
           Fill out your details to join the Portal and unlock opportunities for your students.
         </p>
         <div className="absolute top-4 right-8 text-sm text-gray-400 text-right">
-          <div>Not a School? Register as</div>
+          <div>Not a School Employee? Register as</div>
           <a href="/register/company" className="block text-blue-400 underline hover:text-blue-300">
-            Company
+            Company Employee
           </a>
-          <a href="/register/athlete" className="block text-blue-400 underline hover:text-blue-300">
+          <a
+            href="/register/schoolEmployee"
+            className="block text-blue-400 underline hover:text-blue-300"
+          >
             Athlete
           </a>
         </div>
@@ -49,27 +45,38 @@ export const SchoolRegister = () => {
           {/* Auth fields */}
           <input
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={schoolEmployee?.email}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, email: e.target.value }))}
             required
             className="form-input"
           />
           <input
             placeholder="Password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={schoolEmployee?.password}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, password: e.target.value }))}
             required
             className="form-input"
           />
 
           {/* Name */}
           <input
-            placeholder="School Name"
-            value={schoolName}
-            onChange={(e) => setSchoolName(e.target.value)}
+            placeholder="First Name"
+            value={schoolEmployee?.firstName}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, firstName: e.target.value }))}
             required
             className="form-input"
+          />
+          <input
+            placeholder="Last Name"
+            value={schoolEmployee?.lastName}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
+            required
+            className="form-input"
+          />
+
+          <SchoolDropdown
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolName: e?.value }))}
           />
 
           <div className="md:col-span-2 flex gap-4 mt-4">

@@ -1,11 +1,15 @@
 import { NavLink, NavLinkProps, useNavigate } from 'react-router-dom';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { IUserData, USER_PERMISSIONS } from '../api/store';
 
 export const Sidebar = () => {
   const isLoggedIn = useIsAuthenticated();
   const signOut = useSignOut();
   const navigate = useNavigate();
+
+  const { permission } = useAuthUser<IUserData>() as IUserData;
 
   const handleLogout = () => {
     signOut();
@@ -36,30 +40,55 @@ export const Sidebar = () => {
               <NavLink to="/">Home</NavLink>
             </li>
 
-            <li className="mb-4">
-              <DisabledNavLink to="/dashboard">Dashboard</DisabledNavLink>
-            </li>
-            <li className="mb-4">
-              <DisabledNavLink to="/alumni">Alumni</DisabledNavLink>
-            </li>
-            <li className="mb-4">
-              <DisabledNavLink to="/jobs">Jobs</DisabledNavLink>
-            </li>
-            <li className="mb-4">
-              <DisabledNavLink to="/internships">Internships</DisabledNavLink>
-            </li>
-            <li className="mb-4">
-              <DisabledNavLink to="/nil">NIL Deals</DisabledNavLink>
-            </li>
-            <li className="mb-4">
-              <DisabledNavLink to="/analytics">Analytics</DisabledNavLink>
-            </li>
-            <li className="mb-4">
-              <DisabledNavLink to="/careerDevelopment">Career Development</DisabledNavLink>
-            </li>
-            <li className="mb-4">
-              <DisabledNavLink to="/messages">Messages</DisabledNavLink>
-            </li>
+            {permission == USER_PERMISSIONS.ATHLETE && (
+              <div>
+                <li className="mb-4">
+                  <DisabledNavLink to="/dashboard">Dashboard</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/alumni">Alumni</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/jobs">Jobs</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/internships">Internships</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/nil">NIL Deals</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/analytics">Analytics</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/careerDevelopment">Career Development</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/messages">Messages</DisabledNavLink>
+                </li>
+              </div>
+            )}
+            {permission == USER_PERMISSIONS.SCHOOL && (
+              <div>
+                <li className="mb-4">
+                  <DisabledNavLink to="/school">School Profile</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/messages">Messages</DisabledNavLink>
+                </li>
+              </div>
+            )}
+
+            {permission == USER_PERMISSIONS.COMPANY && (
+              <div>
+                <li className="mb-4">
+                  <DisabledNavLink to="/company">Company Profile</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/messages">Messages</DisabledNavLink>
+                </li>
+              </div>
+            )}
           </ul>
         </nav>
       </div>
@@ -75,7 +104,7 @@ export const Sidebar = () => {
             </li>
 
             <li className="mb-4">
-              <NavLink to="/register" className="text-blue-400 hover:text-blue-300">
+              <NavLink to="/register/athlete" className="text-blue-400 hover:text-blue-300">
                 Register
               </NavLink>
             </li>

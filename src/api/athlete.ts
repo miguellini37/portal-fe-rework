@@ -3,27 +3,20 @@ import { url } from '../config/url';
 import { IUserData } from './store';
 
 export interface ICreateAthletePayload {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
   firstName?: string;
   lastName?: string;
   sport?: string;
   position?: string;
-  school?: string;
   major?: string;
   gpa?: number;
   division?: string;
   accolades?: string;
   teamRole?: string;
-  coachability?: string;
-  industry?: string;
-  graduationDate?: string; // or Date if your API accepts ISO strings
-  points?: number;
-  assists?: number;
-  jobTitle?: string;
-  company?: string;
-  location?: string;
-  description?: string;
+  graduationDate?: string;
+  statistics?: string;
+  schoolName?: string;
 }
 
 export const createAthlete = async (data: ICreateAthletePayload): Promise<IUserData> => {
@@ -56,7 +49,7 @@ export const updateAthlete = async (
 };
 
 export const getAthleteById = async (
-  id: number,
+  id: string,
   authHeader: string | null
 ): Promise<IUpdateAthletePayload> => {
   const response = await axios.get(`${url}/athlete/${id}`, {

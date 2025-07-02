@@ -1,22 +1,27 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getSchoolById, IUpdateSchoolPayload, updateSchool } from '../../api/school';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData } from '../../api/store';
+import { SchoolDropdown } from '../../components/SchoolDropdown';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import {
+  getSchoolEmployeeById,
+  IUpdateSchoolEmployeePayload,
+  updateSchoolEmployee,
+} from '../../api/schoolEmployee';
 
 export const SchoolProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
   const { id } = useAuthUser<IUserData>() as IUserData;
 
-  const [school, setSchool] = useState<IUpdateSchoolPayload>({});
+  const [schoolEmployee, setSchoolEmployee] = useState<IUpdateSchoolEmployeePayload>({});
 
   const fetchSchool = async () => {
     try {
-      const school = await getSchoolById(Number(id), authHeader);
-      setSchool(school);
+      const schoolEmployee = await getSchoolEmployeeById(id, authHeader);
+      setSchoolEmployee(schoolEmployee);
     } catch {
       toast.error('Failed to load profile');
     }
@@ -33,7 +38,7 @@ export const SchoolProfile = () => {
     e.preventDefault();
 
     try {
-      await updateSchool(school, authHeader);
+      await updateSchoolEmployee(schoolEmployee, authHeader);
       toast.success('Profile updated successfully');
     } catch {
       toast.success('Failed to update profile');
@@ -42,40 +47,72 @@ export const SchoolProfile = () => {
 
   return (
     <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
-      <h2 className="text-4xl font-bold mb-2">Create Your School Profile</h2>
-      <p className="text-gray-400 mb-6">
-        Fill out your details to join the Portal and unlock opportunities for your students.
-      </p>
+      <div className="ProfileSetup">
+        <h2 className="text-4xl font-bold mb-2">Edit Your School Employee Profile</h2>
+        <form
+          onSubmit={onSubmit}
+          className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {/* Auth fields */}
+          {/* <input
+            placeholder="Email"
+            value={schoolEmployee?.email}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, email: e.target.value }))}
+            required
+            className="form-input"
+            disabled
+          />
+          <input
+            placeholder="Password"
+            type="password"
+            value={schoolEmployee?.password}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, password: e.target.value }))}
+            required
+            className="form-input"
+            disabled
+          /> */}
 
-      <form
-        onSubmit={onSubmit}
-        className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
-        <input
-          placeholder="School Name"
-          value={school.schoolName ?? ''}
-          onChange={(e) => setSchool((prev) => ({ ...prev, schoolName: e.target.value }))}
-          required
-          className="form-input"
-          style={{ width: '400px' }}
-        />
+          {/* Name */}
+          <input
+            placeholder="First Name"
+            value={schoolEmployee?.firstName}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, firstName: e.target.value }))}
+            required
+            className="form-input"
+            disabled
+          />
+          <input
+            placeholder="Last Name"
+            value={schoolEmployee?.lastName}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
+            required
+            className="form-input"
+            disabled
+          />
 
-        <div className="md:col-span-2 flex gap-4 mt-4">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
-          >
-            Save Profile
-          </button>
-          <button
-            type="button"
-            className="bg-gray-600 text-white px-6 py-3 rounded hover:bg-gray-500"
-            onClick={() => navigate('/')}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+          <SchoolDropdown
+            selected={schoolEmployee.schoolName}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolName: e?.value }))}
+            disabled
+          />
+
+          <div className="md:col-span-2 flex gap-4 mt-4">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
+            >
+              Submit Profile
+            </button>
+            <button
+              type="button"
+              className="bg-gray-600 text-white px-6 py-3 rounded hover:bg-gray-500"
+              onClick={() => navigate('/')}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

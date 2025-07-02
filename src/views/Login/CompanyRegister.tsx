@@ -1,27 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createCompany, ICreateCompanyPayload } from '../../api/company';
+import { createCompanyEmployee, ICreateCompanyEmployeePayload } from '../../api/companyEmployee';
+import { CompanyDropdown } from '../../components/CompanyDropdown';
 
 export const CompanyRegister = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [industry, setIndustry] = useState('');
+  const [companyEmployee, setCompanyEmployee] = useState<ICreateCompanyEmployeePayload>();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payload: ICreateCompanyPayload = {
-      email,
-      password,
-      companyName,
-      industry,
-    };
-
     try {
-      await createCompany(payload);
+      await createCompanyEmployee(companyEmployee as ICreateCompanyEmployeePayload);
       navigate('/login');
     } catch (error) {
       console.error('Error creating athlete:', error);
@@ -31,7 +22,7 @@ export const CompanyRegister = () => {
   return (
     <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
       <div className="ProfileSetup">
-        <h2 className="text-4xl font-bold mb-2">Create Your Company Profile</h2>
+        <h2 className="text-4xl font-bold mb-2">Create Your Company Employee Profile</h2>
         <p className="text-gray-400 mb-6">
           Fill out your details to join the Portal and unlock hiring opportunities.
         </p>
@@ -41,7 +32,7 @@ export const CompanyRegister = () => {
             Athlete
           </a>
           <a href="/register/school" className="block text-blue-400 underline hover:text-blue-300">
-            School
+            School Employee
           </a>
         </div>
         <form
@@ -51,33 +42,38 @@ export const CompanyRegister = () => {
           {/* Auth fields */}
           <input
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={companyEmployee?.email}
+            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, email: e.target.value }))}
             required
             className="form-input"
           />
           <input
             placeholder="Password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={companyEmployee?.password}
+            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, password: e.target.value }))}
             required
             className="form-input"
           />
 
           {/* Name */}
           <input
-            placeholder="Company Name"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
+            placeholder="First Name"
+            value={companyEmployee?.firstName}
+            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, firstName: e.target.value }))}
             required
             className="form-input"
           />
           <input
-            placeholder="Industry Preference"
-            value={industry}
-            onChange={(e) => setIndustry(e.target.value)}
+            placeholder="Last Name"
+            value={companyEmployee?.lastName}
+            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
+            required
             className="form-input"
+          />
+
+          <CompanyDropdown
+            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, companyName: e?.value }))}
           />
 
           <div className="md:col-span-2 flex gap-4 mt-4">
