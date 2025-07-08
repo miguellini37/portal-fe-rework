@@ -14,7 +14,7 @@ body {
     background-color: #2d3748;
     height: 100vh;
     position: fixed;
-    width: 250px;
+    width: 210px;
   }
   .filter-select, .search-input, .form-input, .form-select, .form-textarea {
     background-color: #2d3748;
@@ -39,7 +39,7 @@ body {
     background-image: url('https://via.placeholder.com/1200x600?text=College+Sports+Field+Silhouettes');
     background-size: cover;
     background-position: center;
-    height: 80vh;
+    height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
