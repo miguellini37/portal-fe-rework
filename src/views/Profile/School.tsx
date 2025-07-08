@@ -14,13 +14,14 @@ import {
 export const SchoolProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
-  const { id } = useAuthUser<IUserData>() as IUserData;
+  const user = useAuthUser<IUserData>();
+  const id = user?.id;
 
   const [schoolEmployee, setSchoolEmployee] = useState<IUpdateSchoolEmployeePayload>({});
 
   const fetchSchool = async () => {
     try {
-      const schoolEmployee = await getSchoolEmployeeById(id, authHeader);
+      const schoolEmployee = await getSchoolEmployeeById(id as string, authHeader);
       setSchoolEmployee(schoolEmployee);
     } catch {
       toast.error('Failed to load profile');

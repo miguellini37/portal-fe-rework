@@ -1,13 +1,6 @@
 import { Homepage } from './views/Homepage';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import { Dashboard } from './views/Dashboard';
-import { Alumni } from './views/Alumni';
-import { Jobs } from './views/Jobs';
-import { Internships } from './views/Internships';
-import { NIL } from './views/NilDeals';
-import { Analytics } from './views/Analytics';
-import { CareerDevelopment } from './views/CareerDevelopment';
-import { Messages } from './views/Messages';
 import { SidebarLayout } from './components/SidebarLayout';
 import AuthProvider from 'react-auth-kit';
 import RequireAuth from '@auth-kit/react-router/RequireAuth';
@@ -19,6 +12,8 @@ import { ProfileEdit } from './views/Profile';
 import { ToastContainer } from 'react-toastify';
 import { CompanyRegister } from './views/Login/CompanyRegister';
 import { SchoolRegister } from './views/Login/SchoolRegister';
+import { CompanyPage } from './views/CompanyPage';
+import { SchoolPage } from './views/SchoolPage';
 
 type PageRoute = {
   path: string;
@@ -33,16 +28,13 @@ export const App = () => {
     { path: '/register/athlete', element: <AthleteRegister />, withSidebar: false, noAuth: true },
     { path: '/register/company', element: <CompanyRegister />, withSidebar: false, noAuth: true },
     { path: '/register/school', element: <SchoolRegister />, withSidebar: false, noAuth: true },
+
+    { path: '/profile', element: <ProfileEdit />, withSidebar: true },
+    { path: '/company/:id', element: <CompanyPage />, withSidebar: true },
+    { path: '/school/:id', element: <SchoolPage />, withSidebar: true },
+
     { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
     { path: '/dashboard', element: <Dashboard />, withSidebar: true },
-    { path: '/alumni', element: <Alumni />, withSidebar: true },
-    { path: '/jobs', element: <Jobs />, withSidebar: true },
-    { path: '/internships', element: <Internships />, withSidebar: true },
-    { path: '/nil', element: <NIL />, withSidebar: true },
-    { path: '/analytics', element: <Analytics />, withSidebar: true },
-    { path: '/careerDevelopment', element: <CareerDevelopment />, withSidebar: true },
-    { path: '/messages', element: <Messages />, withSidebar: true },
-    { path: '/profile', element: <ProfileEdit />, withSidebar: true },
     { path: '*', element: <Homepage />, withSidebar: true, noAuth: true },
   ];
 

@@ -5,7 +5,8 @@ import { SchoolProfile } from './School';
 import { CompanyProfile } from './Company';
 
 export const ProfileEdit = () => {
-  const { permission } = useAuthUser<IUserData>() as IUserData;
+  const user = useAuthUser<IUserData>();
+  const permission = user?.permission;
 
   if (permission == USER_PERMISSIONS.ATHLETE) {
     return <AthleteProfile />;

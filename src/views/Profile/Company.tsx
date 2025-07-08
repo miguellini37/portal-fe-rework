@@ -14,13 +14,14 @@ import {
 export const CompanyProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
-  const { id } = useAuthUser<IUserData>() as IUserData;
+  const user = useAuthUser<IUserData>();
+  const id = user?.id;
 
   const [companyEmployee, setCompanyEmployee] = useState<IUpdateCompanyEmployeePayload>({});
 
   const fetchCompany = async () => {
     try {
-      const companyEmployee = await getCompanyEmployeeById(id, authHeader);
+      const companyEmployee = await getCompanyEmployeeById(id as string, authHeader);
       setCompanyEmployee(companyEmployee);
     } catch {
       toast.error('Failed to fetch profile');

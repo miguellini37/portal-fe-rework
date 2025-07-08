@@ -9,7 +9,8 @@ export const Sidebar = () => {
   const signOut = useSignOut();
   const navigate = useNavigate();
 
-  const { permission } = useAuthUser<IUserData>() as IUserData;
+  const user = useAuthUser<IUserData>();
+  const permission = user?.permission;
 
   const handleLogout = () => {
     signOut();
@@ -40,38 +41,22 @@ export const Sidebar = () => {
               <NavLink to="/">Home</NavLink>
             </li>
 
-            {permission == USER_PERMISSIONS.ATHLETE && (
+            {(!permission || permission == USER_PERMISSIONS.ATHLETE) && (
               <div>
                 <li className="mb-4">
                   <DisabledNavLink to="/dashboard">Dashboard</DisabledNavLink>
                 </li>
                 <li className="mb-4">
-                  <DisabledNavLink to="/alumni">Alumni</DisabledNavLink>
-                </li>
-                <li className="mb-4">
                   <DisabledNavLink to="/jobs">Jobs</DisabledNavLink>
-                </li>
-                <li className="mb-4">
-                  <DisabledNavLink to="/internships">Internships</DisabledNavLink>
-                </li>
-                <li className="mb-4">
-                  <DisabledNavLink to="/nil">NIL Deals</DisabledNavLink>
-                </li>
-                <li className="mb-4">
-                  <DisabledNavLink to="/analytics">Analytics</DisabledNavLink>
-                </li>
-                <li className="mb-4">
-                  <DisabledNavLink to="/careerDevelopment">Career Development</DisabledNavLink>
-                </li>
-                <li className="mb-4">
-                  <DisabledNavLink to="/messages">Messages</DisabledNavLink>
                 </li>
               </div>
             )}
             {permission == USER_PERMISSIONS.SCHOOL && (
               <div>
                 <li className="mb-4">
-                  <DisabledNavLink to="/school">School Profile</DisabledNavLink>
+                  <DisabledNavLink to={`/school/${user?.schoolRef?.id}`}>
+                    School Profile
+                  </DisabledNavLink>
                 </li>
                 <li className="mb-4">
                   <DisabledNavLink to="/messages">Messages</DisabledNavLink>
@@ -82,7 +67,9 @@ export const Sidebar = () => {
             {permission == USER_PERMISSIONS.COMPANY && (
               <div>
                 <li className="mb-4">
-                  <DisabledNavLink to="/company">Company Profile</DisabledNavLink>
+                  <DisabledNavLink to={`/company/${user?.companyRef?.id}`}>
+                    Company Profile
+                  </DisabledNavLink>
                 </li>
                 <li className="mb-4">
                   <DisabledNavLink to="/messages">Messages</DisabledNavLink>

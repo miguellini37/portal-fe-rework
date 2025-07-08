@@ -7,9 +7,18 @@ export enum USER_PERMISSIONS {
   SCHOOL = 'school',
 }
 export interface IUserData {
-  id: string;
-  email: string;
-  permission: USER_PERMISSIONS;
+  id?: string;
+  email?: string;
+  permission?: USER_PERMISSIONS;
+
+  companyRef?: {
+    id: string;
+    ownerRefId: string;
+  };
+  schoolRef?: {
+    id: string;
+    ownerRefId: string;
+  };
 }
 
 export const authStore = createStore<IUserData>({

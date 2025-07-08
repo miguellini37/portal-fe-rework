@@ -9,13 +9,14 @@ import { toast } from 'react-toastify';
 export const AthleteProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
-  const { id } = useAuthUser<IUserData>() as IUserData;
+  const user = useAuthUser<IUserData>();
+  const id = user?.id;
 
   const [athlete, setAthlete] = useState<IUpdateAthletePayload>({});
 
   const fetchAthlete = async () => {
     try {
-      const athlete = await getAthleteById(id, authHeader);
+      const athlete = await getAthleteById(id as string, authHeader);
       setAthlete(athlete);
     } catch {
       toast.error('Failed to fetch profile');
