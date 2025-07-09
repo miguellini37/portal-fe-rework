@@ -14,6 +14,7 @@ import { CompanyRegister } from './views/Login/CompanyRegister';
 import { SchoolRegister } from './views/Login/SchoolRegister';
 import { CompanyPage } from './views/CompanyPage';
 import { SchoolPage } from './views/SchoolPage';
+import 'react-toastify/dist/ReactToastify.css';
 
 type PageRoute = {
   path: string;

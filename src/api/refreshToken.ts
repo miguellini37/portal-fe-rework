@@ -14,7 +14,7 @@ export const refreshToken = createRefresh<IUserData>({
   }) => {
     try {
       const response = await axios.post(
-        `${url}/refresh`,
+        `${url}/auth/refresh`,
         { refreshToken },
         {
           headers: {
@@ -25,10 +25,8 @@ export const refreshToken = createRefresh<IUserData>({
 
       return {
         isSuccess: true,
-        newAuthToken: response.data.token,
-        newAuthTokenExpireIn: 10,
-        newRefreshToken: response.data.refreshToken,
-        newRefreshTokenExpiresIn: 60,
+        newAuthToken: response.data.accessToken,
+        newAuthTokenExpireIn: response.data.expiresIn,
       };
     } catch {
       return {
