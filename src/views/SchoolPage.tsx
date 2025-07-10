@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getSchoolById, ISchoolPaylod, updateSchool } from '../api/school';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../api/store';
+import { IUserData } from '../auth/store';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
 

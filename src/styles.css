@@ -36,7 +36,6 @@ body {
     display: block;
   }
   .hero-section {
-    background-image: url('https://via.placeholder.com/1200x600?text=College+Sports+Field+Silhouettes');
     background-size: cover;
     background-position: center;
     height: 70vh;
@@ -85,3 +84,7 @@ body {
   .modal-close:hover {
     color: #3b82f6;
   }
+
+.Toastify__toast-container {
+  z-index: 9999 !important;
+}

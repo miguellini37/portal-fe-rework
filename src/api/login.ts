@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IUserData } from './store';
+import { IUserData } from '../auth/store';
 import { url } from '../config/url';
 
 export interface ILoginResponse {

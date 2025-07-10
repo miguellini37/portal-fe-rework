@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { url } from '../config/url';
-import { IUserData } from './store';
+import { IUserData } from '../auth/store';
 
 export interface ICreateSchoolEmployeePayload {
   firstName?: string;

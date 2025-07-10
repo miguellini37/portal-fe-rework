@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 interface JobModalProps {
   job?: IJobPayload | null; // If present, edit/view mode
   onClose: () => void;
-  onSuccess: () => void; // Refresh list after creation or update
+  onSuccess?: () => void; // Refresh list after creation or update
   companyId?: string;
   isEdit?: boolean; // NEW: determines if fields are editable
 }
@@ -16,7 +16,7 @@ export const JobModal: React.FC<JobModalProps> = ({
   onClose,
   onSuccess,
   companyId,
-  isEdit = true, // default to true for backward compatibility
+  isEdit = false,
 }) => {
   const authHeader = useAuthHeader();
   const [jobData, setJobData] = useState<IJobPayload>(job ?? {});
@@ -36,7 +36,7 @@ export const JobModal: React.FC<JobModalProps> = ({
         await createJob({ ...jobData, companyId }, authHeader);
         toast.success('Job created successfully');
       }
-      onSuccess();
+      onSuccess?.();
       onClose();
     } catch (err) {
       console.error(err);
@@ -51,6 +51,7 @@ export const JobModal: React.FC<JobModalProps> = ({
           {job ? (isEdit ? 'Edit Job' : 'View Job') : 'Create Job'}
         </h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+          {!isEdit && <div>{job?.company?.companyName}</div>}
           <input
             className="form-input bg-gray-700 p-2 rounded"
             placeholder="Position"

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getAthleteById, IUpdateAthletePayload, updateAthlete } from '../../api/athlete';
 import { useNavigate } from 'react-router-dom';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../../api/store';
+import { IUserData } from '../../auth/store';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
 

@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
-import { IUserData } from '../../api/store';
+import { IUserData } from '../../auth/store';
 import { login } from '../../api/login';
 import './Form.css';
 

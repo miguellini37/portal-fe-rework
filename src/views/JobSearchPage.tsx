@@ -1,0 +1,56 @@
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { IUserData } from '../auth/store';
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { toast } from 'react-toastify';
+import { JobModal } from './Jobs/JobModal';
+import { getAllJobs, IJobPayload } from '../api/job';
+import { JobsTable } from './Jobs/JobsTable';
+
+export const JobSearchPage = () => {
+  const navigate = useNavigate();
+  const authHeader = useAuthHeader();
+  const user = useAuthUser<IUserData>();
+  const { id } = useParams<{ id: string }>();
+
+  const [jobs, setJobs] = useState<IJobPayload[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<IJobPayload | null>(null);
+
+  const fetchJobs = async () => {
+    try {
+      const jobs = await getAllJobs(authHeader);
+      setJobs(jobs);
+    } catch {
+      toast.error('Failed to fetch company');
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  return (
+    <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
+      <h2 className="text-4xl font-bold mb-2">{'Job Search'}</h2>
+
+      {/* Jobs Table using reusable component */}
+      <div className="mt-8">
+        <JobsTable
+          jobs={jobs}
+          onView={(job: IJobPayload) => {
+            setSelectedJob(job);
+            setShowModal(true);
+          }}
+          fullTable
+        />
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <JobModal job={selectedJob} onClose={() => setShowModal(false)} companyId={id} />
+      )}
+    </div>
+  );
+};

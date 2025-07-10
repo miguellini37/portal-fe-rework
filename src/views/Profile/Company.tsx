@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../../api/store';
+import { IUserData } from '../../auth/store';
 import { toast } from 'react-toastify';
 import { CompanyDropdown } from '../../components/CompanyDropdown';
 import {

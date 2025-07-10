@@ -11,6 +11,11 @@ export interface IJobPayload {
   description?: string;
   requirements?: string;
   type?: string; // 'internship' | 'job'
+  company?: {
+    id?: string;
+    companyName?: string;
+    industry?: string;
+  };
 }
 
 export const getJobById = async (id: string, authHeader: string | null): Promise<IJobPayload> => {

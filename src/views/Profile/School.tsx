@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../../api/store';
+import { IUserData } from '../../auth/store';
 import { SchoolDropdown } from '../../components/SchoolDropdown';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';

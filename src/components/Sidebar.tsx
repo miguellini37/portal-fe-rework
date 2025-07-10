@@ -2,7 +2,7 @@ import { NavLink, NavLinkProps, useNavigate } from 'react-router-dom';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData, USER_PERMISSIONS } from '../api/store';
+import { IUserData, USER_PERMISSIONS } from '../auth/store';
 
 export const Sidebar = () => {
   const isLoggedIn = useIsAuthenticated();
@@ -47,7 +47,7 @@ export const Sidebar = () => {
                   <DisabledNavLink to="/dashboard">Dashboard</DisabledNavLink>
                 </li>
                 <li className="mb-4">
-                  <DisabledNavLink to="/jobs">Jobs</DisabledNavLink>
+                  <DisabledNavLink to="/job/search">Jobs</DisabledNavLink>
                 </li>
               </div>
             )}

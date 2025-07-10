@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getCompanyById, ICompanyPaylod } from '../api/company';
-import { updateCompany } from '../api/company';
+import { getCompanyById, ICompanyPaylod, updateCompany } from '../../api/company';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../api/store';
+import { IUserData } from '../../auth/store';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
-import { JobModal } from './Jobs/JobModal';
-import { IJobPayload } from '../api/job';
-import { capitalize } from 'lodash';
+import { JobModal } from '../Jobs/JobModal';
+import { IJobPayload } from '../../api/job';
+import { JobsTable } from '../Jobs/JobsTable';
 
 export const CompanyPage = () => {
   const navigate = useNavigate();
@@ -40,7 +39,6 @@ export const CompanyPage = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       await updateCompany(company, authHeader);
       toast.success('Company updated successfully');
@@ -125,47 +123,16 @@ export const CompanyPage = () => {
         </div>
       )}
 
-      {/* Jobs Table */}
+      {/* Jobs Table using reusable component */}
       <div className="mt-8">
         <h3 className="text-2xl font-bold mb-4">Jobs</h3>
-        {company?.jobs && company.jobs.length > 0 ? (
-          <div className="overflow-x-auto rounded-lg shadow">
-            <table className="min-w-full bg-gray-800 text-white rounded-lg">
-              <thead className="bg-gray-700">
-                <tr>
-                  <th className="px-4 py-2 text-left">Position</th>
-                  <th className="px-4 py-2 text-left">Location</th>
-                  <th className="px-4 py-2 text-left">Salary</th>
-                  <th className="px-4 py-2 text-left">Type</th>
-                  <th className="px-4 py-2 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {company.jobs.map((job) => (
-                  <tr key={job.id} className="border-t border-gray-700">
-                    <td className="px-4 py-2">{job.position || 'N/A'}</td>
-                    <td className="px-4 py-2">{job.location || 'N/A'}</td>
-                    <td className="px-4 py-2">{job.salary || 'N/A'}</td>
-                    <td className="px-4 py-2">{capitalize(job.type) || 'N/A'}</td>
-                    <td className="px-4 py-2">
-                      <button
-                        onClick={() => {
-                          setSelectedJob(job);
-                          setShowModal(true);
-                        }}
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="text-gray-300">No jobs posted for this company yet.</p>
-        )}
+        <JobsTable
+          jobs={company.jobs ?? []}
+          onView={(job: IJobPayload) => {
+            setSelectedJob(job);
+            setShowModal(true);
+          }}
+        />
       </div>
 
       {/* Modal */}
