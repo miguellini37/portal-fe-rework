@@ -12,17 +12,9 @@ import { capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Filter } from '../../components/ColumnFilter';
 
-interface JobsTableProps {
-  jobs: IJobPayload[];
-  onView: (job: IJobPayload) => void;
-  fullTable?: boolean;
-}
-
-export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = false }) => {
-  const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
-    companyName: !!fullTable,
-    industry: !!fullTable,
-  });
+export const CompanySearch: React.FC<any> = () => {
+  const companies: any[] = [];
+  const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({});
 
   const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([]);
 
@@ -71,12 +63,12 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
       cell: (info) => capitalize(info.getValue() as string) || 'N/A',
     },
     {
-      header: '',
+      header: 'Actions',
       id: 'actions',
       cell: ({ row }) => (
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
-          onClick={() => onView(row.original)}
+          onClick={() => {}}
         >
           View
         </button>
@@ -85,7 +77,7 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
   ];
 
   const table = useReactTable({
-    data: jobs,
+    data: companies,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -125,7 +117,7 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
           ))}
         </tbody>
       </table>
-      {jobs.length === 0 && (
+      {companies.length === 0 && (
         <p className="text-gray-300 text-center mt-4">No jobs posted for this company yet.</p>
       )}
     </div>

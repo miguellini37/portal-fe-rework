@@ -37,3 +37,13 @@ export const updateCompany = async (
 
   return response.data;
 };
+
+export const getCompanies = async (): Promise<ICompanyPaylod[]> => {
+  const response = await axios.get(`${url}/company/`, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  });
+
+  return response.data;
+};

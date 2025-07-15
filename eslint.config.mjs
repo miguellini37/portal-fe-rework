@@ -1,4 +1,4 @@
-// eslint.config.js
+// eslint.config.mjs
 import { defineConfig } from "eslint/config";
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
@@ -19,6 +19,7 @@ export default defineConfig([
       },
     },
     plugins: {
+      "@typescript-eslint": tseslint.plugin,
       prettier: eslintPluginPrettier,
       "unused-imports": eslintPluginUnusedImports,
     },
@@ -39,6 +40,7 @@ export default defineConfig([
 
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "warn"
     },
   },
 ]);

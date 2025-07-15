@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../auth/store';
+import { useParams } from 'react-router-dom';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
 import { JobModal } from './Jobs/JobModal';
@@ -9,9 +7,7 @@ import { getAllJobs, IJobPayload } from '../api/job';
 import { JobsTable } from './Jobs/JobsTable';
 
 export const JobSearchPage = () => {
-  const navigate = useNavigate();
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
   const { id } = useParams<{ id: string }>();
 
   const [jobs, setJobs] = useState<IJobPayload[]>([]);

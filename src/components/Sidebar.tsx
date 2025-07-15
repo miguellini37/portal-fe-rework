@@ -37,17 +37,21 @@ export const Sidebar = () => {
         <h1 className="text-3xl font-bold mb-8 text-blue-400">Portal</h1>
         <nav>
           <ul>
-            <li className="mb-4">
-              <NavLink to="/">Home</NavLink>
-            </li>
-
-            {(!permission || permission == USER_PERMISSIONS.ATHLETE) && (
+            {!permission && (
+              <li className="mb-4">
+                <NavLink to="/">Home</NavLink>
+              </li>
+            )}
+            {permission == USER_PERMISSIONS.ATHLETE && (
               <div>
                 <li className="mb-4">
                   <DisabledNavLink to="/dashboard">Dashboard</DisabledNavLink>
                 </li>
                 <li className="mb-4">
-                  <DisabledNavLink to="/job/search">Jobs</DisabledNavLink>
+                  <DisabledNavLink to="/jobs/search">Jobs</DisabledNavLink>
+                </li>
+                <li className="mb-4">
+                  <DisabledNavLink to="/companies/search">Companies</DisabledNavLink>
                 </li>
               </div>
             )}
@@ -63,7 +67,6 @@ export const Sidebar = () => {
                 </li>
               </div>
             )}
-
             {permission == USER_PERMISSIONS.COMPANY && (
               <div>
                 <li className="mb-4">
@@ -91,7 +94,7 @@ export const Sidebar = () => {
             </li>
 
             <li className="mb-4">
-              <NavLink to="/register/athlete" className="text-blue-400 hover:text-blue-300">
+              <NavLink to="/register" className="text-blue-400 hover:text-blue-300">
                 Register
               </NavLink>
             </li>

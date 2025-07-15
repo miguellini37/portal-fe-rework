@@ -5,14 +5,13 @@ import { SidebarLayout } from './components/SidebarLayout';
 import RequireAuth from '@auth-kit/react-router/RequireAuth';
 import { JSX } from 'react';
 import { LoginPage } from './views/Login/Login';
-import { AthleteRegister } from './views/Login/AthleteRegister';
 import { ProfileEdit } from './views/Profile';
-import { CompanyRegister } from './views/Login/CompanyRegister';
-import { SchoolRegister } from './views/Login/SchoolRegister';
 import { CompanyPage } from './views/Companies/CompanyPage';
 import { SchoolPage } from './views/SchoolPage';
 import 'react-toastify/dist/ReactToastify.css';
 import { JobSearchPage } from './views/JobSearchPage';
+import { Register } from './views/Login/Register';
+import { CompanySearch } from './views/Companies/JobsTable';
 
 type PageRoute = {
   path: string;
@@ -24,9 +23,7 @@ type PageRoute = {
 export const AppRoutes = () => {
   const routes: PageRoute[] = [
     { path: '/login', element: <LoginPage />, withSidebar: false, noAuth: true },
-    { path: '/register/athlete', element: <AthleteRegister />, withSidebar: false, noAuth: true },
-    { path: '/register/company', element: <CompanyRegister />, withSidebar: false, noAuth: true },
-    { path: '/register/school', element: <SchoolRegister />, withSidebar: false, noAuth: true },
+    { path: '/register', element: <Register />, withSidebar: false, noAuth: true },
 
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
     { path: '/company/:id', element: <CompanyPage />, withSidebar: true },
@@ -35,7 +32,8 @@ export const AppRoutes = () => {
     { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
     { path: '/dashboard', element: <Dashboard />, withSidebar: true },
 
-    { path: '/job/search', element: <JobSearchPage />, withSidebar: true },
+    { path: '/jobs/search', element: <JobSearchPage />, withSidebar: true },
+    { path: '/companies/search', element: <CompanySearch />, withSidebar: true },
 
     { path: '*', element: <Homepage />, withSidebar: true, noAuth: true },
   ];

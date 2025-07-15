@@ -2,27 +2,11 @@ import axios from 'axios';
 import { url } from '../config/url';
 import { IUserData } from '../auth/store';
 
-export interface ICreateSchoolEmployeePayload {
+export interface IUpdateSchoolEmployeePayload {
   firstName?: string;
   lastName?: string;
-  email?: string;
-  password?: string;
   schoolName?: string;
 }
-
-export const createSchoolEmployee = async (
-  data: ICreateSchoolEmployeePayload
-): Promise<IUserData> => {
-  const response = await axios.post(`${url}/schoolEmployee/`, data, {
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-  });
-
-  return response.data;
-};
-
-export type IUpdateSchoolEmployeePayload = Omit<ICreateSchoolEmployeePayload, 'email' | 'password'>;
 
 export const updateSchoolEmployee = async (
   data: IUpdateSchoolEmployeePayload,

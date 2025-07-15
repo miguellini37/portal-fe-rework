@@ -5,6 +5,7 @@ import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData } from '../../auth/store';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
+import { SchoolDropdown } from '../../components/SchoolDropdown';
 
 export const AthleteProfile = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export const AthleteProfile = () => {
     try {
       const athlete = await getAthleteById(id as string, authHeader);
       setAthlete(athlete);
+      toast.success('Profile succesfully updated');
     } catch {
       toast.error('Failed to fetch profile');
     }
@@ -44,7 +46,9 @@ export const AthleteProfile = () => {
   return (
     <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
       <div className="ProfileSetup">
-        <h2 className="text-4xl font-bold mb-2">Edit Your Athlete Profile</h2>
+        <h2 className="text-4xl font-bold mb-2">
+          {`Edit Your Athlete Profile | ${athlete?.firstName} ${athlete.lastName} | ${athlete.schools?.[0]?.schoolName}`}
+        </h2>
         <form
           onSubmit={onSubmit}
           className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -64,12 +68,9 @@ export const AthleteProfile = () => {
             required
             className="form-input"
           />
-          <input
-            placeholder="School"
-            value={athlete?.schoolName}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, schoolName: e.target.value }))}
-            required
-            className="form-input"
+          <SchoolDropdown
+            selected={athlete.schools?.[0]?.id}
+            onChange={(e) => setAthlete((prev) => ({ ...prev, schoolName: e?.value }))}
           />
           <input
             placeholder="Major"
@@ -100,7 +101,6 @@ export const AthleteProfile = () => {
             <option value="D2">D2</option>
             <option value="D3">D3</option>
           </select>
-
           {/* Extras */}
           <input
             placeholder="Accolades"
@@ -120,7 +120,6 @@ export const AthleteProfile = () => {
             onChange={(e) => setAthlete((prev) => ({ ...prev, graduationDate: e.target.value }))}
             className="form-input"
           />
-
           {/* Stats */}
           <input
             type="textarea"
@@ -129,7 +128,6 @@ export const AthleteProfile = () => {
             onChange={(e) => setAthlete((prev) => ({ ...prev, statistics: e.target.value }))}
             className="form-input"
           />
-
           <div className="md:col-span-2 flex gap-4 mt-4">
             <button
               type="submit"

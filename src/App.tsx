@@ -6,10 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AppRoutes } from './Routes';
 
 export const App = () => {
-  // useEffect(() => {
-  //   toast('hi');
-  // }, []);
-
   return (
     <>
       <ToastContainer

@@ -34,3 +34,13 @@ export const updateSchool = async (
 
   return response.data;
 };
+
+export const getSchools = async (): Promise<ISchoolPaylod[]> => {
+  const response = await axios.get(`${url}/school/`, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  });
+
+  return response.data;
+};

@@ -17,20 +17,20 @@ export const Homepage = () => {
             <button
               className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
               onClick={() => {
-                navigate('/register/athlete');
+                navigate('/register?athlete');
               }}
             >
               Join Now (Athletes)
             </button>
             <button
               className="bg-gray-700 text-white px-6 py-3 rounded hover:bg-gray-600"
-              onClick={() => navigate('/register/company')}
+              onClick={() => navigate('/register?type=company')}
             >
               Hire Talent (Employers)
             </button>
             <button
               className="bg-gray-700 text-white px-6 py-3 rounded hover:bg-gray-600"
-              onClick={() => navigate('/register/school')}
+              onClick={() => navigate('/register?type=school')}
             >
               Help Students (Schools)
             </button>

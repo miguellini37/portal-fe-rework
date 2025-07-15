@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { url } from '../config/url';
 import { IUserData } from '../auth/store';
+import { ISchoolPaylod } from './school';
 
-export interface ICreateAthletePayload {
-  email?: string;
-  password?: string;
+export interface IUpdateAthletePayload {
   firstName?: string;
   lastName?: string;
   sport?: string;
@@ -16,23 +15,8 @@ export interface ICreateAthletePayload {
   teamRole?: string;
   graduationDate?: string;
   statistics?: string;
-  schoolName?: string;
+  schools?: ISchoolPaylod[];
 }
-
-export const createAthlete = async (data: ICreateAthletePayload): Promise<IUserData> => {
-  const response = await axios.post(`${url}/athlete/`, data, {
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-  });
-
-  return response.data;
-};
-
-export type IUpdateAthletePayload = Omit<
-  ICreateAthletePayload,
-  'email' | 'password' | 'firstName' | 'lastName'
->;
 
 export const updateAthlete = async (
   data: IUpdateAthletePayload,

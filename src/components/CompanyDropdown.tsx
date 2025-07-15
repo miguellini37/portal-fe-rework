@@ -1,5 +1,7 @@
 import { ActionMeta, SingleValue, StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import { useEffect, useState } from 'react';
+import { getCompanies } from '../api/company';
 
 interface CompanyOption {
   readonly value: string;
@@ -38,7 +40,21 @@ interface CompanyDropdownProps {
 }
 
 export const CompanyDropdown = ({ onChange, disabled, selected }: CompanyDropdownProps) => {
-  const options: CompanyOption[] = [{ label: 'Mastery Inc', value: 'Mastery Inc' }];
+  const [options, setOptions] = useState<CompanyOption[]>([]);
+
+  const fetchCompanies = async (): Promise<void> => {
+    const companies = await getCompanies();
+    setOptions(
+      companies.map((c) => ({
+        value: c.id as string,
+        label: c.companyName as string,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
 
   return (
     <CreatableSelect<CompanyOption>

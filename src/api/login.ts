@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IUserData } from '../auth/store';
+import { IUserData, USER_PERMISSIONS } from '../auth/store';
 import { url } from '../config/url';
 
 export interface ILoginResponse {
@@ -21,4 +21,26 @@ export const login = async (email: string, password: string): Promise<ILoginResp
   });
 
   return response.data as ILoginResponse;
+};
+
+export interface ICreateUserInput {
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  firstName?: string;
+  lastName?: string;
+  permission?: USER_PERMISSIONS;
+
+  companyId?: string;
+  schoolId?: string;
+}
+
+export const register = async (data: ICreateUserInput): Promise<IUserData> => {
+  const response = await axios.post(`${url}/user/register`, data, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  });
+
+  return response.data;
 };
