@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { url } from '../config/url';
 import { IUserData } from '../auth/store';
+import { ISchoolPaylod } from './school';
 
 export interface IUpdateSchoolEmployeePayload {
   firstName?: string;
   lastName?: string;
-  schoolName?: string;
+  schoolRef?: ISchoolPaylod;
 }
 
 export const updateSchoolEmployee = async (

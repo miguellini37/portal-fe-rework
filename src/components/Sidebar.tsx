@@ -51,7 +51,7 @@ export const Sidebar = () => {
                   <DisabledNavLink to="/jobs/search">Jobs</DisabledNavLink>
                 </li>
                 <li className="mb-4">
-                  <DisabledNavLink to="/companies/search">Companies</DisabledNavLink>
+                  <DisabledNavLink to="/company/search">Company Search</DisabledNavLink>
                 </li>
               </div>
             )}

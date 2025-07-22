@@ -15,7 +15,8 @@ export interface IUpdateAthletePayload {
   teamRole?: string;
   graduationDate?: string;
   statistics?: string;
-  schools?: ISchoolPaylod[];
+  schoolRef?: ISchoolPaylod;
+  schoolId?: string;
 }
 
 export const updateAthlete = async (

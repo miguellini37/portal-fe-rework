@@ -58,9 +58,16 @@ export const SchoolDropdown = ({ onChange, disabled, selected }: SchoolDropdownP
 
   return (
     <CreatableSelect<SchoolOption>
-      value={options.find(
-        (x) => x.value == selected || options.find((x) => (x.value as any)?.id == selected)
-      )}
+      value={
+        selected
+          ? options.find(
+              (x) =>
+                x.value == selected ||
+                x.label == selected ||
+                options.find((x) => (x.value as any)?.id == selected)
+            )
+          : null
+      }
       options={options}
       onChange={onChange}
       styles={customStyles}

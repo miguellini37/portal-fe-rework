@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData } from '../../auth/store';
-import { SchoolDropdown } from '../../components/SchoolDropdown';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -10,6 +9,7 @@ import {
   IUpdateSchoolEmployeePayload,
   updateSchoolEmployee,
 } from '../../api/schoolEmployee';
+import { SchoolDropdown } from '../../components/SchoolDropdown';
 
 export const SchoolProfile = () => {
   const navigate = useNavigate();
@@ -49,54 +49,54 @@ export const SchoolProfile = () => {
   return (
     <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
       <div className="ProfileSetup">
-        <h2 className="text-4xl font-bold mb-2">Edit Your School Employee Profile</h2>
+        <h2 className="text-4xl font-bold mb-2">Edit Your Profile</h2>
         <form
           onSubmit={onSubmit}
           className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          {/* Auth fields */}
-          {/* <input
-            placeholder="Email"
-            value={schoolEmployee?.email}
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, email: e.target.value }))}
-            required
-            className="form-input"
-            disabled
-          />
-          <input
-            placeholder="Password"
-            type="password"
-            value={schoolEmployee?.password}
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, password: e.target.value }))}
-            required
-            className="form-input"
-            disabled
-          /> */}
+          {/* First Name */}
+          <div>
+            <label htmlFor="firstName" className="block text-sm text-gray-300 mb-1">
+              First Name
+            </label>
+            <input
+              id="firstName"
+              value={schoolEmployee?.firstName ?? ''}
+              onChange={(e) =>
+                setSchoolEmployee((prev) => ({ ...prev, firstName: e.target.value }))
+              }
+              required
+              className="form-input bg-gray-700 p-2 rounded w-full"
+            />
+          </div>
 
-          {/* Name */}
-          <input
-            placeholder="First Name"
-            value={schoolEmployee?.firstName}
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, firstName: e.target.value }))}
-            required
-            className="form-input"
-            disabled
-          />
-          <input
-            placeholder="Last Name"
-            value={schoolEmployee?.lastName}
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
-            required
-            className="form-input"
-            disabled
-          />
+          {/* Last Name */}
+          <div>
+            <label htmlFor="lastName" className="block text-sm text-gray-300 mb-1">
+              Last Name
+            </label>
+            <input
+              id="lastName"
+              value={schoolEmployee?.lastName ?? ''}
+              onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
+              required
+              className="form-input bg-gray-700 p-2 rounded w-full"
+            />
+          </div>
 
-          <SchoolDropdown
-            selected={schoolEmployee.schoolName}
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolName: e?.value }))}
-            disabled
-          />
+          {/* Company Dropdown */}
+          <div className="md:col-span-2">
+            <label htmlFor="company" className="block text-sm text-gray-300 mb-1">
+              Company
+            </label>
+            <SchoolDropdown
+              onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, companyName: e?.value }))}
+              selected={schoolEmployee.schoolRef?.id}
+              disabled
+            />
+          </div>
 
+          {/* Buttons */}
           <div className="md:col-span-2 flex gap-4 mt-4">
             <button
               type="submit"

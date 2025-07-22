@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
-import { JobModal } from './Jobs/JobModal';
-import { getAllJobs, IJobPayload } from '../api/job';
-import { JobsTable } from './Jobs/JobsTable';
+import { JobModal } from './JobModal';
+import { getAllJobs, IJobPayload } from '../../api/job';
+import { JobsTable } from './JobsTable';
 
 export const JobSearchPage = () => {
   const authHeader = useAuthHeader();
@@ -28,7 +28,7 @@ export const JobSearchPage = () => {
   }, []);
 
   return (
-    <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
+    <div className="ProfileSetup relative min-h-screen p-8  text-white">
       <h2 className="text-4xl font-bold mb-2">{'Job Search'}</h2>
 
       {/* Jobs Table using reusable component */}

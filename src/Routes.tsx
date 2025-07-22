@@ -9,9 +9,9 @@ import { ProfileEdit } from './views/Profile';
 import { CompanyPage } from './views/Companies/CompanyPage';
 import { SchoolPage } from './views/SchoolPage';
 import 'react-toastify/dist/ReactToastify.css';
-import { JobSearchPage } from './views/JobSearchPage';
+import { JobSearchPage } from './views/Jobs/JobSearchPage';
 import { Register } from './views/Login/Register';
-import { CompanySearch } from './views/Companies/JobsTable';
+import { CompanySearch } from './views/Companies/CompanyTable';
 
 type PageRoute = {
   path: string;
@@ -33,7 +33,7 @@ export const AppRoutes = () => {
     { path: '/dashboard', element: <Dashboard />, withSidebar: true },
 
     { path: '/jobs/search', element: <JobSearchPage />, withSidebar: true },
-    { path: '/companies/search', element: <CompanySearch />, withSidebar: true },
+    { path: '/company/search', element: <CompanySearch />, withSidebar: true },
 
     { path: '*', element: <Homepage />, withSidebar: true, noAuth: true },
   ];

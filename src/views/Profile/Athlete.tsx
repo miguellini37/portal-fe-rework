@@ -19,7 +19,6 @@ export const AthleteProfile = () => {
     try {
       const athlete = await getAthleteById(id as string, authHeader);
       setAthlete(athlete);
-      toast.success('Profile succesfully updated');
     } catch {
       toast.error('Failed to fetch profile');
     }
@@ -37,97 +36,125 @@ export const AthleteProfile = () => {
 
     try {
       await updateAthlete(athlete, authHeader);
-      toast.success('Profile updated succesfully');
+      toast.success('Profile updated successfully');
     } catch {
       toast.error('Error updating profile');
     }
   };
 
   return (
-    <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
+    <div className="ProfileSetup relative min-h-screen p-2 pl-4 bg-gray-900 text-white">
       <div className="ProfileSetup">
-        <h2 className="text-4xl font-bold mb-2">
-          {`Edit Your Athlete Profile | ${athlete?.firstName} ${athlete.lastName} | ${athlete.schools?.[0]?.schoolName}`}
+        <h2 className="text-3xl font-bold mb-4 m0-4">
+          {`Edit Your Athlete Profile | ${athlete?.firstName} ${athlete?.lastName}`}
         </h2>
         <form
           onSubmit={onSubmit}
-          className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto"
+          style={{ width: '100%' }}
         >
           {/* Athlete Info */}
-          <input
-            placeholder="Sport"
-            value={athlete?.sport}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, sport: e.target.value }))}
-            required
-            className="form-input"
-          />
-          <input
-            placeholder="Position"
-            value={athlete?.position}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, position: e.target.value }))}
-            required
-            className="form-input"
-          />
-          <SchoolDropdown
-            selected={athlete.schools?.[0]?.id}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, schoolName: e?.value }))}
-          />
-          <input
-            placeholder="Major"
-            value={athlete?.major}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, major: e.target.value }))}
-            required
-            className="form-input"
-          />
-          <input
-            type="number"
-            step="0.1"
-            placeholder="GPA"
-            value={athlete?.gpa ?? ''}
-            onChange={(e) =>
-              setAthlete((prev) => ({ ...prev, gpa: e.target.value as unknown as number }))
-            }
-            required
-            className="form-input"
-          />
-          <select
-            value={athlete?.division}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, division: e.target.value }))}
-            required
-            className="form-select"
-          >
-            <option value="">Select Division</option>
-            <option value="D1">D1</option>
-            <option value="D2">D2</option>
-            <option value="D3">D3</option>
-          </select>
-          {/* Extras */}
-          <input
-            placeholder="Accolades"
-            value={athlete?.accolades}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, accolades: e.target.value }))}
-            className="form-input"
-          />
-          <input
-            placeholder="Team Role"
-            value={athlete?.teamRole}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, teamRole: e.target.value }))}
-            className="form-input"
-          />
-          <input
-            placeholder="Graduation Date"
-            value={athlete?.graduationDate}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, graduationDate: e.target.value }))}
-            className="form-input"
-          />
-          {/* Stats */}
-          <input
-            type="textarea"
-            placeholder="Stats"
-            value={athlete?.statistics}
-            onChange={(e) => setAthlete((prev) => ({ ...prev, statistics: e.target.value }))}
-            className="form-input"
-          />
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Sport</label>
+            <input
+              value={athlete?.sport ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, sport: e.target.value }))}
+              required
+              className="form-input w-full bg-gray-700 p-2 rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Position</label>
+            <input
+              value={athlete?.position ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, position: e.target.value }))}
+              required
+              className="form-input w-full bg-gray-700 p-2 rounded"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm text-gray-300 mb-1">School</label>
+            <SchoolDropdown
+              selected={athlete.schoolRef?.id}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, schoolId: e?.value }))}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Major</label>
+            <input
+              value={athlete?.major ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, major: e.target.value }))}
+              required
+              className="form-input w-full bg-gray-700 p-2 rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">GPA</label>
+            <input
+              type="number"
+              step="0.1"
+              value={athlete?.gpa ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, gpa: parseFloat(e.target.value) }))}
+              required
+              className="form-input w-full bg-gray-700 p-2 rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Division</label>
+            <select
+              value={athlete?.division ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, division: e.target.value }))}
+              required
+              className="form-select w-full bg-gray-700 p-2 rounded"
+            >
+              <option value="">Select Division</option>
+              <option value="D1">D1</option>
+              <option value="D2">D2</option>
+              <option value="D3">D3</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Accolades</label>
+            <input
+              value={athlete?.accolades ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, accolades: e.target.value }))}
+              className="form-input w-full bg-gray-700 p-2 rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Team Role</label>
+            <input
+              value={athlete?.teamRole ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, teamRole: e.target.value }))}
+              className="form-input w-full bg-gray-700 p-2 rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Graduation Date</label>
+            <input
+              value={athlete?.graduationDate ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, graduationDate: e.target.value }))}
+              className="form-input w-full bg-gray-700 p-2 rounded"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm text-gray-300 mb-1">Statistics</label>
+            <textarea
+              value={athlete?.statistics ?? ''}
+              onChange={(e) => setAthlete((prev) => ({ ...prev, statistics: e.target.value }))}
+              className="form-input w-full bg-gray-700 p-2 rounded min-h-[100px]"
+            />
+          </div>
+
           <div className="md:col-span-2 flex gap-4 mt-4">
             <button
               type="submit"
