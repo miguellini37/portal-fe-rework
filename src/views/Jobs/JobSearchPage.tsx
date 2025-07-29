@@ -28,7 +28,7 @@ export const JobSearchPage = () => {
   }, []);
 
   return (
-    <div className="ProfileSetup relative min-h-screen p-8  text-white">
+    <div>
       <h2 className="text-4xl font-bold mb-2">{'Job Search'}</h2>
 
       {/* Jobs Table using reusable component */}

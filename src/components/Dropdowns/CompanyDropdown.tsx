@@ -1,37 +1,16 @@
-import { ActionMeta, SingleValue, StylesConfig } from 'react-select';
+import { ActionMeta, SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useEffect, useState } from 'react';
-import { getCompanies } from '../api/company';
+import { getCompanies } from '../../api/company';
+import { customDropdownStyle } from './DropdownStyle';
 
 interface CompanyOption {
   readonly value: string;
   readonly label: string;
 }
 
-const customStyles: StylesConfig<CompanyOption, false> = {
-  singleValue: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  multiValueLabel: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  input: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  option: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-};
-
 interface CompanyDropdownProps {
+  id?: string;
   onChange:
     | ((newValue: SingleValue<CompanyOption>, actionMeta: ActionMeta<CompanyOption>) => void)
     | undefined;
@@ -39,7 +18,7 @@ interface CompanyDropdownProps {
   selected?: string;
 }
 
-export const CompanyDropdown = ({ onChange, disabled, selected }: CompanyDropdownProps) => {
+export const CompanyDropdown = ({ id, onChange, disabled, selected }: CompanyDropdownProps) => {
   const [options, setOptions] = useState<CompanyOption[]>([]);
 
   const fetchCompanies = async (): Promise<void> => {
@@ -58,10 +37,11 @@ export const CompanyDropdown = ({ onChange, disabled, selected }: CompanyDropdow
 
   return (
     <CreatableSelect<CompanyOption>
+      id={id}
       value={options.find((x) => x.value == selected)}
       options={options}
       onChange={onChange}
-      styles={customStyles}
+      styles={customDropdownStyle}
       isDisabled={disabled}
     />
   );

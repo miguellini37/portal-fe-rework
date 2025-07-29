@@ -1,37 +1,92 @@
 @import url("https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700");
 
+:root {
+  --background: hsla(0, 0%, 100%, 0.316);
+  --foreground: hsl(222.2 84% 4.9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222.2 84% 4.9%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222.2 84% 4.9%);
+  --primary: hsl(221.2 83.2% 53.3%);
+  --primary-foreground: hsl(210 40% 98%);
+  --secondary: hsl(210 40% 96%);
+  --secondary-foreground: hsl(222.2 84% 4.9%);
+  --muted: hsl(210 40% 96%);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+  --accent: hsl(210 40% 96%);
+  --accent-foreground: hsl(222.2 84% 4.9%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(214.3 31.8% 91.4%);
+  --input: hsl(214.3 31.8% 91.4%);
+  --ring: hsl(221.2 83.2% 53.3%);
+  --radius: 0.75rem;
+  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
+}
+
+.dark {
+  --background: hsl(222.2 84% 4.9%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(222.2 84% 4.9%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(222.2 84% 4.9%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(217.2 91.2% 59.8%);
+  --primary-foreground: hsl(222.2 84% 4.9%);
+  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(215 20.2% 65.1%);
+  --accent: hsl(217.2 32.6% 17.5%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217.2 32.6% 17.5%);
+  --input: hsl(217.2 32.6% 17.5%);
+  --ring: hsl(224.3 76.3% 94.1%);
+}
+
+body {
+  background-color: rgb(213, 213, 213);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  margin: 0;
+  padding: 0;
+}
+
 .form-center-section {
-  padding: 4rem 0;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* full viewport height */
-  background-color: #1a202c; /* match body bg */
-  font-family: 'Inter', sans-serif;
+  padding: 4rem 0;
+  background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1));
 }
 
 .form-container {
-  max-width: 40rem;
-  padding: 0 2rem;
+  max-width: 640px;
   width: 100%;
+  padding: 0 2rem;
 }
 
 .form {
-  background-color: #2d3748; /* matches modal, sidebar bg */
-  border-radius: 0.5rem;
+  background-color: var(--card);
+  border-radius: var(--radius);
   padding: 2rem;
   display: grid;
-  grid-gap: 1rem;
+  gap: 1rem;
   min-width: 30rem;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4);
-  color: #e2e8f0;
+  box-shadow: var(--shadow-glow);
+  color: var(--card-foreground);
+  transition: background-color 0.3s ease;
 }
 
 .form-header h2 {
   font-weight: 600;
   font-size: 1.75rem;
   margin-bottom: 1rem;
-  color: #e2e8f0;
+  color: var(--foreground);
 }
 
 .form-field {
@@ -43,56 +98,54 @@
 .form-label {
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #cbd5e1; /* lighter text */
+  color: var(--muted-foreground);
 }
 
 .form-input {
-  background-color: #2d3748;
-  border: 1px solid #4a5568;
-  border-radius: 0.375rem;
-  color: #e2e8f0;
+  background-color: var(--input);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  color: var(--foreground);
   padding: 0.75rem 1rem;
   font-size: 1rem;
   font-family: inherit;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-input::placeholder {
-  color: #718096;
-  opacity: 1;
+  color: var(--muted-foreground);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #3b82f6; /* bright blue focus */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px hsla(221, 83%, 53%, 0.3);
 }
 
 .form-button {
   cursor: pointer;
-  background-color: #3b82f6;
+  background-color: var(--primary);
   border: none;
-  border-radius: 0.375rem;
-  color: white;
+  border-radius: 0.5rem;
+  color: var(--primary-foreground);
   font-weight: 700;
   padding: 1rem;
   font-size: 1.1rem;
-  transition: background-color 0.3s ease;
-  font-family: inherit;
+  transition: background-color 0.3s ease, box-shadow 0.2s;
 }
 
 .form-button:hover {
-  background-color: #2563eb;
+  background-color: hsl(221.2 83.2% 45%);
 }
 
 .form-button:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
+  box-shadow: 0 0 0 3px var(--primary-focus, rgba(37, 99, 235, 0.5));
 }
 
 .form-field-link {
   text-decoration: none;
-  color: #3b82f6;
+  color: var(--primary);
   position: absolute;
   right: 0;
   top: 0;
@@ -103,20 +156,19 @@
 }
 
 .form-field-link:hover {
-  color: #60a5fa;
+  color: hsl(210 100% 75%);
 }
 
 .double-form-field-wrap {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 16px;
-  grid-row-gap: 0px;
+  gap: 0 16px;
 }
 
 #form-error {
   display: none;
-  background-color: #feb2b2; /* red-300 */
-  color: #721c24; /* red-900 */
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
   padding: 1rem;
   text-align: center;
   border-radius: 0.375rem;
@@ -127,14 +179,14 @@
 .form-checkbox-field > label {
   position: relative;
   top: 1px;
-  color: #e2e8f0;
+  color: var(--foreground);
   font-weight: 500;
 }
 
 .form-checkbox {
   display: inline-block;
   vertical-align: middle;
-  font-family: 'Inter', serif;
+  font-family: inherit;
   width: 16px;
   height: 16px;
   margin-right: 0.75rem;
@@ -143,10 +195,72 @@
 
 .form a {
   text-decoration: underline;
-  color: #3b82f6; /* keep your blue color */
+  color: var(--primary);
   transition: color 0.2s;
 }
 
 .form a:hover {
-  color: #60a5fa;
+  color: hsl(210 100% 75%);
+}
+
+.tooltip-svg {
+  width: 16px;
+  height: 16px;
+}
+
+.double-form-field-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 16px;
+}
+
+.label-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative; /* for tooltip positioning */
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-text {
+  position: absolute;
+  bottom: 125%; /* show above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  background-color: rgba(18, 44, 86, 0.408);
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.tooltip-container:hover .tooltip-text {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.portal-title {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700; /* font-bold */
+  margin: 1rem; /* m-4 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+  border-bottom: 1px solid #e5e7eb; /* outline line on the bottom */
+  padding-bottom: 1rem;
+}
+
+.portal-icon {
+  width: 1.5rem; /* w-6 */
+  height: 1.5rem; /* h-6 */
 }

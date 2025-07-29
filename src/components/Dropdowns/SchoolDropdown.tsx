@@ -1,37 +1,16 @@
 import { useState, useEffect } from 'react';
-import { ActionMeta, SingleValue, StylesConfig } from 'react-select';
+import { ActionMeta, SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { getSchools } from '../api/school';
+import { getSchools } from '../../api/school';
+import { customDropdownStyle } from './DropdownStyle';
 
 export interface SchoolOption {
   readonly value: string;
   readonly label: string;
 }
 
-const customStyles: StylesConfig<SchoolOption, false> = {
-  singleValue: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  multiValueLabel: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  input: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  option: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-};
-
 interface SchoolDropdownProps {
+  id?: string;
   onChange:
     | ((newValue: SingleValue<SchoolOption>, actionMeta: ActionMeta<SchoolOption>) => void)
     | undefined;
@@ -39,7 +18,7 @@ interface SchoolDropdownProps {
   selected?: string;
 }
 
-export const SchoolDropdown = ({ onChange, disabled, selected }: SchoolDropdownProps) => {
+export const SchoolDropdown = ({ id, onChange, disabled, selected }: SchoolDropdownProps) => {
   const [options, setOptions] = useState<SchoolOption[]>([]);
 
   const fetchSchools = async (): Promise<void> => {
@@ -58,6 +37,7 @@ export const SchoolDropdown = ({ onChange, disabled, selected }: SchoolDropdownP
 
   return (
     <CreatableSelect<SchoolOption>
+      id={id}
       value={
         selected
           ? options.find(
@@ -70,7 +50,7 @@ export const SchoolDropdown = ({ onChange, disabled, selected }: SchoolDropdownP
       }
       options={options}
       onChange={onChange}
-      styles={customStyles}
+      styles={customDropdownStyle}
       isDisabled={disabled}
     />
   );

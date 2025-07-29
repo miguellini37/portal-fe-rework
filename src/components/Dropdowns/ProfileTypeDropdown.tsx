@@ -1,43 +1,27 @@
-import { ActionMeta, SingleValue, StylesConfig } from 'react-select';
+import { ActionMeta, SingleValue } from 'react-select';
 import Select from 'react-select';
 import { useEffect } from 'react';
-import { USER_PERMISSIONS } from '../auth/store';
+import { USER_PERMISSIONS } from '../../auth/store';
+import { customDropdownStyle } from './DropdownStyle';
 
 interface Option {
   readonly value: USER_PERMISSIONS;
   readonly label: string;
 }
 
-const customStyles: StylesConfig<Option, false> = {
-  singleValue: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  multiValueLabel: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  input: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-  option: (provided) => ({
-    ...provided,
-    color: 'black',
-  }),
-};
-
 interface ProfileTypeDropdownProps {
+  id?: string;
   onChange: (newValue: SingleValue<Option>, actionMeta: ActionMeta<Option>) => void;
   disabled?: boolean;
   selected?: string;
 }
 
-export const ProfileTypeDropdown = ({ onChange, disabled, selected }: ProfileTypeDropdownProps) => {
+export const ProfileTypeDropdown = ({
+  id,
+  onChange,
+  disabled,
+  selected,
+}: ProfileTypeDropdownProps) => {
   const options: Option[] = Object.values(USER_PERMISSIONS).map((value) => ({
     value,
     label: value.charAt(0).toUpperCase() + value.slice(1),
@@ -52,10 +36,11 @@ export const ProfileTypeDropdown = ({ onChange, disabled, selected }: ProfileTyp
 
   return (
     <Select<Option>
+      id={id}
       value={options.find((x) => x.value === selected) || options[0]}
       options={options}
       onChange={onChange}
-      styles={customStyles}
+      styles={customDropdownStyle}
       isDisabled={disabled}
     />
   );

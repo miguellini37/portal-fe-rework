@@ -1,7 +1,7 @@
 import { Homepage } from './views/Homepage';
 import { Route, Routes } from 'react-router-dom';
 import { Dashboard } from './views/Dashboard';
-import { SidebarLayout } from './components/SidebarLayout';
+import { Sidebar } from './components/Sidebar/Sidebar';
 import RequireAuth from '@auth-kit/react-router/RequireAuth';
 import { JSX } from 'react';
 import { LoginPage } from './views/Login/Login';
@@ -44,7 +44,7 @@ export const AppRoutes = () => {
         let content = element;
 
         if (withSidebar) {
-          content = <SidebarLayout> {element} </SidebarLayout>;
+          content = <Sidebar> {element} </Sidebar>;
         }
 
         if (!noAuth) {
