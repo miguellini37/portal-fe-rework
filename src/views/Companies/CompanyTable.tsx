@@ -8,8 +8,9 @@ import {
 } from '@tanstack/react-table';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
-import { Filter } from '../../components/ColumnFilter';
+import { Filter } from '../../components/Table/ColumnFilter';
 import { getCompanies, ICompanyPaylod } from '../../api/company';
+import '../../components/Table/Table.css';
 
 export const CompanySearch: React.FC<any> = () => {
   const [companies, setCompanies] = useState<ICompanyPaylod[]>([]);
@@ -77,40 +78,37 @@ export const CompanySearch: React.FC<any> = () => {
   });
 
   return (
-    <div className="ProfileSetup relative min-h-screen p-8 text-white">
-      <h2 style={{ marginBottom: '30px' }} className="text-4xl font-bold mb-2">
-        {'Company Search'}
-      </h2>
-      <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full bg-gray-800 text-white rounded-lg">
-          <thead className="bg-gray-700">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="px-4 py-2 text-left">
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                    {header.column.getCanFilter() ? (
-                      <div>
-                        <Filter column={header.column} />
-                      </div>
-                    ) : null}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="border-t border-gray-700">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-2">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="table-container">
+      <table className="table">
+        <thead className="thead">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} className="th">
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                  {header.column.getCanFilter() ? (
+                    <div>
+                      <Filter column={header.column} />
+                    </div>
+                  ) : null}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id} className="tr">
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className="td">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div>
         {companies.length === 0 && (
           <p className="text-gray-300 text-center mt-4">No companies available for search.</p>
         )}

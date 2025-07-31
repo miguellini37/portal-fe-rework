@@ -10,6 +10,7 @@ import {
   IUpdateCompanyEmployeePayload,
   updateCompanyEmployee,
 } from '../../api/companyEmployee';
+import './Profiles.css';
 
 export const CompanyProfile = () => {
   const navigate = useNavigate();
@@ -44,15 +45,11 @@ export const CompanyProfile = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-4xl font-bold mb-2">Edit Your Profile</h2>
-      <form
-        onSubmit={onSubmit}
-        className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
-        {/* First Name */}
+    <div className="profile-container">
+      <h2 className="profile-title">Edit Your Profile</h2>
+      <form onSubmit={onSubmit} className="profile-form">
         <div>
-          <label htmlFor="firstName" className="block text-sm text-gray-300 mb-1">
+          <label htmlFor="firstName" className="form-label">
             First Name
           </label>
           <input
@@ -60,13 +57,12 @@ export const CompanyProfile = () => {
             value={companyEmployee?.firstName ?? ''}
             onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, firstName: e.target.value }))}
             required
-            className="form-input bg-gray-700 p-2 rounded w-full"
+            className="form-control"
           />
         </div>
 
-        {/* Last Name */}
         <div>
-          <label htmlFor="lastName" className="block text-sm text-gray-300 mb-1">
+          <label htmlFor="lastName" className="form-label">
             Last Name
           </label>
           <input
@@ -74,13 +70,12 @@ export const CompanyProfile = () => {
             value={companyEmployee?.lastName ?? ''}
             onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
             required
-            className="form-input bg-gray-700 p-2 rounded w-full"
+            className="form-control"
           />
         </div>
 
-        {/* Company Dropdown */}
-        <div className="md:col-span-2">
-          <label htmlFor="company" className="block text-sm text-gray-300 mb-1">
+        <div className="full-width">
+          <label htmlFor="company" className="form-label">
             Company
           </label>
           <CompanyDropdown
@@ -89,19 +84,11 @@ export const CompanyProfile = () => {
           />
         </div>
 
-        {/* Buttons */}
-        <div className="md:col-span-2 flex gap-4 mt-4">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
-          >
+        <div className="form-actions">
+          <button type="submit" className="btn btn-primary">
             Submit Profile
           </button>
-          <button
-            type="button"
-            className="bg-gray-600 text-white px-6 py-3 rounded hover:bg-gray-500"
-            onClick={() => navigate('/')}
-          >
+          <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>
             Cancel
           </button>
         </div>

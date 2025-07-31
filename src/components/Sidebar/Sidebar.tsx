@@ -3,7 +3,16 @@ import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData, USER_PERMISSIONS } from '../../auth/store';
-import { Home, Briefcase, Search, User, LogOut, LogIn, UserPlus } from 'lucide-react';
+import {
+  Home,
+  Briefcase,
+  Search,
+  User,
+  LogOut,
+  LogIn,
+  UserPlus,
+  GraduationCap,
+} from 'lucide-react';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -65,6 +74,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <li className="mb-4">
                     <DisabledNavLink to="/jobs/search">
                       <Briefcase /> Jobs
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/internships/search">
+                      <GraduationCap /> Internships
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">

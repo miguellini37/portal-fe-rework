@@ -8,9 +8,9 @@ import {
 } from '@tanstack/react-table';
 import { ColumnFilter } from '@tanstack/react-table';
 import { IJobPayload } from '../../api/job';
-import { capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
-import { Filter } from '../../components/ColumnFilter';
+import { Filter } from '../../components/Table/ColumnFilter';
+import '../../components/Table/Table.css';
 
 interface JobsTableProps {
   jobs: IJobPayload[];
@@ -34,7 +34,7 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
       cell: (info) => {
         const company = info.row.original.company;
         return company ? (
-          <Link to={`/company/${company.id}`} className="text-blue-600 hover:underline">
+          <Link to={`/company/${company.id}`} className="link">
             {company.companyName}
           </Link>
         ) : (
@@ -66,18 +66,10 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
       cell: (info) => info.getValue() || 'N/A',
     },
     {
-      header: 'Type',
-      accessorKey: 'type',
-      cell: (info) => capitalize(info.getValue() as string) || 'N/A',
-    },
-    {
       header: '',
       id: 'actions',
       cell: ({ row }) => (
-        <button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
-          onClick={() => onView(row.original)}
-        >
+        <button className="btn" onClick={() => onView(row.original)}>
           View
         </button>
       ),
@@ -95,13 +87,13 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
   });
 
   return (
-    <div className="overflow-x-auto rounded-lg shadow">
-      <table className="min-w-full bg-gray-800 text-white rounded-lg">
-        <thead className="bg-gray-700">
+    <div className="table-container">
+      <table className="table">
+        <thead className="thead">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id} className="px-4 py-2 text-left">
+                <th key={header.id} className="th">
                   {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanFilter() ? (
                     <div>
@@ -115,9 +107,9 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="border-t border-gray-700">
+            <tr key={row.id} className="tr">
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 py-2">
+                <td key={cell.id} className="td">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
@@ -125,9 +117,7 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs, onView, fullTable = 
           ))}
         </tbody>
       </table>
-      {jobs.length === 0 && (
-        <p className="text-gray-300 text-center mt-4">No jobs posted for this company yet.</p>
-      )}
+      {jobs.length === 0 && <p className="table-empty">No jobs posted for this company yet.</p>}
     </div>
   );
 };

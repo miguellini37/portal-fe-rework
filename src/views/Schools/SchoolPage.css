@@ -1,0 +1,117 @@
+.school-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  position: relative;
+  font-family: inherit;
+}
+
+.school-page__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.school-page__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.school-page__form {
+  background-color: var(--muted);
+  padding: 2rem;
+  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  min-width: 40rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .school-page__form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.school-page__form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.school-page__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.school-page__text {
+  font-size: 1.125rem;
+  color: var(--foreground);
+}
+
+.school-page__input {
+  background-color: var(--input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.school-page__input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.school-page__input:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px hsla(221, 83%, 53%, 0.3);
+}
+
+.school-page__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: flex-start;
+}
+
+/* Buttons */
+
+.btn-primary {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+  color: var(--primary-foreground);
+  background-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: hsl(221, 83%, 43%);
+}
+
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+  background-color: hsl(210, 40%, 80%);
+  color: var(--foreground);
+}

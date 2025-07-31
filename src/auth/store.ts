@@ -10,6 +10,8 @@ export interface IUserData {
   id?: string;
   email?: string;
   permission?: USER_PERMISSIONS;
+  firstName?: string;
+  lastName?: string;
 
   companyRef?: {
     id: string;

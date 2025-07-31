@@ -45,20 +45,19 @@ export const JobModal: React.FC<JobModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-auto p-4">
-      <div className="bg-gray-800 p-6 rounded-lg w-full max-w-3xl text-white">
-        <h2 className="text-2xl font-bold mb-4">
-          {job ? (isEdit ? 'Edit Job' : 'View Job') : 'Create Job'}
-        </h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {!isEdit && <div className="md:col-span-2">{job?.company?.companyName}</div>}
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h2 className="modal-title">{job ? (isEdit ? 'Edit Job' : 'View Job') : 'Create Job'}</h2>
+        <form onSubmit={handleSubmit} className="modal-form">
+          {!isEdit && <div className="full-span">{job?.company?.companyName}</div>}
+
           <div>
-            <label htmlFor="type" className="block text-sm text-gray-300 mb-1">
+            <label htmlFor="type" className="modal-label">
               Type
             </label>
             <select
               id="type"
-              className="form-input bg-gray-700 p-2 rounded w-full"
+              className="modal-input"
               value={jobData.type ?? ''}
               onChange={(e) => handleChange('type', e.target.value)}
               disabled={!isEdit}
@@ -68,15 +67,16 @@ export const JobModal: React.FC<JobModalProps> = ({
               <option value="job">Job</option>
             </select>
           </div>
+
           <div></div>
 
           <div>
-            <label htmlFor="position" className="block text-sm text-gray-300 mb-1">
+            <label htmlFor="position" className="modal-label">
               Position
             </label>
             <input
               id="position"
-              className="form-input bg-gray-700 p-2 rounded w-full"
+              className="modal-input"
               value={jobData.position ?? ''}
               onChange={(e) => handleChange('position', e.target.value)}
               disabled={!isEdit}
@@ -85,12 +85,12 @@ export const JobModal: React.FC<JobModalProps> = ({
           </div>
 
           <div>
-            <label htmlFor="location" className="block text-sm text-gray-300 mb-1">
+            <label htmlFor="location" className="modal-label">
               Location
             </label>
             <input
               id="location"
-              className="form-input bg-gray-700 p-2 rounded w-full"
+              className="modal-input"
               value={jobData.location ?? ''}
               onChange={(e) => handleChange('location', e.target.value)}
               disabled={!isEdit}
@@ -98,12 +98,12 @@ export const JobModal: React.FC<JobModalProps> = ({
           </div>
 
           <div>
-            <label htmlFor="salary" className="block text-sm text-gray-300 mb-1">
+            <label htmlFor="salary" className="modal-label">
               Salary
             </label>
             <input
               id="salary"
-              className="form-input bg-gray-700 p-2 rounded w-full"
+              className="modal-input"
               value={jobData.salary ?? ''}
               onChange={(e) => handleChange('salary', e.target.value)}
               disabled={!isEdit}
@@ -111,57 +111,50 @@ export const JobModal: React.FC<JobModalProps> = ({
           </div>
 
           <div>
-            <label htmlFor="benefit" className="block text-sm text-gray-300 mb-1">
+            <label htmlFor="benefit" className="modal-label">
               Benefit
             </label>
             <input
               id="benefit"
-              className="form-input bg-gray-700 p-2 rounded w-full"
+              className="modal-input"
               value={jobData.benefit ?? ''}
               onChange={(e) => handleChange('benefit', e.target.value)}
               disabled={!isEdit}
             />
           </div>
 
-          <div className="md:col-span-2">
-            <label htmlFor="description" className="block text-sm text-gray-300 mb-1">
+          <div className="full-span">
+            <label htmlFor="description" className="modal-label">
               Description
             </label>
             <textarea
               id="description"
-              className="form-input bg-gray-700 p-2 rounded w-full"
+              className="modal-textarea"
               value={jobData.description ?? ''}
               onChange={(e) => handleChange('description', e.target.value)}
               disabled={!isEdit}
             />
           </div>
 
-          <div className="md:col-span-2">
-            <label htmlFor="requirements" className="block text-sm text-gray-300 mb-1">
+          <div className="full-span">
+            <label htmlFor="requirements" className="modal-label">
               Requirements
             </label>
             <textarea
               id="requirements"
-              className="form-input bg-gray-700 p-2 rounded w-full"
+              className="modal-textarea"
               value={jobData.requirements ?? ''}
               onChange={(e) => handleChange('requirements', e.target.value)}
               disabled={!isEdit}
             />
           </div>
 
-          <div className="md:col-span-2 flex justify-end gap-2 mt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500"
-            >
+          <div className="modal-actions">
+            <button type="button" onClick={onClose} className="btn-secondary">
               Close
             </button>
             {isEdit && (
-              <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
+              <button type="submit" className="btn-primary">
                 {job ? 'Update Job' : 'Create Job'}
               </button>
             )}

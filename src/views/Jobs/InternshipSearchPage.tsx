@@ -6,7 +6,7 @@ import { JobModal } from './JobModal';
 import { getAllJobs, IJobPayload } from '../../api/job';
 import { JobsTable } from './JobsTable';
 
-export const JobSearchPage = () => {
+export const InternshipSearchPage = () => {
   const authHeader = useAuthHeader();
   const { id } = useParams<{ id: string }>();
 
@@ -16,7 +16,7 @@ export const JobSearchPage = () => {
 
   const fetchJobs = async () => {
     try {
-      const jobs = await getAllJobs(authHeader, { type: 'job' });
+      const jobs = await getAllJobs(authHeader, { type: 'internship' });
       setJobs(jobs);
     } catch {
       toast.error('Failed to fetch company');
@@ -29,7 +29,7 @@ export const JobSearchPage = () => {
 
   return (
     <div>
-      <h2 className="text-4xl font-bold mb-2">{'Job Search'}</h2>
+      <h2 className="text-4xl font-bold mb-2">{'Internship Search'}</h2>
 
       {/* Jobs Table using reusable component */}
       <div className="mt-8">

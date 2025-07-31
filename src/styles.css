@@ -54,12 +54,11 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Components */
+/* --- Component Styles --- */
 
 .card-hover {
   transition: transform 0.2s ease-in-out;
 }
-
 .card-hover:hover {
   transform: translateY(-0.25rem);
   background-color: var(--muted);
@@ -75,7 +74,6 @@ body {
   transition: background-color 0.2s;
   outline: none;
 }
-
 .form-control:focus {
   box-shadow: 0 0 0 1px var(--primary);
 }
@@ -83,7 +81,6 @@ body {
 .page {
   display: none;
 }
-
 .page.active {
   display: block;
 }
@@ -97,34 +94,38 @@ body {
   background-position: center;
   text-align: center;
 }
-
 .hero-content {
   background-color: hsla(var(--background), 0.85);
-  border-radius: 0.75rem;
+  border-radius: var(--radius);
   padding: 2.5rem;
 }
-
 .hero-text {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-.modal {
+/* --- Modal Styles --- */
+
+.modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
-  display: none;
-  align-items: center;
-  justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  overflow: auto;
+  padding: 1rem;
 }
 
 .modal-content {
-  position: relative;
-  width: 90%;
-  max-width: 600px;
   background-color: var(--muted);
-  border-radius: 0.75rem;
   padding: 2rem;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 48rem;
+  color: var(--foreground);
+  position: relative;
+  z-index: 10001;
 }
 
 .modal-close {
@@ -136,15 +137,104 @@ body {
   color: var(--foreground);
   transition: color 0.2s;
 }
-
 .modal-close:hover {
   color: var(--primary);
 }
 
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.modal-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .modal-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.modal-label {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  color: var(--muted-foreground);
+}
+
+.modal-input,
+.modal-textarea {
+  background-color: var(--input);
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 100%;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+.modal-input:focus,
+.modal-textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--ring);
+}
+
+.modal-textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.full-span {
+  grid-column: span 1;
+}
+@media (min-width: 768px) {
+  .full-span {
+    grid-column: span 2;
+  }
+}
+
+.modal-actions {
+  grid-column: span 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+@media (min-width: 768px) {
+  .modal-actions {
+    grid-column: span 2;
+  }
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background-color: hsl(221, 83%, 43%);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background-color: hsl(210, 40%, 80%);
+  color: var(--foreground);
+}
+
+/* --- Utility / Misc --- */
+
 .card-container {
   transition: transform 0.2s ease-in-out;
 }
-
 .card-container:hover {
   transform: translateY(-0.25rem);
   background-color: var(--muted);

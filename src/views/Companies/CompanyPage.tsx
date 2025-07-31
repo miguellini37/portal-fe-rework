@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { JobModal } from '../Jobs/JobModal';
 import { IJobPayload } from '../../api/job';
 import { JobsTable } from '../Jobs/JobsTable';
+import './CompanyPage.css';
 
 export const CompanyPage = () => {
   const navigate = useNavigate();
@@ -48,84 +49,81 @@ export const CompanyPage = () => {
   };
 
   return (
-    <div className="ProfileSetup relative min-h-screen p-8 bg-gray-900 text-white">
-      <div className="ProfileSetup">
-        <h2 className="text-4xl font-bold mb-2">{company.companyName || 'Company'}</h2>
-        <form
-          onSubmit={onSubmit}
-          className="bg-gray-800 p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
-          {/* Company Name */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Company Name</label>
-            {canEditPage ? (
-              <input
-                placeholder="Company Name"
-                value={company?.companyName ?? ''}
-                onChange={(e) => setCompany((prev) => ({ ...prev, companyName: e.target.value }))}
-                required
-                className="form-input w-full"
-              />
-            ) : (
-              <p className="text-lg">{company?.companyName || 'Not Provided'}</p>
-            )}
-          </div>
-
-          {/* Industry */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Industry</label>
-            {canEditPage ? (
-              <input
-                placeholder="Industry"
-                value={company?.industry ?? ''}
-                onChange={(e) => setCompany((prev) => ({ ...prev, industry: e.target.value }))}
-                required
-                className="form-input w-full"
-              />
-            ) : (
-              <p className="text-lg">{company?.industry || 'Not Provided'}</p>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          {canEditPage && (
-            <div className="md:col-span-2 flex gap-4 mt-4">
-              <button
-                type="submit"
-                className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
-              >
-                Submit Profile
-              </button>
-              <button
-                type="button"
-                className="bg-gray-600 text-white px-6 py-3 rounded hover:bg-gray-500"
-                onClick={() => navigate('/')}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-        </form>
+    <div className="company-page">
+      <div className="company-page__header">
+        <h2 className="company-page__title">{company.companyName || 'Company'}</h2>
       </div>
+
+      <form onSubmit={onSubmit} className="company-page__form">
+        {/* Company Name */}
+        <div className="company-page__form-group">
+          <label htmlFor="companyName" className="company-page__label">
+            Company Name
+          </label>
+          {canEditPage ? (
+            <input
+              id="companyName"
+              className="form-input"
+              placeholder="Company Name"
+              value={company?.companyName ?? ''}
+              onChange={(e) => setCompany((prev) => ({ ...prev, companyName: e.target.value }))}
+              required
+            />
+          ) : (
+            <p className="company-page__text">{company?.companyName || 'Not Provided'}</p>
+          )}
+        </div>
+
+        {/* Industry */}
+        <div className="company-page__form-group">
+          <label htmlFor="industry" className="company-page__label">
+            Industry
+          </label>
+          {canEditPage ? (
+            <input
+              id="industry"
+              className="form-input"
+              placeholder="Industry"
+              value={company?.industry ?? ''}
+              onChange={(e) => setCompany((prev) => ({ ...prev, industry: e.target.value }))}
+              required
+            />
+          ) : (
+            <p className="company-page__text">{company?.industry || 'Not Provided'}</p>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        {canEditPage && (
+          <div className="company-page__actions">
+            <button type="submit" className="btn btn-primary">
+              Submit Profile
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>
+              Cancel
+            </button>
+          </div>
+        )}
+      </form>
 
       {/* Create Job Button */}
       {canEditPage && (
-        <div className="mt-6">
+        <div className="company-page__create-job">
           <button
             onClick={() => {
               setSelectedJob(null);
               setShowModal(true);
             }}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="btn btn-primary"
           >
             Create Job
           </button>
         </div>
       )}
 
-      {/* Jobs Table using reusable component */}
-      <div className="mt-8">
-        <h3 className="text-2xl font-bold mb-4">Jobs</h3>
+      {/* Jobs Table */}
+      <div className="company-page__jobs">
+        <h3 className="company-page__jobs-title">Jobs</h3>
         <JobsTable
           jobs={company.jobs ?? []}
           onView={(job: IJobPayload) => {

@@ -1,12 +1,17 @@
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { IUserData } from '../auth/store';
+
 export const Dashboard = () => {
+  const user = useAuthUser<IUserData>();
+
   return (
-    <div className="Dashboard">
+    <div className="p-6">
       <div className="mb-8">
-        <h2 className="text-4xl font-bold">Welcome, Jane Doe!</h2>
+        <h2 className="text-4xl font-bold">{`Welcome, ${user?.firstName} ${user?.lastName}!`}</h2>
         <p className="text-gray-400 mt-2">Your journey to a dream career starts here.</p>
       </div>
       <div className="space-y-8">
-        <div className="feed-card bg-gray-800 p-6 rounded-lg">
+        <div className="bg-white p-6 rounded-lg">
           <h3 className="text-xl font-bold">Your Profile Status</h3>
           <p>
             <span className="font-semibold">Profile Completion:</span> 85%
@@ -22,10 +27,11 @@ export const Dashboard = () => {
             Edit Profile
           </button>
         </div>
+
         <div>
           <h3 className="text-2xl font-bold mb-4">Recommended Jobs</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="feed-card bg-gray-800 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg">
               <h4 className="text-lg font-bold">Coyote Logistics</h4>
               <p className="text-gray-400">Carrier Sales Representative</p>
               <p>
@@ -41,7 +47,7 @@ export const Dashboard = () => {
                 Apply
               </button>
             </div>
-            <div className="feed-card bg-gray-800 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg">
               <h4 className="text-lg font-bold">Mastery Logistics Systems</h4>
               <p className="text-gray-400">Supply Chain Analyst</p>
               <p>
@@ -59,10 +65,11 @@ export const Dashboard = () => {
             </div>
           </div>
         </div>
+
         <div>
           <h3 className="text-2xl font-bold mb-4">Recommended NIL Deals</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="feed-card bg-gray-800 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg">
               <h4 className="text-lg font-bold">Mastery Logistics Systems</h4>
               <p className="text-gray-400">Social Media Campaign & Internship</p>
               <p>
@@ -77,9 +84,10 @@ export const Dashboard = () => {
             </div>
           </div>
         </div>
+
         <div>
           <h3 className="text-2xl font-bold mb-4">Recent Activity</h3>
-          <div id="recent-activity" className="feed-card bg-gray-800 p-6 rounded-lg">
+          <div className="bg-white p-6 rounded-lg">
             <p>
               <span className="font-semibold">Applied:</span> Coyote Logistics, Carrier Sales
               Representative – April 25, 2025

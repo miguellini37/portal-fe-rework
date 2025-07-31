@@ -1,0 +1,112 @@
+.company-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  position: relative;
+  font-family: inherit;
+}
+
+.company-page__header {
+  margin-bottom: 2rem;
+}
+
+.company-page__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.company-page__form {
+  background-color: var(--muted);
+  padding: 2rem;
+  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  min-width: 40rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .company-page__form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.company-page__form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.company-page__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.company-page__text {
+  font-size: 1.125rem;
+  color: var(--foreground);
+}
+
+.company-page__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.company-page__create-job {
+  margin-top: 1.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.company-page__jobs {
+  margin-top: 2rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.company-page__jobs-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Buttons */
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+  color: var(--primary-foreground);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: hsl(221, 83%, 43%);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.btn-secondary:hover {
+  background-color: hsl(210, 40%, 80%);
+  color: var(--foreground);
+}
+
+/* Use your existing .form-input styles for inputs */
