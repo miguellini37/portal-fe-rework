@@ -23,7 +23,7 @@ export const Register = () => {
     }
 
     try {
-      await register(user as ICreateUserInput);
+      await register({ permission: registerType, ...user } as ICreateUserInput);
       navigate('/login');
     } catch (error) {
       console.error('Error creating user:', error);
@@ -171,7 +171,10 @@ export const Register = () => {
                   </div>
                 </span>
               </label>
-              <CompanyDropdown id="companyDropdown" onChange={undefined} />
+              <CompanyDropdown
+                id="companyDropdown"
+                onChange={(e) => setUser((prev) => ({ ...prev, companyName: e?.label }))}
+              />
             </div>
           )}
 
@@ -206,7 +209,10 @@ export const Register = () => {
                   </div>
                 </span>
               </label>
-              <SchoolDropdown id="schoolDropdown" onChange={undefined} />
+              <SchoolDropdown
+                id="schoolDropdown"
+                onChange={(e) => setUser((prev) => ({ ...prev, schoolName: e?.label }))}
+              />
             </div>
           )}
 

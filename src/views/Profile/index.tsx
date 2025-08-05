@@ -1,6 +1,6 @@
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData, USER_PERMISSIONS } from '../../auth/store';
-import { AthleteProfile } from './Athlete';
+import { AthleteProfile } from './Athlete/';
 import { SchoolProfile } from './School';
 import { CompanyProfile } from './Company';
 

@@ -3,18 +3,35 @@ import { url } from '../config/url';
 import { IUserData } from '../auth/store';
 import { ISchoolPaylod } from './school';
 
+export interface AcademicsPayload {
+  major?: string;
+  minor?: string;
+  gpa?: number;
+  graduationDate?: string;
+  awards?: string;
+  coursework?: string;
+}
+
+export interface AthleticsPayload {
+  sport?: string;
+  position?: string;
+  division?: string;
+  conference?: string;
+  yearsPlayed?: string;
+  leadershipRoles?: string;
+  achievements?: string;
+  statistics?: string;
+}
+
 export interface IUpdateAthletePayload {
   firstName?: string;
   lastName?: string;
-  sport?: string;
-  position?: string;
-  major?: string;
-  gpa?: number;
-  division?: string;
-  accolades?: string;
-  teamRole?: string;
-  graduationDate?: string;
-  statistics?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  bio?: string;
+  academics?: AcademicsPayload;
+  athletics?: AthleticsPayload;
   schoolRef?: ISchoolPaylod;
   schoolId?: string;
 }

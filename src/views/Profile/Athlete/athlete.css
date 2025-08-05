@@ -1,0 +1,283 @@
+/* Always disable first/last name and email fields */
+input.first-name,
+input.last-name,
+input.email {
+  background-color: #f3f4f6;
+  color: #222;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  pointer-events: none;
+  opacity: 1;
+}
+
+input.first-name:disabled,
+input.last-name:disabled,
+input.email:disabled {
+  background-color: #f3f4f6;
+  color: #222;
+  border: 1px solid #d1d5db;
+  opacity: 1;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+@media (min-width: 1024px) {
+  .overview-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.personal-info,
+.completion-card,
+.skills-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.info-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.avatar {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+.field input {
+  padding: 0.5rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+}
+
+.bio label {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.bio textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  resize: none;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.progress-percent {
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 0.5rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #2563eb;
+  border-radius: 9999px;
+}
+
+.completion-list {
+  list-style: none;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.completion-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.completion-list li.complete {
+  color: #16a34a;
+}
+
+.completion-list li.warning {
+  color: #d97706;
+}
+
+.completion-list li.incomplete {
+  color: #dc2626;
+}
+
+.skills-description {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 0.75rem;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  color: #374151;
+}
+
+/* Academic Tab Styles */
+.academic-tab-container,
+.athletics-tab-container {
+  max-width: 1200px;
+  margin: auto;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.academic-section-title,
+.athletics-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.academic-grid,
+.athletics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 1200px;
+}
+
+@media (min-width: 768px) {
+  .academic-grid,
+  .athletics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .academic-field-full,
+  .athletics-field-full {
+    grid-column: 1 / -1;
+  }
+}
+
+.academic-textarea,
+.athletics-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.academic-field,
+.athletics-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.academic-label,
+.athletics-label {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.academic-value,
+.athletics-value {
+  position: relative;
+}
+
+.academic-input,
+.athletics-input {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.academic-placeholder-mock,
+.athletics-placeholder {
+  display: block;
+  height: 1rem;
+  width: 100%;
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+}
+
