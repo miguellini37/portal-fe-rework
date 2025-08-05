@@ -24,7 +24,7 @@ input.email:disabled {
   grid-template-columns: 1fr;
   gap: 1.5rem;
   max-width: 1200px;
-  margin: auto;
+  background-color: var(--primary-foreground);
 }
 
 @media (min-width: 1024px) {

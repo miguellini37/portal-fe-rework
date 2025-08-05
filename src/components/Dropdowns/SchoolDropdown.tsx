@@ -16,9 +16,16 @@ interface SchoolDropdownProps {
     | undefined;
   disabled?: boolean;
   selected?: string;
+  className?: string;
 }
 
-export const SchoolDropdown = ({ id, onChange, disabled, selected }: SchoolDropdownProps) => {
+export const SchoolDropdown = ({
+  id,
+  onChange,
+  disabled,
+  selected,
+  className,
+}: SchoolDropdownProps) => {
   const [options, setOptions] = useState<SchoolOption[]>([]);
 
   const fetchSchools = async (): Promise<void> => {
@@ -52,6 +59,7 @@ export const SchoolDropdown = ({ id, onChange, disabled, selected }: SchoolDropd
       onChange={onChange}
       styles={customDropdownStyle}
       isDisabled={disabled}
+      className={className}
     />
   );
 };

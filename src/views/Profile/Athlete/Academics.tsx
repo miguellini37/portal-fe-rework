@@ -1,23 +1,18 @@
 import React from 'react';
 
 import { IUpdateAthletePayload } from '../../../api/athlete';
+import { SchoolDropdown } from '../../../components/Dropdowns/SchoolDropdown';
 
 interface AcademicsTabProps {
   athlete: IUpdateAthletePayload;
   editMode: boolean;
-  EditSaveButton: React.ComponentType;
   setAthlete: React.Dispatch<React.SetStateAction<IUpdateAthletePayload>>;
 }
 
-export const AcademicsTab: React.FC<AcademicsTabProps> = ({
-  athlete,
-  editMode,
-  EditSaveButton,
-  setAthlete,
-}) => {
+export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, setAthlete }) => {
   const academics = athlete.academics || {};
   return (
-    <div className="academic-tab-container">
+    <div className="academic-tab-container card">
       <h2 className="academic-section-title">
         <span className="icon" role="img" aria-label="Academic Cap">
           🎓
@@ -29,19 +24,17 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({
           <div className="academic-label">University</div>
           <div className="academic-value">
             {editMode ? (
-              <input
-                className="academic-input"
-                // value={academics.sch || ''}
+              <SchoolDropdown
                 onChange={(e) =>
                   setAthlete((a) => ({
                     ...a,
-                    academics: { ...a.academics, university: e.target.value },
+                    schoolId: e?.value,
                   }))
                 }
+                selected={athlete.schoolRef?.id}
               />
             ) : (
-              //               academics.university || <span className="academic-placeholder-mock" />
-              <span className="academic-placeholder-mock" />
+              (athlete.schoolRef?.schoolName ?? <span className="academic-placeholder-mock" />)
             )}
           </div>
         </div>
@@ -127,10 +120,10 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({
             )}
           </div>
         </div>
-        <div className="academic-field">
+        {/* <div className="academic-field">
           <div className="academic-label">Class Rank (Optional)</div>
-          <div className="academic-value">{/* No classRank in BE, leave blank or remove */}</div>
-        </div>
+          <div className="academic-value">No classRank in BE, leave blank or remove</div>
+        </div> */}
         <div className="academic-field academic-field-full">
           <div className="academic-label">Academic Honors & Awards</div>
           <div className="academic-value">
@@ -182,7 +175,6 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({
           </div>
         </div>
       </div>
-      <EditSaveButton />
     </div>
   );
 };

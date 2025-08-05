@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { JSX } from 'react';
 
 import { IUpdateAthletePayload } from '../../../api/athlete';
+import { isNil } from 'lodash';
 
 interface OverviewTabProps {
   athlete: IUpdateAthletePayload;
   editMode: boolean;
-  EditSaveButton: React.ComponentType;
   setAthlete: React.Dispatch<React.SetStateAction<IUpdateAthletePayload>>;
 }
 
-export const OverviewTab: React.FC<OverviewTabProps> = ({
-  athlete,
-  editMode,
-  EditSaveButton,
-  setAthlete,
-}) => {
+export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, setAthlete }) => {
   const skills = [
     'Leadership',
     'Team Collaboration',
@@ -26,10 +21,66 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
     'Goal Setting',
   ];
   const initials = `${athlete.firstName?.[0] || ''}${athlete.lastName?.[0] || ''}`.toUpperCase();
+
+  // Recursively count all fields and filled fields
+  const countFields = (obj: any): { total: number; filled: number } => {
+    if (typeof obj !== 'object' || obj === null) return { total: 0, filled: 0 };
+    let total = 0;
+    let filled = 0;
+    for (const key of Object.keys(obj)) {
+      const value = obj[key];
+      if (typeof value === 'object' && value !== null) {
+        const nested = countFields(value);
+        total += nested.total;
+        filled += nested.filled;
+      } else {
+        total += 1;
+        if (!isNil(value) && value !== '') filled += 1;
+      }
+    }
+    return { total, filled };
+  };
+
+  const getProfileCompletion = (
+    fields: Partial<IUpdateAthletePayload>
+  ): { colorClassName: string; percentComplete: number } => {
+    const { total, filled } = countFields(fields);
+    if (total === 0) {
+      return { colorClassName: 'incomplete', percentComplete: 0 };
+    }
+    const percentComplete = Math.round((filled / total) * 100);
+    if (percentComplete === 100) {
+      return { colorClassName: 'complete', percentComplete };
+    }
+    if (percentComplete >= 60) {
+      return { colorClassName: 'warning', percentComplete };
+    }
+    return { colorClassName: 'incomplete', percentComplete };
+  };
+
+  const renderProfileCompletion = (
+    category: string,
+    fields: Partial<IUpdateAthletePayload>
+  ): JSX.Element => {
+    const { colorClassName, percentComplete } = getProfileCompletion(fields);
+
+    return (
+      <li className={`profile-completion ${colorClassName}`}>
+        <span>{category}</span>
+        <span className="progress-percent">
+          {percentComplete == 100 ? 'Complete' : `${percentComplete}%`}
+        </span>
+      </li>
+    );
+  };
+
+  const { academics, athletics, schoolRef, ...overViewInfo } = athlete;
+  const { percentComplete } = getProfileCompletion(athlete);
+
   return (
     <div className="overview-grid overview-tab-container">
       {/* Personal Information */}
-      <div className="personal-info">
+      <div className="personal-info card">
         <h2 className="section-title">
           <span className="icon">👤</span> Personal Information
         </h2>
@@ -102,47 +153,36 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         </div>
       </div>
 
-      {/* Edit/Save Button */}
-      <EditSaveButton />
       {/* Profile Completion */}
-      <div className="completion-card">
+      <div className="completion-card card">
         <h2 className="section-title">Profile Completion</h2>
 
         <div className="progress-header">
           <span>Overall Progress</span>
-          <span className="progress-percent">85%</span>
+          <span className="progress-percent">{percentComplete}%</span>
         </div>
 
         <div className="progress-bar">
-          <div className="progress-bar-fill" style={{ width: '85%' }} />
+          <div className="progress-bar-fill" style={{ width: `${percentComplete}%` }} />
         </div>
 
         <ul className="completion-list">
-          <li className="complete">
-            <span>🧍 Personal Info</span>
-            <span>Complete</span>
-          </li>
-          <li className="complete">
-            <span>🎓 Academic Info</span>
-            <span>Complete</span>
-          </li>
-          <li className="complete">
-            <span>🏆 Athletic Info</span>
-            <span>Complete</span>
-          </li>
-          <li className="warning">
+          {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
+          {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
+          {renderProfileCompletion('🏆 Athletic Info', { athletics })}
+          {/* <li className="warning">
             <span>📄 Resume</span>
             <span>Needs Update</span>
           </li>
           <li className="incomplete">
             <span>📷 Media</span>
             <span>Incomplete</span>
-          </li>
+          </li> */}
         </ul>
       </div>
 
       {/* Skills & Interests */}
-      <div className="skills-card">
+      <div className="skills-card card">
         <h2 className="section-title">Skills & Interests</h2>
         <div className="skills-description">
           These are some of the skills and interests that set you apart as a student-athlete:

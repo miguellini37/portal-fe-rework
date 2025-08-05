@@ -44,15 +44,36 @@ export const AthleteProfile = () => {
     }
   };
 
+  const handleCancelClick = async () => {
+    if (!id) return;
+    try {
+      const refreshedData = await getAthleteById(id as string, authHeader);
+      setAthlete(refreshedData);
+      setEditMode(false);
+    } catch {
+      toast.error('Failed to refresh profile');
+    }
+  };
+
   const EditSaveButton = () => (
-    <button
-      className="float-right px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition ml-2"
-      onClick={editMode ? handleSaveClick : handleEditClick}
-      disabled={loading}
-      style={{ position: 'absolute', top: 24, right: 32 }}
-    >
-      {editMode ? (loading ? 'Saving...' : 'Save') : 'Edit'}
-    </button>
+    <div className="absolute top-0 right-0 flex gap-2 z-10">
+      {editMode && (
+        <button
+          className="px-3 py-1.5 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition shadow"
+          onClick={handleCancelClick}
+          disabled={loading}
+        >
+          Cancel
+        </button>
+      )}
+      <button
+        className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition shadow"
+        onClick={editMode ? handleSaveClick : handleEditClick}
+        disabled={loading}
+      >
+        {editMode ? (loading ? 'Saving...' : 'Save') : 'Edit'}
+      </button>
+    </div>
   );
 
   const TABS = [
@@ -60,67 +81,53 @@ export const AthleteProfile = () => {
       key: 'overview',
       label: 'Overview',
       component: (athlete: IUpdateAthletePayload) => (
-        <OverviewTab
-          athlete={athlete}
-          editMode={editMode}
-          EditSaveButton={EditSaveButton}
-          setAthlete={setAthlete}
-        />
+        <OverviewTab athlete={athlete} editMode={editMode} setAthlete={setAthlete} />
       ),
     },
     {
       key: 'academic',
       label: 'Academic',
       component: (athlete: IUpdateAthletePayload) => (
-        <AcademicsTab
-          athlete={athlete}
-          editMode={editMode}
-          EditSaveButton={EditSaveButton}
-          setAthlete={setAthlete}
-        />
+        <AcademicsTab athlete={athlete} editMode={editMode} setAthlete={setAthlete} />
       ),
     },
     {
       key: 'athletic',
       label: 'Athletic',
       component: (athlete: IUpdateAthletePayload) => (
-        <AthleticsTab
-          athlete={athlete}
-          editMode={editMode}
-          EditSaveButton={EditSaveButton}
-          setAthlete={setAthlete}
-        />
+        <AthleticsTab athlete={athlete} editMode={editMode} setAthlete={setAthlete} />
       ),
     },
-    // { key: 'resume', label: 'Resume', component: (athlete: IUpdateAthletePayload) => <ResumeTab athlete={athlete} editMode={editMode} EditSaveButton={EditSaveButton} setAthlete={setAthlete} /> },
-    // { key: 'media', label: 'Media', component: (athlete: IUpdateAthletePayload) => <MediaTab athlete={athlete} editMode={editMode} EditSaveButton={EditSaveButton} setAthlete={setAthlete} /> },
+    // { key: 'resume', label: 'Resume', component: (athlete: IUpdateAthletePayload) => <ResumeTab athlete={athlete} editMode={editMode} setAthlete={setAthlete} /> },
+    // { key: 'media', label: 'Media', component: (athlete: IUpdateAthletePayload) => <MediaTab athlete={athlete} editMode={editMode} setAthlete={setAthlete} /> },
   ];
 
   const currentTab = TABS.find((tab) => tab.key === activeTab);
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-6 relative">
-      {/* Tabs */}
-      <div className="flex space-x-4 border-b border-gray-300">
-        {TABS.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`py-2 px-4 text-sm font-medium ${
-              activeTab === tab.key
-                ? 'border-b-2 border-blue-600 text-blue-600'
-                : 'text-gray-600 hover:text-blue-500'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Tabs + Edit/Save Button */}
+      <div className="relative border-b border-gray-300 pb-0 mb-0">
+        <EditSaveButton />
+        <div className="flex space-x-4 mt-2">
+          {TABS.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`py-2 px-4 text-sm font-medium ${
+                activeTab === tab.key
+                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  : 'text-gray-600 hover:text-blue-500'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Tab Content */}
-      <div className="bg-white rounded-b-md shadow p-4 min-h-[400px] relative">
-        {currentTab?.component(athlete)}
-      </div>
+      <div className="m-4 min-h-[400px] relative">{currentTab?.component(athlete)}</div>
     </div>
   );
 };

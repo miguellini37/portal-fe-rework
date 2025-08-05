@@ -5,19 +5,13 @@ import { IUpdateAthletePayload } from '../../../api/athlete';
 interface AthleticsTabProps {
   athlete: IUpdateAthletePayload;
   editMode: boolean;
-  EditSaveButton: React.ComponentType;
   setAthlete: React.Dispatch<React.SetStateAction<IUpdateAthletePayload>>;
 }
 
-export const AthleticsTab: React.FC<AthleticsTabProps> = ({
-  athlete,
-  editMode,
-  EditSaveButton,
-  setAthlete,
-}) => {
+export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, setAthlete }) => {
   const athletics = athlete.athletics || {};
   return (
-    <div className="athletics-tab-container">
+    <div className="athletics-tab-container card">
       <h2 className="athletics-section-title">
         <span className="icon" role="img" aria-label="Trophy">
           🏆
@@ -194,7 +188,6 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({
           </div>
         </div>
       </div>
-      <EditSaveButton />
     </div>
   );
 };
