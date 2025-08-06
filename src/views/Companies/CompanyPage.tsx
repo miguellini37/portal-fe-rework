@@ -35,7 +35,7 @@ export const CompanyPage = () => {
   }, [id]);
 
   const canEditPage = useMemo(() => {
-    return user?.companyRef?.ownerRefId === company.ownerRefId;
+    return user?.id === company.ownerRefId;
   }, [user, company]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -91,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.SCHOOL && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to={`/school/${user?.schoolRef?.id}`}>
+                    <DisabledNavLink to={`/school/${user?.schoolRefId}`}>
                       School Profile
                     </DisabledNavLink>
                   </li>
@@ -103,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.COMPANY && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to={`/company/${user?.companyRef?.id}`}>
+                    <DisabledNavLink to={`/company/${user?.companyRefId}`}>
                       Company Profile
                     </DisabledNavLink>
                   </li>

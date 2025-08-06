@@ -30,7 +30,7 @@ export const SchoolPage = () => {
   }, [id]);
 
   const canEditPage = useMemo(() => {
-    return user?.schoolRef?.ownerRefId === school.ownerRefId;
+    return user?.id === school.ownerRefId;
   }, [user, school]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

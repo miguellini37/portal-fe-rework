@@ -12,15 +12,8 @@ export interface IUserData {
   permission?: USER_PERMISSIONS;
   firstName?: string;
   lastName?: string;
-
-  companyRef?: {
-    id: string;
-    ownerRefId: string;
-  };
-  schoolRef?: {
-    id: string;
-    ownerRefId: string;
-  };
+  companyRefId?: string;
+  schoolRefId?: string;
 }
 
 export const authStore = createStore<IUserData>({
