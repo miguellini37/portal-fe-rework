@@ -13,6 +13,7 @@ export const refreshToken = createRefresh<IUserData>({
     refreshToken?: string;
   }) => {
     try {
+      console.log('Refreshing token...');
       const response = await axios.post(
         `${url}/auth/refresh`,
         { refreshToken },
