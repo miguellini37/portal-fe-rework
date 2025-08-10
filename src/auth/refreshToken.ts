@@ -28,6 +28,8 @@ export const refreshToken = createRefresh<IUserData>({
         isSuccess: true,
         newAuthToken: response.data.accessToken,
         newAuthTokenExpireIn: response.data.expiresIn,
+        newRefreshToken: response.data.refreshToken,
+        newRefreshTokenExpiresIn: response.data.refreshTokenExpireIn,
       };
     } catch {
       return {
