@@ -6,13 +6,13 @@ import RequireAuth from '@auth-kit/react-router/RequireAuth';
 import { JSX } from 'react';
 import { LoginPage } from './views/Login/Login';
 import { ProfileEdit } from './views/Profile';
-import { CompanyPage } from './views/Companies/CompanyPage';
 import { SchoolPage } from './views/Schools/SchoolPage';
 import 'react-toastify/dist/ReactToastify.css';
 import { JobSearchPage } from './views/Jobs/JobSearchPage';
 import { Register } from './views/Login/Register';
 import { CompanySearch } from './views/Companies/CompanyTable';
 import { InternshipSearchPage } from './views/Jobs/InternshipSearchPage';
+import { CompanyProfile } from './views/Companies/Profile';
 
 type PageRoute = {
   path: string;
@@ -27,7 +27,7 @@ export const AppRoutes = () => {
     { path: '/register', element: <Register />, withSidebar: false, noAuth: true },
 
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
-    { path: '/company/:id', element: <CompanyPage />, withSidebar: true },
+    { path: '/company/:id', element: <CompanyProfile />, withSidebar: true },
     { path: '/school/:id', element: <SchoolPage />, withSidebar: true },
 
     { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },

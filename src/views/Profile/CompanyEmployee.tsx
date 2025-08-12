@@ -12,7 +12,7 @@ import {
 } from '../../api/companyEmployee';
 import './Profiles.css';
 
-export const CompanyProfile = () => {
+export const CompanyEmployeeProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
   const user = useAuthUser<IUserData>();

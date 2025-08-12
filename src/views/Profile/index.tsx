@@ -1,8 +1,8 @@
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData, USER_PERMISSIONS } from '../../auth/store';
 import { AthleteProfile } from './Athlete/';
-import { SchoolProfile } from './School';
-import { CompanyProfile } from './Company';
+import { SchoolEmployeeProfile } from './SchoolEmployee';
+import { CompanyEmployeeProfile } from './CompanyEmployee';
 
 export const ProfileEdit = () => {
   const user = useAuthUser<IUserData>();
@@ -13,11 +13,11 @@ export const ProfileEdit = () => {
   }
 
   if (permission == USER_PERMISSIONS.SCHOOL) {
-    return <SchoolProfile />;
+    return <SchoolEmployeeProfile />;
   }
 
   if (permission == USER_PERMISSIONS.COMPANY) {
-    return <CompanyProfile />;
+    return <CompanyEmployeeProfile />;
   }
 
   return <div>Logged in user doesn't have correct permission</div>;

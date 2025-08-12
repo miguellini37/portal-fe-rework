@@ -12,7 +12,7 @@ import {
 import { SchoolDropdown } from '../../components/Dropdowns/SchoolDropdown';
 import './Profiles.css';
 
-export const SchoolProfile = () => {
+export const SchoolEmployeeProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
   const user = useAuthUser<IUserData>();

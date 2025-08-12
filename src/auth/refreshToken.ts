@@ -4,7 +4,7 @@ import { url } from '../config/url';
 import { IUserData } from '../auth/store';
 
 export const refreshToken = createRefresh<IUserData>({
-  interval: 10, // Refresh interval in minutes
+  interval: 1, // Refresh interval in minutes
   refreshApiCallback: async ({
     authToken,
     refreshToken,
@@ -12,6 +12,7 @@ export const refreshToken = createRefresh<IUserData>({
     authToken?: string;
     refreshToken?: string;
   }) => {
+    console.log('Attempting to refresh token...');
     try {
       console.log('Refreshing token...');
       const response = await axios.post(
@@ -23,6 +24,7 @@ export const refreshToken = createRefresh<IUserData>({
           },
         }
       );
+      console.log(response.data);
 
       return {
         isSuccess: true,
