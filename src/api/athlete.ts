@@ -63,3 +63,26 @@ export const getAthleteById = async (
 
   return response.data;
 };
+
+export type getAthletesFilter = {
+  gpa?: number;
+};
+
+export type GetAthletesResponse = {
+  firstName?: string;
+};
+
+export const getAthletes = async (
+  filter: getAthletesFilter,
+  authHeader: string | null
+): Promise<GetAthletesResponse[]> => {
+  const response = await axios.get(`${url}/athlete/`, {
+    params: filter,
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};

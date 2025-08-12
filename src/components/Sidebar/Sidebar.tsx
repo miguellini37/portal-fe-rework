@@ -108,6 +108,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
+                    <DisabledNavLink to="/talent-pool">Talent Pool</DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
                     <DisabledNavLink to="/messages">Messages</DisabledNavLink>
                   </li>
                 </>
