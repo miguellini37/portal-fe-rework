@@ -64,16 +64,25 @@ export const getAthleteById = async (
   return response.data;
 };
 
-export type getAthletesFilter = {
-  gpa?: number;
-};
+export class GetAthletesFilter {
+  wildcardTerm?: string;
+}
 
 export type GetAthletesResponse = {
   firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  bio?: string;
+  academics?: AcademicsPayload;
+  athletics?: AthleticsPayload;
+  schoolRef?: ISchoolPaylod;
+  schoolId?: string;
 };
 
 export const getAthletes = async (
-  filter: getAthletesFilter,
+  filter: GetAthletesFilter,
   authHeader: string | null
 ): Promise<GetAthletesResponse[]> => {
   const response = await axios.get(`${url}/athlete/`, {

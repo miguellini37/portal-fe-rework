@@ -1,0 +1,214 @@
+.talent-pool-root {
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 16px 64px 16px;
+  min-height: 100vh;
+}
+
+.talent-pool-header {
+  margin-bottom: 24px;
+}
+.talent-pool-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+.talent-pool-subtitle {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.talent-pool-searchbar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.talent-pool-searchbar {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--input);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--muted);
+  color: var(--foreground);
+  outline: none;
+  transition: border 0.2s;
+}
+.talent-pool-searchbar:focus {
+  border: 1.5px solid var(--primary);
+  background: var(--background);
+}
+.talent-pool-filters-btn {
+  background: var(--muted);
+  border: 1px solid var(--input);
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+.talent-pool-filters-btn:hover {
+  background: var(--accent);
+  border: 1.5px solid var(--primary);
+}
+.talent-pool-results-count {
+  margin-left: auto;
+  color: var(--muted-foreground);
+  font-size: 1rem;
+}
+
+.talent-pool-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+.athlete-card {
+  flex: 1 1 320px;
+  max-width: 370px;
+  min-width: 280px;
+  /* ...existing card styles... */
+}
+
+/* --- Athlete Card Styles --- */
+.athlete-card {
+  background: var(--card);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  max-width: 500px;
+  transition: box-shadow 0.2s;
+}
+.athlete-card:hover {
+  box-shadow: 0 4px 24px rgba(99,102,241,0.10);
+}
+.athlete-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.athlete-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+}
+.athlete-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+.athlete-sport {
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 500;
+}
+.athlete-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+.athlete-info-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--foreground);
+}
+.athlete-info-label {
+  font-size: 1.1em;
+  margin-right: 2px;
+}
+.athlete-division {
+  background: var(--muted);
+  color: var(--primary);
+  font-size: 0.85em;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-left: 8px;
+}
+.athlete-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.athlete-skill {
+  background: var(--muted);
+  color: var(--primary);
+  font-size: 0.95em;
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-weight: 500;
+}
+.athlete-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+.athlete-view-profile {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 8px;
+  padding: 0.45em 1em;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  box-shadow: 0 1px 2px rgba(59,130,246,0.08);
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.athlete-view-profile:hover {
+  background: hsl(221, 83%, 43%);
+  box-shadow: 0 2px 8px rgba(59,130,246,0.12);
+}
+.athlete-contact {
+  background: var(--card);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  padding: 0.45em 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  box-shadow: 0 1px 2px rgba(59,130,246,0.04);
+  width: 150px;
+  justify-content: center;
+}
+.athlete-contact:hover {
+  background: var(--muted);
+  color: hsl(221, 83%, 43%);
+  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+}

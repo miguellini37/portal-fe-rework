@@ -1,19 +1,46 @@
 import { useEffect, useState } from 'react';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../../../auth/store';
 import './talentPool.css';
-import { getAthletes, GetAthletesResponse } from '../../../api/athlete';
+import { getAthletes, GetAthletesFilter, GetAthletesResponse } from '../../../api/athlete';
+import { AthleteCard } from './AthleteCard';
 
 export const TalentPool = () => {
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
-
   const [athletes, setAthletes] = useState<GetAthletesResponse[]>([]);
+  const [filter, setFilter] = useState<GetAthletesFilter>({});
 
   useEffect(() => {
-    getAthletes({}, authHeader).then((data) => setAthletes(data));
-  }, []);
+    const handler = setTimeout(() => {
+      getAthletes(filter, authHeader).then((data) => setAthletes(data));
+    }, 250); // 250ms debounce
 
-  return <div className="w-full max-w-6xl mx-auto mt-6 relative">Talent Pool</div>;
+    return () => clearTimeout(handler);
+  }, [filter, authHeader]);
+
+  return (
+    <div className="talent-pool-root">
+      <div className="talent-pool-header">
+        <h1 className="talent-pool-title">Talent Pool</h1>
+        <div className="talent-pool-subtitle">
+          Discover and connect with elite NCAA student-athletes
+        </div>
+      </div>
+      <div className="talent-pool-searchbar-row">
+        <input
+          className="talent-pool-searchbar"
+          type="text"
+          placeholder="Search by name, school, major, or sport..."
+          value={filter.wildcardTerm}
+          onChange={(e) => setFilter((prev) => ({ ...prev, wildcardTerm: e.target.value }))}
+        />
+        {/* <button className="talent-pool-filters-btn">Filters</button> */}
+        <div className="talent-pool-results-count">{athletes.length} results</div>
+      </div>
+      <div className="talent-pool-grid">
+        {athletes.map((athlete, i) => (
+          <AthleteCard key={i} athlete={athlete} />
+        ))}
+      </div>
+    </div>
+  );
 };

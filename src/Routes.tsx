@@ -1,6 +1,5 @@
 import { Homepage } from './views/Homepage';
 import { Route, Routes } from 'react-router-dom';
-import { Dashboard } from './views/Dashboard';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import RequireAuth from '@auth-kit/react-router/RequireAuth';
 import { JSX } from 'react';
@@ -32,7 +31,6 @@ export const AppRoutes = () => {
     { path: '/school/:id', element: <SchoolPage />, withSidebar: true },
 
     { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
-    { path: '/dashboard', element: <Dashboard />, withSidebar: true },
 
     { path: '/jobs/search', element: <JobSearchPage />, withSidebar: true },
     { path: '/internships/search', element: <InternshipSearchPage />, withSidebar: true },

@@ -67,11 +67,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.ATHLETE && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to="/dashboard">
-                      <Home /> Dashboard
-                    </DisabledNavLink>
-                  </li>
-                  <li className="mb-4">
                     <DisabledNavLink to="/jobs/search">
                       <Briefcase /> Jobs
                     </DisabledNavLink>
