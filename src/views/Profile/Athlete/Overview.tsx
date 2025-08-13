@@ -154,23 +154,26 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
       </div>
 
       {/* Profile Completion */}
-      <div className="completion-card card">
-        <h2 className="section-title">Profile Completion</h2>
+      {percentComplete === 100 ? (
+        <></>
+      ) : (
+        <div className="completion-card card">
+          <h2 className="section-title">Profile Completion</h2>
 
-        <div className="progress-header">
-          <span>Overall Progress</span>
-          <span className="progress-percent">{percentComplete}%</span>
-        </div>
+          <div className="progress-header">
+            <span>Overall Progress</span>
+            <span className="progress-percent">{percentComplete}%</span>
+          </div>
 
-        <div className="progress-bar">
-          <div className="progress-bar-fill" style={{ width: `${percentComplete}%` }} />
-        </div>
+          <div className="progress-bar">
+            <div className="progress-bar-fill" style={{ width: `${percentComplete}%` }} />
+          </div>
 
-        <ul className="completion-list">
-          {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
-          {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
-          {renderProfileCompletion('🏆 Athletic Info', { athletics })}
-          {/* <li className="warning">
+          <ul className="completion-list">
+            {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
+            {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
+            {renderProfileCompletion('🏆 Athletic Info', { athletics })}
+            {/* <li className="warning">
             <span>📄 Resume</span>
             <span>Needs Update</span>
           </li>
@@ -178,8 +181,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
             <span>📷 Media</span>
             <span>Incomplete</span>
           </li> */}
-        </ul>
-      </div>
+          </ul>
+        </div>
+      )}
 
       {/* Skills & Interests */}
       <div className="skills-card card">

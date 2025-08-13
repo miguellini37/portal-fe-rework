@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { IUpdateAthletePayload } from '../../../api/athlete';
+import { SportsDropdown } from '../../../components/Dropdowns/SportsDropdown';
+import { DivisionDropdown } from '../../../components/Dropdowns/DivisionDropdown';
 
 interface AthleticsTabProps {
   athlete: IUpdateAthletePayload;
@@ -23,13 +25,12 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
           <div className="athletics-label">Sport</div>
           <div className="athletics-value">
             {editMode ? (
-              <input
-                className="athletics-input"
-                value={athletics.sport || ''}
+              <SportsDropdown
+                selected={athletics.sport || ''}
                 onChange={(e) =>
                   setAthlete((a) => ({
                     ...a,
-                    athletics: { ...a.athletics, sport: e.target.value },
+                    athletics: { ...a.athletics, sport: e?.value },
                   }))
                 }
               />
@@ -61,13 +62,12 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
           <div className="athletics-label">Division</div>
           <div className="athletics-value">
             {editMode ? (
-              <input
-                className="athletics-input"
-                value={athletics.division || ''}
+              <DivisionDropdown
+                selected={athletics.division || ''}
                 onChange={(e) =>
                   setAthlete((a) => ({
                     ...a,
-                    athletics: { ...a.athletics, division: e.target.value },
+                    athletics: { ...a.athletics, division: e?.value },
                   }))
                 }
               />

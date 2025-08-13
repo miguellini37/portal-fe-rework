@@ -2,6 +2,7 @@ import React from 'react';
 
 import { IUpdateAthletePayload } from '../../../api/athlete';
 import { SchoolDropdown } from '../../../components/Dropdowns/SchoolDropdown';
+import { MajorDropdown } from '../../../components/Dropdowns/MajorDropdown';
 
 interface AcademicsTabProps {
   athlete: IUpdateAthletePayload;
@@ -42,13 +43,12 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
           <div className="academic-label">Major</div>
           <div className="academic-value">
             {editMode ? (
-              <input
-                className="academic-input"
-                value={academics.major || ''}
+              <MajorDropdown
+                selected={academics.major || ''}
                 onChange={(e) =>
                   setAthlete((a) => ({
                     ...a,
-                    academics: { ...a.academics, major: e.target.value },
+                    academics: { ...a.academics, major: e?.value },
                   }))
                 }
               />
@@ -61,13 +61,12 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
           <div className="academic-label">Minor (Optional)</div>
           <div className="academic-value">
             {editMode ? (
-              <input
-                className="academic-input"
-                value={academics.minor || ''}
+              <MajorDropdown
+                selected={academics.minor || ''}
                 onChange={(e) =>
                   setAthlete((a) => ({
                     ...a,
-                    academics: { ...a.academics, minor: e.target.value },
+                    academics: { ...a.academics, minor: e?.value },
                   }))
                 }
               />
