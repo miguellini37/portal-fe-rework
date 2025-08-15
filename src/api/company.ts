@@ -10,7 +10,9 @@ export interface ICompanyPaylod {
   industry?: string;
   jobs?: IJobPayload[];
   culture?: CulturePayload;
+  benefits?: BenefitsPayload;
 }
+
 export interface CulturePayload {
   cultureValues?: CultureValue[];
   environmentTiles?: EnvironmentTile[];
@@ -19,6 +21,15 @@ export interface CulturePayload {
 export interface CultureValue { icon?: string; title: string; description: string }
 export interface EnvironmentTile { title: string; subtitle: string }
 
+export interface BenefitsPayload {
+  baseSalary: string;
+  commission: string;
+  totalComp: string;
+  healthWellness: string[];
+  flexibleScheduling: string[];
+  careerDevelopment: string[];
+  nilOpportunities: string[];
+}
 
 export const getCompanyById = async (
   id: string,

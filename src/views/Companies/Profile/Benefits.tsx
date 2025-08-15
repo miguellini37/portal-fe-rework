@@ -1,198 +1,208 @@
-import React, { JSX } from 'react';
+import React from 'react';
+import CreatableSelect from 'react-select/creatable'; // Use CreatableSelect for custom options
+import {
+  ICompanyPaylod,
+  BenefitsPayload,
+} from '../../../api/company';
+import './company.css';
 
-import { ICompanyPaylod } from '../../../api/company';
-import { isNil } from 'lodash';
-
-interface BenefitsTabProps {
+type Props = {
   company: ICompanyPaylod;
-  editMode: boolean;
   setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>;
-}
+  editMode: boolean;
+};
 
-export const BenefitsTab: React.FC<BenefitsTabProps> = ({ company, editMode, setCompany }) => {
-  const skills = [
-    'Leadership',
-    'Team Collaboration',
-    'Time Management',
-    'Communication',
-    'Problem Solving',
-    'Adaptability',
-    'Work Ethic',
-    'Goal Setting',
-  ];
+const HEALTH_WELLNESS_PRESETS = [
+  'Medical, Dental, Vision Insurance',
+  'On-site fitness center',
+  'Mental health support',
+  'Wellness programs',
+];
 
-  // Recursively count all fields and filled fields
-  const countFields = (obj: any): { total: number; filled: number } => {
-    if (typeof obj !== 'object' || obj === null) return { total: 0, filled: 0 };
-    let total = 0;
-    let filled = 0;
-    for (const key of Object.keys(obj)) {
-      const value = obj[key];
-      if (typeof value === 'object' && value !== null) {
-        const nested = countFields(value);
-        total += nested.total;
-        filled += nested.filled;
-      } else {
-        total += 1;
-        if (!isNil(value) && value !== '') filled += 1;
-      }
-    }
-    return { total, filled };
+const FLEXIBLE_SCHEDULING_PRESETS = [
+  'Training schedule accommodation',
+  'Competition time off',
+  'Flexible work arrangements',
+];
+
+const CAREER_DEV_PRESETS = [
+  'Athlete mentorship program',
+  'Leadership development track',
+  'Fast-track promotion opportunities',
+  'Tuition reimbursement',
+];
+
+const NIL_OPPORTUNITIES_PRESETS = [
+  'Brand partnership opportunities',
+  'Social media collaboration',
+  'Event appearances',
+];
+
+const ensureBenefits = (b?: BenefitsPayload) => ({
+  baseSalary: b?.baseSalary ?? '',
+  commission: b?.commission ?? '',
+  totalComp: b?.totalComp ?? '',
+  healthWellness: b?.healthWellness ?? [],
+  flexibleScheduling: b?.flexibleScheduling ?? [],
+  careerDevelopment: b?.careerDevelopment ?? [],
+  nilOpportunities: b?.nilOpportunities ?? [],
+});
+
+// Helper for colored bullets
+const bullet = (color: string) => (
+  <span style={{
+    display: 'inline-block',
+    width: 8,
+    height: 8,
+    borderRadius: '50%',
+    background: color,
+    marginRight: 8,
+    verticalAlign: 'middle'
+  }} />
+);
+
+export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) => {
+  const benefits = ensureBenefits(company.benefits);
+
+  const handleInputChange = (field: keyof BenefitsPayload, value: string) => {
+    setCompany(a => ({
+      ...a,
+      benefits: {
+        ...benefits,
+        [field]: value,
+      },
+    }));
   };
 
-  const getProfileCompletion = (
-    fields: Partial<ICompanyPaylod>
-  ): { colorClassName: string; percentComplete: number } => {
-    const { total, filled } = countFields(fields);
-    if (total === 0) {
-      return { colorClassName: 'incomplete', percentComplete: 0 };
-    }
-    const percentComplete = Math.round((filled / total) * 100);
-    if (percentComplete === 100) {
-      return { colorClassName: 'complete', percentComplete };
-    }
-    if (percentComplete >= 60) {
-      return { colorClassName: 'warning', percentComplete };
-    }
-    return { colorClassName: 'incomplete', percentComplete };
+  const handleListChange = (field: keyof BenefitsPayload, selected: any) => {
+    setCompany(a => ({
+      ...a,
+      benefits: {
+        ...benefits,
+        [field]: selected.map((s: any) => s.value),
+      },
+    }));
   };
 
-  const renderProfileCompletion = (
-    category: string,
-    fields: Partial<ICompanyPaylod>
-  ): JSX.Element => {
-    const { colorClassName, percentComplete } = getProfileCompletion(fields);
-
-    return (
-      <li className={`profile-completion ${colorClassName}`}>
-        <span>{category}</span>
-        <span className="progress-percent">
-          {percentComplete == 100 ? 'Complete' : `${percentComplete}%`}
-        </span>
-      </li>
-    );
-  };
-
-  const { percentComplete } = getProfileCompletion(company);
+  // CreatableSelect allows custom options
+  const getCreatableProps = (presets: string[], value: string[], color: string) => ({
+    isMulti: true,
+    options: presets.map(p => ({ value: p, label: p })),
+    value: value.map(p => ({ value: p, label: p })),
+    onChange: (selected: any) => handleListChange(
+      presets === HEALTH_WELLNESS_PRESETS ? 'healthWellness' :
+      presets === FLEXIBLE_SCHEDULING_PRESETS ? 'flexibleScheduling' :
+      presets === CAREER_DEV_PRESETS ? 'careerDevelopment' : 'nilOpportunities',
+      selected
+    ),
+    closeMenuOnSelect: false,
+    formatOptionLabel: (option: any) => (
+      <span>
+        {bullet(color)}
+        {option.label}
+      </span>
+    ),
+    placeholder: "Select or type to add...",
+  });
 
   return (
-    <div className="overview-grid overview-tab-container">
-      {/* Personal Information */}
-      <div className="personal-info card">
-        <h2 className="section-title">
-          <span className="icon">👤</span> Personal Information
-        </h2>
+    <div className="culture-grid card" contentEditable={false}
+      onKeyDownCapture={(e) => { if (editMode) e.stopPropagation(); }}>
 
-        <div className="info-row">
-          {/* <div className="avatar">{initials || '--'}</div>
+      {/* Left Column */}
+      <section className="card values-card">
+        <h3 className="section-title">Compensation & Benefits</h3>
 
-          <div className="info-fields">
-            <div className="two-column">
-              <div className="field">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  className="first-name"
-                  value={company.firstName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  className="last-name"
-                  value={company.lastName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Email</label>
-                <input
-                  type="text"
-                  className="email"
-                  value={company.email || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Phone</label>
-                <input
-                  type="text"
-                  value={company.phone || ''}
-                  readOnly={!editMode}
-                  onChange={(e) => setCompany((a) => ({ ...a, phone: e.target.value }))}
-                />
-              </div>
+        {editMode ? (
+          <div className="comp-inputs">
+            <label>Base Salary Range</label>
+            <input
+              type="text"
+              value={benefits.baseSalary}
+              onChange={(e) => handleInputChange('baseSalary', e.target.value)}
+              placeholder="$55K - $85K"
+            />
+            <label>Commission Potential</label>
+            <input
+              type="text"
+              value={benefits.commission}
+              onChange={(e) => handleInputChange('commission', e.target.value)}
+              placeholder="$20K - $50K+"
+            />
+            <label>Total Comp (Avg)</label>
+            <input
+              type="text"
+              value={benefits.totalComp}
+              onChange={(e) => handleInputChange('totalComp', e.target.value)}
+              placeholder="$78K"
+            />
+          </div>
+        ) : (
+          <>
+            <div className="benefit-card green">
+              <span>Base Salary Range</span>
+              <strong style={{ color: '#22c55e', fontWeight: 700 }}>{benefits.baseSalary}</strong>
             </div>
-            <div className="field full-width">
-              <label>Location</label>
-              <input
-                type="text"
-                value={company.location || ''}
-                readOnly={!editMode}
-                onChange={(e) => setCompany((a) => ({ ...a, location: e.target.value }))}
-              />
+            <div className="benefit-card blue">
+              <span>Commission Potential</span>
+              <strong style={{ color: '#2563eb', fontWeight: 700 }}>{benefits.commission}</strong>
             </div>
-          </div> */}
-        </div>
+            <div className="benefit-card purple">
+              <span>Total Comp (Avg)</span>
+              <strong style={{ color: '#a78bfa', fontWeight: 700 }}>{benefits.totalComp}</strong>
+            </div>
+          </>
+        )}
 
-        <div className="bio">
-          <label>Professional Bio</label>
-          {/* <textarea
-            rows={3}
-            readOnly={!editMode}
-            value={company.bio || ''}
-            onChange={(e) => setCompany((a) => ({ ...a, bio: e.target.value }))}
-          /> */}
-        </div>
-      </div>
+        <h3>Health & Wellness</h3>
+        {!editMode ? (
+          <div className="pill-list">
+            {benefits.healthWellness.map((item, idx) => (
+              <span className="pill pill-green" key={idx}>{item}</span>
+            ))}
+          </div>
+        ) : (
+          <CreatableSelect {...getCreatableProps(HEALTH_WELLNESS_PRESETS, benefits.healthWellness, '#22c55e')} />
+        )}
+      </section>
 
-      {/* Profile Completion */}
-      <div className="completion-card card">
-        <h2 className="section-title">Profile Completion</h2>
+      {/* Right Column */}
+      <section className="card env-card">
+        <h3 className="section-title">Student-Athlete Specific Benefits</h3>
 
-        <div className="progress-header">
-          <span>Overall Progress</span>
-          <span className="progress-percent">{percentComplete}%</span>
-        </div>
+        <h4>Flexible Scheduling</h4>
+        {!editMode ? (
+          <div className="pill-list">
+            {benefits.flexibleScheduling.map((item, idx) => (
+              <span className="pill pill-blue" key={idx}>{item}</span>
+            ))}
+          </div>
+        ) : (
+          <CreatableSelect {...getCreatableProps(FLEXIBLE_SCHEDULING_PRESETS, benefits.flexibleScheduling, '#2563eb')} />
+        )}
 
-        <div className="progress-bar">
-          <div className="progress-bar-fill" style={{ width: `${percentComplete}%` }} />
-        </div>
+        <h4>Career Development</h4>
+        {!editMode ? (
+          <div className="pill-list">
+            {benefits.careerDevelopment.map((item, idx) => (
+              <span className="pill pill-orange" key={idx}>{item}</span>
+            ))}
+          </div>
+        ) : (
+          <CreatableSelect {...getCreatableProps(CAREER_DEV_PRESETS, benefits.careerDevelopment, '#f59e42')} />
+        )}
 
-        <ul className="completion-list">
-          {/* {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
-          {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
-          {renderProfileCompletion('🏆 Athletic Info', { athletics })} */}
-          {/* <li className="warning">
-            <span>📄 Resume</span>
-            <span>Needs Update</span>
-          </li>
-          <li className="incomplete">
-            <span>📷 Media</span>
-            <span>Incomplete</span>
-          </li> */}
-        </ul>
-      </div>
-
-      {/* Skills & Interests */}
-      <div className="skills-card card">
-        <h2 className="section-title">Skills & Interests</h2>
-        <div className="skills-description">
-          These are some of the skills and interests that set you apart as a student-company:
-        </div>
-        <div className="skills-list">
-          {skills.map((skill) => (
-            <span className="skill-tag" key={skill}>
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
+        <h4>NIL Opportunities</h4>
+        {!editMode ? (
+          <div className="pill-list">
+            {benefits.nilOpportunities.map((item, idx) => (
+              <span className="pill pill-purple" key={idx}>{item}</span>
+            ))}
+          </div>
+        ) : (
+          <CreatableSelect {...getCreatableProps(NIL_OPPORTUNITIES_PRESETS, benefits.nilOpportunities, '#a78bfa')} />
+        )}
+      </section>
     </div>
   );
 };
