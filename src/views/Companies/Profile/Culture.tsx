@@ -1,46 +1,27 @@
-import React from 'react';
-import Select from 'react-select';
-import {
-  ICompanyPaylod,
-  CulturePayload,
-} from '../../../api/company';
-import './company.css';
+import React, { JSX } from 'react';
 
-const VALUE_PRESETS = [
-  { value: 'competitive', label: 'Competitive Excellence', icon: '🌀', description: 'We hire athletes because they understand what it takes to win and perform under pressure.' },
-  { value: 'team', label: 'Team First', icon: '🧑‍🤝‍🧑', description: 'Success comes from collaboration, just like in sports. We win together.' },
-  { value: 'continuous', label: 'Continuous Improvement', icon: '📈', description: "Like training for the next season, we're always getting better." },
-  // ...add up to 30
-];
+import { ICompanyPaylod } from '../../../api/company';
+import { isNil } from 'lodash';
 
-const ENVIRONMENT_PRESETS = [
-  { value: 'fast', label: 'Fast-Paced', description: 'High-energy environment' },
-  { value: 'growth', label: 'Growth-Focused', description: 'Career development' },
-  { value: 'collaborative', label: 'Collaborative', description: 'Team-based success' },
-  { value: 'results', label: 'Results-Driven', description: 'Performance matters' },
-  // ...add up to 30
-];
-
-const THRIVE_POINTS_PRESETS = [
-  'Competitive sales environment rewards high performers',
-  'Team-based culture mirrors sports dynamics',
-  'Clear performance metrics and goals',
-  'Fast career advancement for top performers',
-  // ...add more as needed
-];
-
-type Props = {
+interface CultureTabProps {
   company: ICompanyPaylod;
-  setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>;
   editMode: boolean;
-};
+  setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>;
+}
 
-const ensureCulture = (c?: CulturePayload) => ({
-  cultureValues: c?.cultureValues ?? [],
-  environmentTiles: c?.environmentTiles ?? [],
-  thrivePoints: c?.thrivePoints ?? [],
-});
+export const CultureTab: React.FC<CultureTabProps> = ({ company, editMode, setCompany }) => {
+  const skills = [
+    'Leadership',
+    'Team Collaboration',
+    'Time Management',
+    'Communication',
+    'Problem Solving',
+    'Adaptability',
+    'Work Ethic',
+    'Goal Setting',
+  ];
 
+<<<<<<< HEAD
 export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) => {
   const culture = ensureCulture(company.culture);
 
@@ -82,106 +63,180 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
         thrivePoints: selected.map((preset: any) => preset.value),
       },
     }));
+=======
+  // Recursively count all fields and filled fields
+  const countFields = (obj: any): { total: number; filled: number } => {
+    if (typeof obj !== 'object' || obj === null) return { total: 0, filled: 0 };
+    let total = 0;
+    let filled = 0;
+    for (const key of Object.keys(obj)) {
+      const value = obj[key];
+      if (typeof value === 'object' && value !== null) {
+        const nested = countFields(value);
+        total += nested.total;
+        filled += nested.filled;
+      } else {
+        total += 1;
+        if (!isNil(value) && value !== '') filled += 1;
+      }
+    }
+    return { total, filled };
   };
 
-  return (
-    <div className="culture-grid card" contentEditable={false}
-      onKeyDownCapture={(e) => { if (editMode) e.stopPropagation(); }}>
-      <section className="card values-card">
-        <h3 className="section-title">Our Values</h3>
-        <p className="section-subtitle">The principles that guide everything we do.</p>
-        {editMode ? (
-          <Select
-            isMulti
-            options={VALUE_PRESETS}
-            value={VALUE_PRESETS.filter(preset =>
-              culture.cultureValues?.some(v => v.title === preset.label)
-            )}
-            onChange={handleValuesChange}
-            closeMenuOnSelect={false}
-            isOptionDisabled={() =>
-              (culture.cultureValues?.length ?? 0) >= 5
-            }
-            getOptionLabel={option => option.label}
-            formatOptionLabel={option => (
-              <span>
-                <span style={{ marginRight: 8 }}>{option.icon}</span>
-                {option.label}
-                <span style={{ color: '#6b7280', marginLeft: 8, fontSize: '0.9em' }}>{option.description}</span>
-              </span>
-            )}
-          />
-        ) : (
-          <ul className="values-list">
-            {culture.cultureValues?.map((v, i) => (
-              <li key={i} className="value-item">
-                <div className="value-icon">{v.icon}</div>
-                <div className="value-copy">
-                  <div className="value-title">{v.title}</div>
-                  <div className="value-desc">{v.description}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+  const getProfileCompletion = (
+    fields: Partial<ICompanyPaylod>
+  ): { colorClassName: string; percentComplete: number } => {
+    const { total, filled } = countFields(fields);
+    if (total === 0) {
+      return { colorClassName: 'incomplete', percentComplete: 0 };
+    }
+    const percentComplete = Math.round((filled / total) * 100);
+    if (percentComplete === 100) {
+      return { colorClassName: 'complete', percentComplete };
+    }
+    if (percentComplete >= 60) {
+      return { colorClassName: 'warning', percentComplete };
+    }
+    return { colorClassName: 'incomplete', percentComplete };
+  };
 
-      <section className="card env-card">
-        <h3 className="section-title">Work Environment</h3>
-        <p className="section-subtitle">What it's like to work here</p>
-        {editMode ? (
-          <Select
-            isMulti
-            options={ENVIRONMENT_PRESETS}
-            value={ENVIRONMENT_PRESETS.filter(preset =>
-              culture.environmentTiles?.some(t => t.title === preset.label)
-            )}
-            onChange={handleEnvChange}
-            closeMenuOnSelect={false}
-            isOptionDisabled={() =>
-              (culture.environmentTiles?.length ?? 0) >= 4
-            }
-            formatOptionLabel={option => (
-              <span>
-                <span style={{ fontWeight: 700 }}>{option.label}</span>
-                <span style={{ color: '#6b7280', marginLeft: 8, fontSize: '0.9em' }}>{option.description}</span>
-              </span>
-            )}
-          />
-        ) : (
-          <div className="env-tiles">
-            {culture.environmentTiles?.map((t, i) => (
-              <div key={i} className="env-tile">
-                <div className="env-tile-title" style={{ textAlign: 'center', fontWeight: 700, fontSize: '1.1em' }}>{t.title}</div>
-                <div className="env-tile-sub" style={{ textAlign: 'center', color: '#6b7280', fontSize: '0.98em' }}>{t.subtitle}</div>
+  const renderProfileCompletion = (
+    category: string,
+    fields: Partial<ICompanyPaylod>
+  ): JSX.Element => {
+    const { colorClassName, percentComplete } = getProfileCompletion(fields);
+
+    return (
+      <li className={`profile-completion ${colorClassName}`}>
+        <span>{category}</span>
+        <span className="progress-percent">
+          {percentComplete == 100 ? 'Complete' : `${percentComplete}%`}
+        </span>
+      </li>
+    );
+>>>>>>> 713c57c (removed culture and index)
+  };
+
+  const { percentComplete } = getProfileCompletion(company);
+
+  return (
+    <div className="overview-grid overview-tab-container">
+      {/* Personal Information */}
+      <div className="personal-info card">
+        <h2 className="section-title">
+          <span className="icon">👤</span> Personal Information
+        </h2>
+
+        <div className="info-row">
+          {/* <div className="avatar">{initials || '--'}</div>
+
+          <div className="info-fields">
+            <div className="two-column">
+              <div className="field">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  className="first-name"
+                  value={company.firstName || ''}
+                  readOnly
+                  tabIndex={-1}
+                />
               </div>
-            ))}
-          </div>
-        )}
-        <h4 className="subheader">Why Student-Athletes Thrive Here</h4>
-        {editMode ? (
-          <Select
-            isMulti
-            options={THRIVE_POINTS_PRESETS.map(p => ({ value: p, label: p }))}
-            value={THRIVE_POINTS_PRESETS.filter(p =>
-              culture.thrivePoints?.includes(p)
-            ).map(p => ({ value: p, label: p }))}
-            onChange={handleThriveChange}
-            closeMenuOnSelect={false}
-            isOptionDisabled={() =>
-              (culture.thrivePoints?.length ?? 0) >= 6
-            }
-          />
-        ) : (
-          <ul className="thrive-list">
-            {culture.thrivePoints?.map((p, i) => (
-              <li key={i} style={{ listStyle: 'none', marginLeft: 0 }}>
-                <span style={{ marginRight: 8 }}>🔹</span>{p}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+              <div className="field">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  className="last-name"
+                  value={company.lastName || ''}
+                  readOnly
+                  tabIndex={-1}
+                />
+              </div>
+              <div className="field">
+                <label>Email</label>
+                <input
+                  type="text"
+                  className="email"
+                  value={company.email || ''}
+                  readOnly
+                  tabIndex={-1}
+                />
+              </div>
+              <div className="field">
+                <label>Phone</label>
+                <input
+                  type="text"
+                  value={company.phone || ''}
+                  readOnly={!editMode}
+                  onChange={(e) => setCompany((a) => ({ ...a, phone: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="field full-width">
+              <label>Location</label>
+              <input
+                type="text"
+                value={company.location || ''}
+                readOnly={!editMode}
+                onChange={(e) => setCompany((a) => ({ ...a, location: e.target.value }))}
+              />
+            </div>
+          </div> */}
+        </div>
+
+        <div className="bio">
+          <label>Professional Bio</label>
+          {/* <textarea
+            rows={3}
+            readOnly={!editMode}
+            value={company.bio || ''}
+            onChange={(e) => setCompany((a) => ({ ...a, bio: e.target.value }))}
+          /> */}
+        </div>
+      </div>
+
+      {/* Profile Completion */}
+      <div className="completion-card card">
+        <h2 className="section-title">Profile Completion</h2>
+
+        <div className="progress-header">
+          <span>Overall Progress</span>
+          <span className="progress-percent">{percentComplete}%</span>
+        </div>
+
+        <div className="progress-bar">
+          <div className="progress-bar-fill" style={{ width: `${percentComplete}%` }} />
+        </div>
+
+        <ul className="completion-list">
+          {/* {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
+          {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
+          {renderProfileCompletion('🏆 Athletic Info', { athletics })} */}
+          {/* <li className="warning">
+            <span>📄 Resume</span>
+            <span>Needs Update</span>
+          </li>
+          <li className="incomplete">
+            <span>📷 Media</span>
+            <span>Incomplete</span>
+          </li> */}
+        </ul>
+      </div>
+
+      {/* Skills & Interests */}
+      <div className="skills-card card">
+        <h2 className="section-title">Skills & Interests</h2>
+        <div className="skills-description">
+          These are some of the skills and interests that set you apart as a student-company:
+        </div>
+        <div className="skills-list">
+          {skills.map((skill) => (
+            <span className="skill-tag" key={skill}>
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
