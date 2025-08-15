@@ -109,4 +109,154 @@
   color: var(--foreground);
 }
 
+
 /* Use your existing .form-input styles for inputs */
+
+/* Company Culture */
+/* layout */
+.culture-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e9eef5;
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.section-subtitle {
+  color: #6b7280;
+  margin: 0 0 16px;
+}
+
+.subheader {
+  margin: 16px 0 8px;
+  font-weight: 700;
+}
+
+/* values */
+.values-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.value-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 8px;
+  border-radius: 10px;
+}
+
+
+.value-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #f3f6ff;
+  font-size: 18px;
+}
+
+.value-title { font-weight: 700; margin-bottom: 2px; }
+.value-desc { color: #374151; }
+
+.muted { color: #6b7280; }
+
+/* env tiles */
+.env-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 10px 0 18px;
+}
+
+.env-tile {
+  border: 1px solid #e9eef5;
+  border-radius: 12px;
+  padding: 14px;
+  background: #f9fbff;
+}
+
+
+.env-tile-title { font-weight: 700; margin-bottom: 4px; }
+.env-tile-sub { color: #6b7280; font-size: 14px; }
+
+/* thrive points */
+.thrive-list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.thrive-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+  /* Indent wrapped lines under the text, not the bullet */
+}
+
+.thrive-list li span {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 1.1em;
+}
+
+.thrive-list li > span + span {
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* actions & inputs */
+.toolbar-actions { display: flex; gap: 8px; }
+
+input, textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+}
+
+.row-2col {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary { background: #3b82f6; color: #fff; }
+.btn-secondary { background: #eef2ff; color: #1f2937; }
+.btn-tertiary { background: transparent; color: #374151; }
+
+.error-inline {
+  grid-column: 1 / -1;
+  color: #b91c1c;
+  margin-bottom: 8px;
+}
+
+.empty-culture { text-align: left; }
+

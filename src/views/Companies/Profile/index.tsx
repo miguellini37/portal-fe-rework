@@ -73,7 +73,7 @@ export const CompanyProfile = () => {
           className="px-3 py-1.5 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition shadow"
           onClick={handleCancelClick}
           disabled={loading}
-        >
+        > 
           Cancel
         </button>
       )}
@@ -98,7 +98,7 @@ export const CompanyProfile = () => {
     {
       key: 'culture',
       label: 'Culture',
-      component: (company: IUpdateCompanyEmployeePayload) => (
+      component: (company: ICompanyPaylod) => (
         <CultureTab company={company} editMode={editMode} setCompany={setCompany} />
       ),
     },
