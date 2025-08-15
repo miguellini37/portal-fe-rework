@@ -49,7 +49,7 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
     setCompany(a => ({
       ...a,
       culture: {
-        ...culture,
+        ...a.culture,
         cultureValues: selected.map((preset: any) => ({
           icon: preset.icon,
           title: preset.label,
@@ -64,7 +64,7 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
     setCompany(a => ({
       ...a,
       culture: {
-        ...culture,
+        ...a.culture,
         environmentTiles: selected.map((preset: any) => ({
           title: preset.label,
           subtitle: preset.description,
@@ -78,7 +78,7 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
     setCompany(a => ({
       ...a,
       culture: {
-        ...culture,
+        ...a.culture,
         thrivePoints: selected.map((preset: any) => preset.value),
       },
     }));
