@@ -68,7 +68,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
     setCompany(a => ({
       ...a,
       benefits: {
-        ...benefits,
+        ...ensureBenefits(a.benefits),
         [field]: value,
       },
     }));
@@ -78,7 +78,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
     setCompany(a => ({
       ...a,
       benefits: {
-        ...benefits,
+        ...ensureBenefits(a.benefits),
         [field]: selected.map((s: any) => s.value),
       },
     }));
