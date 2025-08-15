@@ -98,7 +98,7 @@ export const CompanyProfile = () => {
     {
       key: 'culture',
       label: 'Culture',
-      component: (company: ICompanyPaylod) => (
+      component: (company: IUpdateCompanyEmployeePayload) => (
         <CultureTab company={company} editMode={editMode} setCompany={setCompany} />
       ),
     },
