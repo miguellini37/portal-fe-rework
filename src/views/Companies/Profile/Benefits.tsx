@@ -48,18 +48,6 @@ const ensureBenefits = (b?: BenefitsPayload) => ({
   nilOpportunities: b?.nilOpportunities ?? [],
 });
 
-// Helper for colored bullets
-const bullet = (color: string) => (
-  <span style={{
-    display: 'inline-block',
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-    background: color,
-    marginRight: 8,
-    verticalAlign: 'middle'
-  }} />
-);
 
 export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) => {
   const benefits = ensureBenefits(company.benefits);
@@ -98,7 +86,6 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
     closeMenuOnSelect: false,
     formatOptionLabel: (option: any) => (
       <span>
-        {bullet(color)}
         {option.label}
       </span>
     ),
