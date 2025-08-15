@@ -362,7 +362,8 @@ input, textarea {
 }
 
 .pill {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   padding: 10px 22px;
   border-radius: 999px;
   font-size: 1.05rem;
@@ -370,9 +371,24 @@ input, textarea {
   box-shadow: 0 2px 8px rgba(59,130,246,0.07);
   border: none;
   transition: background 0.15s;
-  /* Always show background */
   background: #f3f6ff;
   color: #222;
+  gap: 8px; /* space between label and x */
+}
+
+.pill .css-12jo7m5, /* react-select multiValueRemove default class */
+.pill .css-xb97g8 { /* react-select multiValueRemove hover class */
+  margin-left: 8px;
+  font-size: 1.1em;
+  align-self: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .pill-green {
@@ -398,4 +414,10 @@ input, textarea {
 .pill:hover {
   filter: brightness(0.97);
   cursor: pointer;
+}
+
+.pill-edit {
+  padding: 6px 12px !important;
+  font-size: 0.95rem !important;
+  gap: 4px !important;
 }

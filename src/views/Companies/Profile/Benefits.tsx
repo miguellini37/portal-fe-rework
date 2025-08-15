@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import CreatableSelect from 'react-select/creatable'; // Use CreatableSelect for custom options
 import {
   ICompanyPaylod,
@@ -73,7 +73,12 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
   };
 
   // CreatableSelect allows custom options
-  const getCreatableProps = (presets: string[], value: string[], color: string) => ({
+  const getCreatableProps = (
+    presets: string[],
+    value: string[],
+    color: string,
+    pillClass: string
+  ) => ({
     isMulti: true,
     options: presets.map(p => ({ value: p, label: p })),
     value: value.map(p => ({ value: p, label: p })),
@@ -90,6 +95,35 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
       </span>
     ),
     placeholder: "Select or type to add...",
+    styles: {
+      multiValue: (base: any) => ({
+        ...base,
+        backgroundColor: 'transparent',
+        padding: 0,
+        margin: '4px 8px 4px 0',
+        borderRadius: '999px',
+      }),
+      multiValueLabel: (base: any) => ({
+        ...base,
+        padding: 0,
+        color: 'inherit',
+      }),
+      multiValueRemove: (base: any) => ({
+        ...base,
+        paddingLeft: 8,
+        paddingRight: 8,
+        color: 'inherit',
+        ':hover': {
+          backgroundColor: 'transparent',
+          color: '#333',
+        },
+      }),
+    },
+    components: {
+      MultiValueContainer: ({ children, ...props }: { children: React.ReactNode } & any) => (
+        <span className={`pill ${pillClass} pill-edit`} {...props}>{children}</span>
+      ),
+    },
   });
 
   return (
@@ -149,7 +183,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
             ))}
           </div>
         ) : (
-          <CreatableSelect {...getCreatableProps(HEALTH_WELLNESS_PRESETS, benefits.healthWellness, '#22c55e')} />
+          <CreatableSelect {...getCreatableProps(HEALTH_WELLNESS_PRESETS, benefits.healthWellness, '#22c55e', 'pill-green')} />
         )}
       </section>
 
@@ -165,7 +199,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
             ))}
           </div>
         ) : (
-          <CreatableSelect {...getCreatableProps(FLEXIBLE_SCHEDULING_PRESETS, benefits.flexibleScheduling, '#2563eb')} />
+          <CreatableSelect {...getCreatableProps(FLEXIBLE_SCHEDULING_PRESETS, benefits.flexibleScheduling, '#2563eb', 'pill-blue')} />
         )}
 
         <h4>Career Development</h4>
@@ -176,7 +210,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
             ))}
           </div>
         ) : (
-          <CreatableSelect {...getCreatableProps(CAREER_DEV_PRESETS, benefits.careerDevelopment, '#f59e42')} />
+          <CreatableSelect {...getCreatableProps(CAREER_DEV_PRESETS, benefits.careerDevelopment, '#f59e42', 'pill-orange')} />
         )}
 
         <h4>NIL Opportunities</h4>
@@ -187,7 +221,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
             ))}
           </div>
         ) : (
-          <CreatableSelect {...getCreatableProps(NIL_OPPORTUNITIES_PRESETS, benefits.nilOpportunities, '#a78bfa')} />
+          <CreatableSelect {...getCreatableProps(NIL_OPPORTUNITIES_PRESETS, benefits.nilOpportunities, '#a78bfa', 'pill-purple')} />
         )}
       </section>
     </div>
