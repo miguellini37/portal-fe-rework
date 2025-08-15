@@ -333,14 +333,6 @@ input, textarea {
   vertical-align: middle;
 }
 
-/* Optional: Use emoji instead of colored dots for more visual interest
-.card ul li span {
-  background: none;
-  font-size: 1.2em;
-  margin-right: 10px;
-}
-*/
-
 /* Add a little space between groups if needed */
 .card ul:not(:last-child) {
   margin-bottom: 18px;
