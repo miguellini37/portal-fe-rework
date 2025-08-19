@@ -10,15 +10,32 @@ export interface ICompanyPaylod {
   industry?: string;
   jobs?: IJobPayload[];
   culture?: CulturePayload;
+  benefits?: BenefitsPayload;
 }
+
 export interface CulturePayload {
   cultureValues?: CultureValue[];
   environmentTiles?: EnvironmentTile[];
   thrivePoints?: string[];
 }
-export interface CultureValue { icon?: string; title: string; description: string }
-export interface EnvironmentTile { title: string; subtitle: string }
+export interface CultureValue { icon?: string; title?: string; description?: string }
+export interface EnvironmentTile { title?: string; subtitle?: string }
 
+export interface BenefitsPayload {
+  baseSalaryMin?: number;
+  baseSalaryMax?: number;
+  commissionMin?: number;
+  commissionMax?: number;
+  totalCompMin?: number;
+  totalCompMax?: number;
+  specificBenefits?: SpecificBenefits[];
+}
+
+export interface SpecificBenefits {
+  title?: string;
+  description?: string[];
+  icon?: string;
+}
 
 export const getCompanyById = async (
   id: string,

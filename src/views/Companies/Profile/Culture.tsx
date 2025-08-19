@@ -10,7 +10,6 @@ const VALUE_PRESETS = [
   { value: 'competitive', label: 'Competitive Excellence', icon: '🌀', description: 'We hire athletes because they understand what it takes to win and perform under pressure.' },
   { value: 'team', label: 'Team First', icon: '🧑‍🤝‍🧑', description: 'Success comes from collaboration, just like in sports. We win together.' },
   { value: 'continuous', label: 'Continuous Improvement', icon: '📈', description: "Like training for the next season, we're always getting better." },
-  // ...add up to 30
 ];
 
 const ENVIRONMENT_PRESETS = [
@@ -18,7 +17,6 @@ const ENVIRONMENT_PRESETS = [
   { value: 'growth', label: 'Growth-Focused', description: 'Career development' },
   { value: 'collaborative', label: 'Collaborative', description: 'Team-based success' },
   { value: 'results', label: 'Results-Driven', description: 'Performance matters' },
-  // ...add up to 30
 ];
 
 const THRIVE_POINTS_PRESETS = [
@@ -26,7 +24,6 @@ const THRIVE_POINTS_PRESETS = [
   'Team-based culture mirrors sports dynamics',
   'Clear performance metrics and goals',
   'Fast career advancement for top performers',
-  // ...add more as needed
 ];
 
 type Props = {
