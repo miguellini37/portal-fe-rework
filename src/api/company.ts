@@ -18,17 +18,20 @@ export interface CulturePayload {
   environmentTiles?: EnvironmentTile[];
   thrivePoints?: string[];
 }
-export interface CultureValue { icon?: string; title: string; description: string }
-export interface EnvironmentTile { title: string; subtitle: string }
+export interface CultureValue { icon?: string; title?: string; description?: string }
+export interface EnvironmentTile { title?: string; subtitle?: string }
 
 export interface BenefitsPayload {
-  baseSalary: string;
-  commission: string;
-  totalComp: string;
-  healthWellness: string[];
-  flexibleScheduling: string[];
-  careerDevelopment: string[];
-  nilOpportunities: string[];
+  baseSalary?: number[];
+  commission?: number[];
+  totalComp?: number[];
+  specficBenefits?: SpecificBenefits[];
+}
+
+export interface SpecificBenefits {
+  title?: string;
+  description?: string[];
+  icon?: string;
 }
 
 export const getCompanyById = async (

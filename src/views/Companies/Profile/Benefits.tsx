@@ -1,228 +1,201 @@
-import React, { ReactNode } from 'react';
-import CreatableSelect from 'react-select/creatable'; // Use CreatableSelect for custom options
-import {
-  ICompanyPaylod,
-  BenefitsPayload,
-} from '../../../api/company';
+import React, { useMemo } from 'react';
+import CreatableSelect from 'react-select/creatable';
+import type { MultiValue } from 'react-select';
+import { ICompanyPaylod, BenefitsPayload, SpecificBenefits } from '../../../api/company';
 import './company.css';
 
-type Props = {
-  company: ICompanyPaylod;
-  setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>;
-  editMode: boolean;
+type Props = { company: ICompanyPaylod; setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>; editMode: boolean };
+type Option = { value: string; label: string };
+
+const PRESETS = [
+  { id: 'health', title: 'Health & Wellness', icon: '💚', suggestions: ['Medical, Dental, Vision Insurance', 'On-site fitness center', 'Mental health support', 'Wellness programs'] },
+  { id: 'flex', title: 'Flexible Scheduling', icon: '🗓️', suggestions: ['Training schedule accommodation', 'Competition time off', 'Flexible work arrangements'] },
+  { id: 'career', title: 'Career Development', icon: '🚀', suggestions: ['Athlete mentorship program', 'Leadership development track', 'Fast-track promotion opportunities', 'Tuition reimbursement'] },
+  { id: 'nil', title: 'NIL Opportunities', icon: '💼', suggestions: ['Brand partnership opportunities', 'Social media collaboration', 'Event appearances'] },
+];
+
+// utils
+const asRange = (v: unknown): number[] =>
+  Array.isArray(v) ? v.map(Number).filter(n => Number.isFinite(n) && n >= 0).slice(0, 2)
+  : v == null || v === '' ? [] : Number.isFinite(+v) && +v >= 0 ? [+v] : [];
+
+const money = (n?: number) => typeof n === 'number' && n > 0 ? `$${Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n)}` : '—';
+const moneyRange = (arr?: number[]) => {
+  const v = asRange(arr);
+  return v.length === 0 ? '—' : v.length === 1 ? money(v[0]) : `${money(Math.min(...v))} - ${money(Math.max(...v))}`;
+};
+const color = (i: number) => ['pill-blue', 'pill-orange', 'pill-purple', 'pill-green'][i % 4];
+
+// small UI piece
+const RangeField = ({ label, value, onChange }: { label: string; value: number[]; onChange: (a: number[]) => void }) => {
+  const v = asRange(value), two = v.length > 1;
+  return (
+    <>
+      <label className="comp-label">{label}</label>
+      {two ? (
+        <div className="range-group">
+          <input type="number" placeholder="Min" value={v[0] ?? ''} onChange={e => onChange([e.target.value === '' ? 0 : +e.target.value, v[1] ?? 0])} />
+          <span className="range-sep">—</span>
+          <input type="number" placeholder="Max" value={v[1] ?? ''} onChange={e => onChange([v[0] ?? 0, e.target.value === '' ? 0 : +e.target.value])} />
+          <button className="btn btn-secondary" type="button" onClick={() => onChange([Math.max(...(v.length ? v : [0]))])}>Use single</button>
+        </div>
+      ) : (
+        <div className="range-group">
+          <input type="number" placeholder="Amount $USD" value={v[0] ?? ''} onChange={e => onChange(e.target.value === '' ? [] : [+e.target.value])} />
+          <button className="btn btn-secondary" type="button" onClick={() => onChange([v[0] ?? 0, v[0] ?? 0])}>Add range</button>
+        </div>
+      )}
+    </>
+  );
 };
 
-const HEALTH_WELLNESS_PRESETS = [
-  'Medical, Dental, Vision Insurance',
-  'On-site fitness center',
-  'Mental health support',
-  'Wellness programs',
-];
-
-const FLEXIBLE_SCHEDULING_PRESETS = [
-  'Training schedule accommodation',
-  'Competition time off',
-  'Flexible work arrangements',
-];
-
-const CAREER_DEV_PRESETS = [
-  'Athlete mentorship program',
-  'Leadership development track',
-  'Fast-track promotion opportunities',
-  'Tuition reimbursement',
-];
-
-const NIL_OPPORTUNITIES_PRESETS = [
-  'Brand partnership opportunities',
-  'Social media collaboration',
-  'Event appearances',
-];
-
-const ensureBenefits = (b?: BenefitsPayload) => ({
-  baseSalary: b?.baseSalary ?? '',
-  commission: b?.commission ?? '',
-  totalComp: b?.totalComp ?? '',
-  healthWellness: b?.healthWellness ?? [],
-  flexibleScheduling: b?.flexibleScheduling ?? [],
-  careerDevelopment: b?.careerDevelopment ?? [],
-  nilOpportunities: b?.nilOpportunities ?? [],
-});
-
-
 export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) => {
-  const benefits = ensureBenefits(company.benefits);
+  // sanitize incoming props
+  const b = useMemo<BenefitsPayload>(() => ({
+    baseSalary: asRange((company.benefits as any)?.baseSalary),
+    commission: asRange((company.benefits as any)?.commission),
+    totalComp: asRange((company.benefits as any)?.totalComp),
+    specficBenefits: (company.benefits?.specficBenefits as SpecificBenefits[] | undefined) ?? [],
+  }), [company.benefits]);
 
-  const handleInputChange = (field: keyof BenefitsPayload, value: string) => {
-    setCompany(a => ({
-      ...a,
-      benefits: {
-        ...ensureBenefits(a.benefits),
-        [field]: value,
-      },
-    }));
-  };
+  const cats = b.specficBenefits ?? [];
+  const usedPresetIds = useMemo(
+    () => new Set(cats.map(c => PRESETS.find(p => p.title.toLowerCase() === (c.title ?? '').toLowerCase())?.id).filter(Boolean) as string[]),
+    [cats]
+  );
 
-  const handleListChange = (field: keyof BenefitsPayload, selected: any) => {
-    setCompany(a => ({
-      ...a,
-      benefits: {
-        ...ensureBenefits(a.benefits),
-        [field]: selected.map((s: any) => s.value),
-      },
-    }));
-  };
+  const setBenefits = (partial: Partial<BenefitsPayload>) =>
+    setCompany(prev => {
+      const cur = (prev.benefits ?? {}) as Partial<BenefitsPayload>;
+      const next: any = { ...cur, ...partial };
+      next.baseSalary = asRange(next.baseSalary);
+      next.commission = asRange(next.commission);
+      next.totalComp = asRange(next.totalComp);
+      next.specficBenefits = next.specficBenefits ?? cur.specficBenefits ?? [];
+      return { ...prev, benefits: next as any };
+    });
 
-  // CreatableSelect allows custom options
-  const getCreatableProps = (
-    presets: string[],
-    value: string[],
-    color: string,
-    pillClass: string
-  ) => ({
-    isMulti: true,
-    options: presets.map(p => ({ value: p, label: p })),
-    value: value.map(p => ({ value: p, label: p })),
-    onChange: (selected: any) => handleListChange(
-      presets === HEALTH_WELLNESS_PRESETS ? 'healthWellness' :
-      presets === FLEXIBLE_SCHEDULING_PRESETS ? 'flexibleScheduling' :
-      presets === CAREER_DEV_PRESETS ? 'careerDevelopment' : 'nilOpportunities',
-      selected
-    ),
-    closeMenuOnSelect: false,
-    formatOptionLabel: (option: any) => (
-      <span>
-        {option.label}
-      </span>
-    ),
-    placeholder: "Select or type to add...",
-    styles: {
-      multiValue: (base: any) => ({
-        ...base,
-        backgroundColor: 'transparent',
-        padding: 0,
-        margin: '4px 8px 4px 0',
-        borderRadius: '999px',
-      }),
-      multiValueLabel: (base: any) => ({
-        ...base,
-        padding: 0,
-        color: 'inherit',
-      }),
-      multiValueRemove: (base: any) => ({
-        ...base,
-        paddingLeft: 8,
-        paddingRight: 8,
-        color: 'inherit',
-        ':hover': {
-          backgroundColor: 'transparent',
-          color: '#333',
-        },
-      }),
-    },
-    components: {
-      MultiValueContainer: ({ children, ...props }: { children: React.ReactNode } & any) => (
-        <span className={`pill ${pillClass} pill-edit`} {...props}>{children}</span>
-      ),
-    },
-  });
+  const updateCats = (fn: (cats: SpecificBenefits[]) => SpecificBenefits[]) =>
+    setCompany(prev => {
+      const cur = (prev.benefits ?? {}) as Partial<BenefitsPayload>;
+      const nextCats = fn((cur.specficBenefits as SpecificBenefits[] | undefined) ?? []);
+      const next: any = {
+        ...cur,
+        baseSalary: asRange(cur.baseSalary),
+        commission: asRange(cur.commission),
+        totalComp: asRange(cur.totalComp),
+        specficBenefits: nextCats,
+      };
+      return { ...prev, benefits: next };
+    });
 
-  return (
-    <div className="culture-grid card" contentEditable={false}
-      onKeyDownCapture={(e) => { if (editMode) e.stopPropagation(); }}>
+  const updCat = (i: number, f: (c: SpecificBenefits) => SpecificBenefits) => updateCats(cs => cs.map((c, idx) => (idx === i ? f(c) : c)));
+  const addCat = (presetId?: string) =>
+    updateCats(cs => {
+      const p = PRESETS.find(x => x.id === presetId);
+      return [...cs, p ? { title: p.title, icon: p.icon, description: p.suggestions } : { title: 'New Category', icon: '', description: [] }];
+    });
+  const removeCat = (i: number) => updateCats(cs => cs.filter((_, idx) => idx !== i));
+  const applyPreset = (i: number, id: string) =>
+    updateCats(cs => {
+      const p = PRESETS.find(x => x.id === id); if (!p) return cs;
+      return cs.map((c, idx) => (idx === i ? { ...c, title: p.title, icon: p.icon, description: [...p.suggestions] } : c));
+    });
 
-      {/* Left Column */}
-      <section className="card values-card">
-        <h3 className="section-title">Compensation & Benefits</h3>
+  const renderCat = (c: SpecificBenefits, i: number) => {
+    const preset = PRESETS.find(p => p.title === c.title);
+    const suggestions = preset?.suggestions ?? [];
+    const currentId = PRESETS.find(p => p.title.toLowerCase() === (c.title ?? '').toLowerCase())?.id;
+    const available = PRESETS.filter(p => !usedPresetIds.has(p.id) || p.id === currentId);
 
+    const onItems = (mv: MultiValue<Option>) =>
+      updateCats(cs => cs.map((c2, idx) => (idx === i ? { ...c2, description: mv.map(o => o.value) } : c2)));
+
+    return (
+      <div key={`SpecificBenefits-${i}`} style={{ marginBottom: 16 }}>
         {editMode ? (
-          <div className="comp-inputs">
-            <label>Base Salary Range</label>
-            <input
-              type="text"
-              value={benefits.baseSalary}
-              onChange={(e) => handleInputChange('baseSalary', e.target.value)}
-              placeholder="$55K - $85K"
-            />
-            <label>Commission Potential</label>
-            <input
-              type="text"
-              value={benefits.commission}
-              onChange={(e) => handleInputChange('commission', e.target.value)}
-              placeholder="$20K - $50K+"
-            />
-            <label>Total Comp (Avg)</label>
-            <input
-              type="text"
-              value={benefits.totalComp}
-              onChange={(e) => handleInputChange('totalComp', e.target.value)}
-              placeholder="$78K"
-            />
-          </div>
-        ) : (
           <>
-            <div className="benefit-card green">
-              <span>Base Salary Range</span>
-              <strong style={{ color: '#22c55e', fontWeight: 700 }}>{benefits.baseSalary}</strong>
+            <div className="cat-header">
+              <input type="text" value={c.title ?? ''} placeholder="Category title" onChange={e => updCat(i, x => ({ ...x, title: e.target.value }))} />
+              <input type="text" value={c.icon ?? ''} placeholder="Icon (emoji)" className="cat-icon-input" onChange={e => updCat(i, x => ({ ...x, icon: e.target.value }))} />
+              <button className="btn btn-secondary" type="button" onClick={() => removeCat(i)}>Remove</button>
             </div>
-            <div className="benefit-card blue">
-              <span>Commission Potential</span>
-              <strong style={{ color: '#2563eb', fontWeight: 700 }}>{benefits.commission}</strong>
-            </div>
-            <div className="benefit-card purple">
-              <span>Total Comp (Avg)</span>
-              <strong style={{ color: '#a78bfa', fontWeight: 700 }}>{benefits.totalComp}</strong>
+            <div className="preset-row">
+              <span className="preset-label">Quick presets:</span>
+              {available.map(p => (
+                <button key={p.id} type="button" className="preset-chip" onClick={() => applyPreset(i, p.id)}>
+                  <span className="preset-chip-icon">{p.icon}</span>{p.title}
+                </button>
+              ))}
             </div>
           </>
+        ) : (
+          <h4 style={{ marginBottom: 8 }}>{c.icon ? `${c.icon} ` : ''}{c.title}</h4>
         )}
 
-        <h3>Health & Wellness</h3>
-        {!editMode ? (
-          <div className="pill-list">
-            {benefits.healthWellness.map((item, idx) => (
-              <span className="pill pill-green" key={idx}>{item}</span>
-            ))}
-          </div>
+        {editMode ? (
+          <CreatableSelect<Option, true>
+            isMulti
+            options={Array.from(new Set([...(suggestions ?? []), ...(c.description ?? [])])).map(v => ({ value: v, label: v }))}
+            value={(c.description ?? []).map(v => ({ value: v, label: v }))}
+            onChange={onItems}
+            onCreateOption={v => {
+              const t = v.trim(); if (!t) return;
+              updateCats(cs => cs.map((c2, idx) => idx === i ? { ...c2, description: Array.from(new Set([...(c.description ?? []), t])) } : c2));
+            }}
+            closeMenuOnSelect={false}
+            styles={{
+              control: (s: any) => ({ ...s, minHeight: 40 }),
+              multiValue: (s: any) => ({ ...s, background: 'transparent', margin: '4px 8px 4px 0', borderRadius: 999 }),
+              multiValueLabel: (s: any) => ({ ...s, padding: 0 }),
+              multiValueRemove: (s: any) => ({ ...s, padding: '0 8px', ':hover': { background: 'transparent' } }),
+            }}
+            components={{ MultiValueContainer: (p: any) => <span className={`pill ${color(i)} pill-edit`}>{p.children}</span> }}
+            placeholder="Type and press Enter…"
+          />
         ) : (
-          <CreatableSelect {...getCreatableProps(HEALTH_WELLNESS_PRESETS, benefits.healthWellness, '#22c55e', 'pill-green')} />
+          <div className="pill-list">{(c.description ?? []).map((it, j) => <span key={`${it}-${j}`} className={`pill ${color(i)}`}>{it}</span>)}</div>
+        )}
+      </div>
+    );
+  };
+
+  const left = (i: number) => i % 2 === 1;
+  const right = (i: number) => i % 2 === 0;
+
+  return (
+    <div className="culture-grid card" contentEditable={false} onKeyDownCapture={e => editMode && e.stopPropagation()}>
+      {/* LEFT: Compensation and left-side categories */}
+      <section className="card values-card">
+        <div className="comp-box">
+          <h3 className="section-title" style={{ marginTop: 0 }}>Compensation & Benefits</h3>
+          {editMode ? (
+            <div className="comp-inputs">
+              <RangeField label="Base Salary" value={b.baseSalary ?? []} onChange={a => setBenefits({ baseSalary: a })} />
+              <RangeField label="Commission" value={b.commission ?? []} onChange={a => setBenefits({ commission: a })} />
+              <RangeField label="Total Comp (Avg)" value={b.totalComp ?? []} onChange={a => setBenefits({ totalComp: a })} />
+            </div>
+          ) : (
+            <>
+              <div className="benefit-card green"><span>Base Salary</span><strong style={{ color: '#000' }}>{moneyRange(b.baseSalary)}</strong></div>
+              <div className="benefit-card blue"><span>Commission</span><strong style={{ color: '#000' }}>{moneyRange(b.commission)}</strong></div>
+              <div className="benefit-card purple"><span>Total Comp (Avg)</span><strong style={{ color: '#000' }}>{moneyRange(b.totalComp)}</strong></div>
+            </>
+          )}
+        </div>
+        {cats.map((c, i) => left(i) && renderCat(c, i))}
+        {editMode && (
+          <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+            <button className="btn btn-primary" type="button" onClick={() => addCat()}>+ Add Category</button>
+          </div>
         )}
       </section>
 
-      {/* Right Column */}
+      {/* RIGHT: header + right-side categories */}
       <section className="card env-card">
-        <h3 className="section-title">Student-Athlete Specific Benefits</h3>
-
-        <h4>Flexible Scheduling</h4>
-        {!editMode ? (
-          <div className="pill-list">
-            {benefits.flexibleScheduling.map((item, idx) => (
-              <span className="pill pill-blue" key={idx}>{item}</span>
-            ))}
-          </div>
-        ) : (
-          <CreatableSelect {...getCreatableProps(FLEXIBLE_SCHEDULING_PRESETS, benefits.flexibleScheduling, '#2563eb', 'pill-blue')} />
-        )}
-
-        <h4>Career Development</h4>
-        {!editMode ? (
-          <div className="pill-list">
-            {benefits.careerDevelopment.map((item, idx) => (
-              <span className="pill pill-orange" key={idx}>{item}</span>
-            ))}
-          </div>
-        ) : (
-          <CreatableSelect {...getCreatableProps(CAREER_DEV_PRESETS, benefits.careerDevelopment, '#f59e42', 'pill-orange')} />
-        )}
-
-        <h4>NIL Opportunities</h4>
-        {!editMode ? (
-          <div className="pill-list">
-            {benefits.nilOpportunities.map((item, idx) => (
-              <span className="pill pill-purple" key={idx}>{item}</span>
-            ))}
-          </div>
-        ) : (
-          <CreatableSelect {...getCreatableProps(NIL_OPPORTUNITIES_PRESETS, benefits.nilOpportunities, '#a78bfa', 'pill-purple')} />
-        )}
+        <h3 className="section-title" style={{ marginTop: 0 }}>Student-Athlete Specific Benefits</h3>
+        {editMode && <p className="muted" style={{ marginBottom: 12 }}>Tip: Use presets, then add your own items (Enter). Icons accept emoji.</p>}
+        {cats.map((c, i) => right(i) && renderCat(c, i))}
       </section>
     </div>
   );

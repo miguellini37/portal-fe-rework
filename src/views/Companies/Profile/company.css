@@ -413,3 +413,40 @@ input, textarea {
   font-size: 0.95rem !important;
   gap: 4px !important;
 }
+
+/* Compensation edit inputs */
+.comp-label { font-weight: 600; margin-bottom: 6px; }
+.range-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.range-group input { max-width: 160px; }
+.range-sep { color: #6b7280; }
+
+/* Preset chips */
+.preset-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 2px 0 10px; }
+.preset-label { color: #6b7280; font-size: 13px; }
+.preset-chip { border: 1px solid #e5e7eb; background: #f9fafb; padding: 6px 10px; border-radius: 999px; font-size: 0.9rem; cursor: pointer; }
+.preset-chip:hover { background: #eef2ff; border-color: #dbeafe; }
+.preset-chip-icon { margin-right: 6px; }
+
+/* Category header row in editor */
+.cat-header {
+  display: grid;
+  grid-template-columns: 1fr 120px auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cat-icon-input {
+  width: 100%;
+  max-width: 120px;
+  text-align: center;
+}
+
+/* Faint box around Compensation & Benefits */
+.comp-box {
+  border: 2px solid #45474c; /* light blue */
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  margin-bottom: 12px; /* space before categories */
+}
