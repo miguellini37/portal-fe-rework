@@ -53,7 +53,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
     commissionMin: num(base?.commissionMin), commissionMax: num(base?.commissionMax),
     totalCompMin: num(base?.totalCompMin),   totalCompMax: num(base?.totalCompMax),
     specificBenefits: (base?.specificBenefits as SpecificBenefits[] | undefined) ?? [],
-  }), [company.benefits]); // keep stable against outer changes only
+  }), [company.benefits]); 
 
   const cats = b.specificBenefits ?? [];
   const usedIds = new Set(cats.map(c => byTitle[(c.title ?? '').toLowerCase()]?.id).filter(Boolean) as string[]);
@@ -68,7 +68,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
         specificBenefits: (curRaw.specificBenefits as SpecificBenefits[] | undefined) ?? [],
       };
       const next = { ...cur, ...(typeof patch === 'function' ? patch(cur) : patch) };
-      return { ...prev, benefits: next as any };
+      return { ...prev, benefits: next as BenefitsPayload };
     });
 
   const upCats = (f: (x: SpecificBenefits[]) => SpecificBenefits[]) => setBenefits(cur => ({ specificBenefits: f(cur.specificBenefits ?? []) }));
@@ -145,17 +145,17 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
           {editMode ? (
             <div className="comp-inputs">
               {FIELDS.map(f => {
-                const min = (b as any)[`${f.k}Min`] as number | undefined;
-                const max = (b as any)[`${f.k}Max`] as number | undefined;
+                const min = (b as BenefitsPayload)[`${f.k}Min`] as number | undefined;
+                const max = (b as BenefitsPayload)[`${f.k}Max`] as number | undefined;
                 return (
                   <RangeField key={f.k} label={f.label} min={min} max={max}
-                    onChange={(mn, mx) => setBenefits({ [`${f.k}Min`]: mn, [`${f.k}Max`]: mx } as any)} />
+                    onChange={(mn, mx) => setBenefits({ [`${f.k}Min`]: mn, [`${f.k}Max`]: mx } as Partial<BenefitsPayload>) } />
                 );
               })}
             </div>
           ) : (
             FIELDS.map(f => {
-              const min = (b as any)[`${f.k}Min`]; const max = (b as any)[`${f.k}Max`];
+              const min = (b as BenefitsPayload)[`${f.k}Min`]; const max = (b as BenefitsPayload)[`${f.k}Max`];
               return (
                 <div key={f.k} className={`benefit-card ${f.cls}`}>
                   <span>{f.label}</span><strong style={{ color: '#000' }}>{moneyPair(min, max)}</strong>
