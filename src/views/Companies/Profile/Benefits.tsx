@@ -58,7 +58,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
   const cats = b.specificBenefits ?? [];
   const usedIds = new Set(cats.map(c => byTitle[(c.title ?? '').toLowerCase()]?.id).filter(Boolean) as string[]);
 
-  const setB = (patch: Partial<BenefitsPayload> | ((cur: BenefitsPayload) => Partial<BenefitsPayload>)) =>
+  const setBenefits = (patch: Partial<BenefitsPayload> | ((cur: BenefitsPayload) => Partial<BenefitsPayload>)) =>
     setCompany(prev => {
       const curRaw = (prev.benefits ?? {}) as Partial<BenefitsPayload>;
       const cur: BenefitsPayload = {
@@ -71,7 +71,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
       return { ...prev, benefits: next as any };
     });
 
-  const upCats = (f: (x: SpecificBenefits[]) => SpecificBenefits[]) => setB(cur => ({ specificBenefits: f(cur.specificBenefits ?? []) }));
+  const upCats = (f: (x: SpecificBenefits[]) => SpecificBenefits[]) => setBenefits(cur => ({ specificBenefits: f(cur.specificBenefits ?? []) }));
   const updCat = (i: number, f: (c: SpecificBenefits) => SpecificBenefits) => upCats(cs => cs.map((c, j) => j === i ? f(c) : c));
   const addCat = (presetId?: string) => upCats(cs => {
     const p = presetId ? byId[presetId] : undefined;
@@ -132,9 +132,9 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
   };
 
   const FIELDS = [
-    { k: 'baseSalary', label: 'Base Salary', cls: 'green' },
-    { k: 'commission', label: 'Commission', cls: 'blue' },
-    { k: 'totalComp', label: 'Total Comp (Avg)', cls: 'purple' },
+    { k: 'baseSalary', label: 'Base Salary', cls: 'black' },
+    { k: 'commission', label: 'Commission', cls: 'black' },
+    { k: 'totalComp', label: 'Total Comp (Avg)', cls: 'black' },
   ] as const;
 
   return (
@@ -149,7 +149,7 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
                 const max = (b as any)[`${f.k}Max`] as number | undefined;
                 return (
                   <RangeField key={f.k} label={f.label} min={min} max={max}
-                    onChange={(mn, mx) => setB({ [`${f.k}Min`]: mn, [`${f.k}Max`]: mx } as any)} />
+                    onChange={(mn, mx) => setBenefits({ [`${f.k}Min`]: mn, [`${f.k}Max`]: mx } as any)} />
                 );
               })}
             </div>
