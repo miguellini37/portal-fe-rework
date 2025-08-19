@@ -22,10 +22,13 @@ export interface CultureValue { icon?: string; title?: string; description?: str
 export interface EnvironmentTile { title?: string; subtitle?: string }
 
 export interface BenefitsPayload {
-  baseSalary?: number[];
-  commission?: number[];
-  totalComp?: number[];
-  specficBenefits?: SpecificBenefits[];
+  baseSalaryMin?: number;
+  baseSalaryMax?: number;
+  commissionMin?: number;
+  commissionMax?: number;
+  totalCompMin?: number;
+  totalCompMax?: number;
+  specificBenefits?: SpecificBenefits[];
 }
 
 export interface SpecificBenefits {

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import type { MultiValue } from 'react-select';
 import { ICompanyPaylod, BenefitsPayload, SpecificBenefits } from '../../../api/company';
@@ -7,42 +7,39 @@ import './company.css';
 type Props = { company: ICompanyPaylod; setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>; editMode: boolean };
 type Option = { value: string; label: string };
 
+const color = (i: number) => ['pill-green', 'pill-blue', 'pill-orange', 'pill-purple'][i % 4];
+const num = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? n : undefined; };
+const money = (n?: number) => typeof n === 'number' && n > 0 ? `$${Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n)}` : '—';
+const moneyPair = (a?: number, b?: number) => (a = num(a), b = num(b), a==null && b==null ? '—' : a!=null && b!=null ? (a===b? money(a) : `${money(Math.min(a,b))} - ${money(Math.max(a,b))}`) : money(a ?? b));
+
 const PRESETS = [
   { id: 'health', title: 'Health & Wellness', icon: '💚', suggestions: ['Medical, Dental, Vision Insurance', 'On-site fitness center', 'Mental health support', 'Wellness programs'] },
-  { id: 'flex', title: 'Flexible Scheduling', icon: '🗓️', suggestions: ['Training schedule accommodation', 'Competition time off', 'Flexible work arrangements'] },
+  { id: 'flex',   title: 'Flexible Scheduling', icon: '🗓️', suggestions: ['Training schedule accommodation', 'Competition time off', 'Flexible work arrangements'] },
   { id: 'career', title: 'Career Development', icon: '🚀', suggestions: ['Athlete mentorship program', 'Leadership development track', 'Fast-track promotion opportunities', 'Tuition reimbursement'] },
-  { id: 'nil', title: 'NIL Opportunities', icon: '💼', suggestions: ['Brand partnership opportunities', 'Social media collaboration', 'Event appearances'] },
+  { id: 'nil',    title: 'NIL Opportunities',  icon: '💼', suggestions: ['Brand partnership opportunities', 'Social media collaboration', 'Event appearances'] },
 ];
+const byId = Object.fromEntries(PRESETS.map(p => [p.id, p]));
+const byTitle = Object.fromEntries(PRESETS.map(p => [p.title.toLowerCase(), p]));
 
-// utils
-const asRange = (v: unknown): number[] =>
-  Array.isArray(v) ? v.map(Number).filter(n => Number.isFinite(n) && n >= 0).slice(0, 2)
-  : v == null || v === '' ? [] : Number.isFinite(+v) && +v >= 0 ? [+v] : [];
-
-const money = (n?: number) => typeof n === 'number' && n > 0 ? `$${Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n)}` : '—';
-const moneyRange = (arr?: number[]) => {
-  const v = asRange(arr);
-  return v.length === 0 ? '—' : v.length === 1 ? money(v[0]) : `${money(Math.min(...v))} - ${money(Math.max(...v))}`;
-};
-const color = (i: number) => ['pill-blue', 'pill-orange', 'pill-purple', 'pill-green'][i % 4];
-
-// small UI piece
-const RangeField = ({ label, value, onChange }: { label: string; value: number[]; onChange: (a: number[]) => void }) => {
-  const v = asRange(value), two = v.length > 1;
+const RangeField: React.FC<{ label: string; min?: number; max?: number; onChange: (min?: number, max?: number) => void; }> = ({ label, min, max, onChange }) => {
+  const realRange = min!=null && max!=null && min!==max;
+  const [two, setTwo] = useState(realRange);
+  useEffect(() => setTwo(t => t || realRange), [realRange]);
+  const p = (s: string) => (s==='' ? undefined : num(s));
   return (
     <>
       <label className="comp-label">{label}</label>
       {two ? (
         <div className="range-group">
-          <input type="number" placeholder="Min" value={v[0] ?? ''} onChange={e => onChange([e.target.value === '' ? 0 : +e.target.value, v[1] ?? 0])} />
+          <input type="number" placeholder="Min" value={min ?? ''} onChange={e => onChange(p(e.target.value), max)} />
           <span className="range-sep">—</span>
-          <input type="number" placeholder="Max" value={v[1] ?? ''} onChange={e => onChange([v[0] ?? 0, e.target.value === '' ? 0 : +e.target.value])} />
-          <button className="btn btn-secondary" type="button" onClick={() => onChange([Math.max(...(v.length ? v : [0]))])}>Use single</button>
+          <input type="number" placeholder="Max" value={max ?? ''} onChange={e => onChange(min, p(e.target.value))} />
+          <button className="btn btn-secondary" type="button" onClick={() => { const v = min ?? max; setTwo(false); onChange(v, v); }}>Use single</button>
         </div>
       ) : (
         <div className="range-group">
-          <input type="number" placeholder="Amount $USD" value={v[0] ?? ''} onChange={e => onChange(e.target.value === '' ? [] : [+e.target.value])} />
-          <button className="btn btn-secondary" type="button" onClick={() => onChange([v[0] ?? 0, v[0] ?? 0])}>Add range</button>
+          <input type="number" placeholder="Amount $USD" value={min ?? max ?? ''} onChange={e => { const v = p(e.target.value); onChange(v, v); }} />
+          <button className="btn btn-secondary" type="button" onClick={() => { const v = min ?? max; setTwo(true); onChange(v, v); }}>Add range</button>
         </div>
       )}
     </>
@@ -50,67 +47,48 @@ const RangeField = ({ label, value, onChange }: { label: string; value: number[]
 };
 
 export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) => {
-  // sanitize incoming props
+  const base = company.benefits as Partial<BenefitsPayload> | undefined;
   const b = useMemo<BenefitsPayload>(() => ({
-    baseSalary: asRange((company.benefits as any)?.baseSalary),
-    commission: asRange((company.benefits as any)?.commission),
-    totalComp: asRange((company.benefits as any)?.totalComp),
-    specficBenefits: (company.benefits?.specficBenefits as SpecificBenefits[] | undefined) ?? [],
-  }), [company.benefits]);
+    baseSalaryMin: num(base?.baseSalaryMin), baseSalaryMax: num(base?.baseSalaryMax),
+    commissionMin: num(base?.commissionMin), commissionMax: num(base?.commissionMax),
+    totalCompMin: num(base?.totalCompMin),   totalCompMax: num(base?.totalCompMax),
+    specificBenefits: (base?.specificBenefits as SpecificBenefits[] | undefined) ?? [],
+  }), [company.benefits]); // keep stable against outer changes only
 
-  const cats = b.specficBenefits ?? [];
-  const usedPresetIds = useMemo(
-    () => new Set(cats.map(c => PRESETS.find(p => p.title.toLowerCase() === (c.title ?? '').toLowerCase())?.id).filter(Boolean) as string[]),
-    [cats]
-  );
+  const cats = b.specificBenefits ?? [];
+  const usedIds = new Set(cats.map(c => byTitle[(c.title ?? '').toLowerCase()]?.id).filter(Boolean) as string[]);
 
-  const setBenefits = (partial: Partial<BenefitsPayload>) =>
+  const setB = (patch: Partial<BenefitsPayload> | ((cur: BenefitsPayload) => Partial<BenefitsPayload>)) =>
     setCompany(prev => {
-      const cur = (prev.benefits ?? {}) as Partial<BenefitsPayload>;
-      const next: any = { ...cur, ...partial };
-      next.baseSalary = asRange(next.baseSalary);
-      next.commission = asRange(next.commission);
-      next.totalComp = asRange(next.totalComp);
-      next.specficBenefits = next.specficBenefits ?? cur.specficBenefits ?? [];
+      const curRaw = (prev.benefits ?? {}) as Partial<BenefitsPayload>;
+      const cur: BenefitsPayload = {
+        baseSalaryMin: num(curRaw.baseSalaryMin), baseSalaryMax: num(curRaw.baseSalaryMax),
+        commissionMin: num(curRaw.commissionMin), commissionMax: num(curRaw.commissionMax),
+        totalCompMin: num(curRaw.totalCompMin),   totalCompMax: num(curRaw.totalCompMax),
+        specificBenefits: (curRaw.specificBenefits as SpecificBenefits[] | undefined) ?? [],
+      };
+      const next = { ...cur, ...(typeof patch === 'function' ? patch(cur) : patch) };
       return { ...prev, benefits: next as any };
     });
 
-  const updateCats = (fn: (cats: SpecificBenefits[]) => SpecificBenefits[]) =>
-    setCompany(prev => {
-      const cur = (prev.benefits ?? {}) as Partial<BenefitsPayload>;
-      const nextCats = fn((cur.specficBenefits as SpecificBenefits[] | undefined) ?? []);
-      const next: any = {
-        ...cur,
-        baseSalary: asRange(cur.baseSalary),
-        commission: asRange(cur.commission),
-        totalComp: asRange(cur.totalComp),
-        specficBenefits: nextCats,
-      };
-      return { ...prev, benefits: next };
-    });
-
-  const updCat = (i: number, f: (c: SpecificBenefits) => SpecificBenefits) => updateCats(cs => cs.map((c, idx) => (idx === i ? f(c) : c)));
-  const addCat = (presetId?: string) =>
-    updateCats(cs => {
-      const p = PRESETS.find(x => x.id === presetId);
-      return [...cs, p ? { title: p.title, icon: p.icon, description: p.suggestions } : { title: 'New Category', icon: '', description: [] }];
-    });
-  const removeCat = (i: number) => updateCats(cs => cs.filter((_, idx) => idx !== i));
-  const applyPreset = (i: number, id: string) =>
-    updateCats(cs => {
-      const p = PRESETS.find(x => x.id === id); if (!p) return cs;
-      return cs.map((c, idx) => (idx === i ? { ...c, title: p.title, icon: p.icon, description: [...p.suggestions] } : c));
-    });
+  const upCats = (f: (x: SpecificBenefits[]) => SpecificBenefits[]) => setB(cur => ({ specificBenefits: f(cur.specificBenefits ?? []) }));
+  const updCat = (i: number, f: (c: SpecificBenefits) => SpecificBenefits) => upCats(cs => cs.map((c, j) => j === i ? f(c) : c));
+  const addCat = (presetId?: string) => upCats(cs => {
+    const p = presetId ? byId[presetId] : undefined;
+    return [...cs, p ? { title: p.title, icon: p.icon, description: p.suggestions } : { title: 'New Category', icon: '', description: [] }];
+  });
+  const removeCat = (i: number) => upCats(cs => cs.filter((_, j) => j !== i));
+  const applyPreset = (i: number, id: string) => upCats(cs => {
+    const p = byId[id]; if (!p) return cs;
+    return cs.map((c, j) => j === i ? { ...c, title: p.title, icon: p.icon, description: [...p.suggestions] } : c);
+  });
 
   const renderCat = (c: SpecificBenefits, i: number) => {
-    const preset = PRESETS.find(p => p.title === c.title);
-    const suggestions = preset?.suggestions ?? [];
-    const currentId = PRESETS.find(p => p.title.toLowerCase() === (c.title ?? '').toLowerCase())?.id;
-    const available = PRESETS.filter(p => !usedPresetIds.has(p.id) || p.id === currentId);
-
-    const onItems = (mv: MultiValue<Option>) =>
-      updateCats(cs => cs.map((c2, idx) => (idx === i ? { ...c2, description: mv.map(o => o.value) } : c2)));
-
+    const preset = byTitle[(c.title ?? '').toLowerCase()];
+    const opts = Array.from(new Set([...(preset?.suggestions ?? []), ...(c.description ?? [])])).map(v => ({ value: v, label: v }));
+    const currentId = preset?.id;
+    const available = PRESETS.filter(p => !usedIds.has(p.id) || p.id === currentId);
+    const onItems = (mv: MultiValue<Option>) => upCats(cs => cs.map((c2, j) => j === i ? ({ ...c2, description: mv.map(o => o.value) }) : c2));
     return (
       <div key={`SpecificBenefits-${i}`} style={{ marginBottom: 16 }}>
         {editMode ? (
@@ -129,20 +107,13 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
               ))}
             </div>
           </>
-        ) : (
-          <h4 style={{ marginBottom: 8 }}>{c.icon ? `${c.icon} ` : ''}{c.title}</h4>
-        )}
+        ) : (<h4 style={{ marginBottom: 8 }}>{c.icon ? `${c.icon} ` : ''}{c.title}</h4>)}
 
         {editMode ? (
           <CreatableSelect<Option, true>
-            isMulti
-            options={Array.from(new Set([...(suggestions ?? []), ...(c.description ?? [])])).map(v => ({ value: v, label: v }))}
-            value={(c.description ?? []).map(v => ({ value: v, label: v }))}
+            isMulti options={opts} value={(c.description ?? []).map(v => ({ value: v, label: v }))}
             onChange={onItems}
-            onCreateOption={v => {
-              const t = v.trim(); if (!t) return;
-              updateCats(cs => cs.map((c2, idx) => idx === i ? { ...c2, description: Array.from(new Set([...(c.description ?? []), t])) } : c2));
-            }}
+            onCreateOption={v => { const t = v.trim(); if (t) updCat(i, x => ({ ...x, description: Array.from(new Set([...(x.description ?? []), t])) })); }}
             closeMenuOnSelect={false}
             styles={{
               control: (s: any) => ({ ...s, minHeight: 40 }),
@@ -160,42 +131,49 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
     );
   };
 
-  const left = (i: number) => i % 2 === 1;
-  const right = (i: number) => i % 2 === 0;
+  const FIELDS = [
+    { k: 'baseSalary', label: 'Base Salary', cls: 'green' },
+    { k: 'commission', label: 'Commission', cls: 'blue' },
+    { k: 'totalComp', label: 'Total Comp (Avg)', cls: 'purple' },
+  ] as const;
 
   return (
     <div className="culture-grid card" contentEditable={false} onKeyDownCapture={e => editMode && e.stopPropagation()}>
-      {/* LEFT: Compensation and left-side categories */}
       <section className="card values-card">
         <div className="comp-box">
           <h3 className="section-title" style={{ marginTop: 0 }}>Compensation & Benefits</h3>
           {editMode ? (
             <div className="comp-inputs">
-              <RangeField label="Base Salary" value={b.baseSalary ?? []} onChange={a => setBenefits({ baseSalary: a })} />
-              <RangeField label="Commission" value={b.commission ?? []} onChange={a => setBenefits({ commission: a })} />
-              <RangeField label="Total Comp (Avg)" value={b.totalComp ?? []} onChange={a => setBenefits({ totalComp: a })} />
+              {FIELDS.map(f => {
+                const min = (b as any)[`${f.k}Min`] as number | undefined;
+                const max = (b as any)[`${f.k}Max`] as number | undefined;
+                return (
+                  <RangeField key={f.k} label={f.label} min={min} max={max}
+                    onChange={(mn, mx) => setB({ [`${f.k}Min`]: mn, [`${f.k}Max`]: mx } as any)} />
+                );
+              })}
             </div>
           ) : (
-            <>
-              <div className="benefit-card green"><span>Base Salary</span><strong style={{ color: '#000' }}>{moneyRange(b.baseSalary)}</strong></div>
-              <div className="benefit-card blue"><span>Commission</span><strong style={{ color: '#000' }}>{moneyRange(b.commission)}</strong></div>
-              <div className="benefit-card purple"><span>Total Comp (Avg)</span><strong style={{ color: '#000' }}>{moneyRange(b.totalComp)}</strong></div>
-            </>
+            FIELDS.map(f => {
+              const min = (b as any)[`${f.k}Min`]; const max = (b as any)[`${f.k}Max`];
+              return (
+                <div key={f.k} className={`benefit-card ${f.cls}`}>
+                  <span>{f.label}</span><strong style={{ color: '#000' }}>{moneyPair(min, max)}</strong>
+                </div>
+              );
+            })
           )}
         </div>
-        {cats.map((c, i) => left(i) && renderCat(c, i))}
-        {editMode && (
-          <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
-            <button className="btn btn-primary" type="button" onClick={() => addCat()}>+ Add Category</button>
-          </div>
-        )}
+        {cats.map((c, i) => i % 2 === 1 && renderCat(c, i))}
+        {editMode && <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+          <button className="btn btn-primary" type="button" onClick={() => addCat()}>+ Add Category</button>
+        </div>}
       </section>
 
-      {/* RIGHT: header + right-side categories */}
       <section className="card env-card">
         <h3 className="section-title" style={{ marginTop: 0 }}>Student-Athlete Specific Benefits</h3>
         {editMode && <p className="muted" style={{ marginBottom: 12 }}>Tip: Use presets, then add your own items (Enter). Icons accept emoji.</p>}
-        {cats.map((c, i) => right(i) && renderCat(c, i))}
+        {cats.map((c, i) => i % 2 === 0 && renderCat(c, i))}
       </section>
     </div>
   );
