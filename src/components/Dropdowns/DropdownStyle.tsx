@@ -3,50 +3,43 @@ import { StylesConfig } from 'react-select';
 export const customDropdownStyle: StylesConfig<any> = {
   control: (provided, state) => ({
     ...provided,
-    backgroundColor: 'var(--input)',
+    backgroundColor: 'var(--background)',
     borderColor: 'var(--border)',
-    borderRadius: '0.5rem',
-    padding: '2px',
-    boxShadow: state.isFocused ? '0 0 0 3px hsla(221, 83%, 53%, 0.3)' : 'none',
+    borderRadius: '0.375rem',
+    padding: '0px',
+    minHeight: '3rem',
+    height: '3rem',
+    boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : 'none',
     '&:hover': {
-      borderColor: 'var(--ring)',
+      borderColor: 'var(--border)',
     },
   }),
   valueContainer: (provided) => ({
     ...provided,
-    padding: '4px 8px',
+    padding: '0 0.75rem',
     color: 'var(--foreground)',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
   }),
-  multiValue: (provided) => ({
+  indicatorsContainer: (provided) => ({
     ...provided,
-    backgroundColor: 'var(--muted)',
-    borderRadius: '0.375rem',
-  }),
-  multiValueLabel: (provided) => ({
-    ...provided,
-    color: 'var(--foreground)',
-    fontSize: '0.95rem',
-    padding: '2px 4px',
-  }),
-  multiValueRemove: (provided) => ({
-    ...provided,
-    color: 'var(--muted-foreground)',
-    ':hover': {
-      backgroundColor: 'var(--destructive)',
-      color: 'var(--destructive-foreground)',
-    },
-  }),
-  input: (provided) => ({
-    ...provided,
-    color: 'var(--foreground)',
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: 'var(--muted-foreground)',
+    padding: '0 0.75rem',
+    height: '100%',
   }),
   singleValue: (provided) => ({
     ...provided,
     color: 'var(--foreground)',
+  }),
+  input: (provided) => ({
+    ...provided,
+    color: 'var(--foreground)',
+    margin: '0px',
+    padding: '0px',
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: 'var(--muted-foreground)',
   }),
   option: (provided, state) => ({
     ...provided,

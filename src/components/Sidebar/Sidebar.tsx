@@ -67,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.ATHLETE && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to="/jobs/search">
+                    <DisabledNavLink to="/jobs/">
                       <Briefcase /> Jobs
                     </DisabledNavLink>
                   </li>
@@ -91,7 +91,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/messages">Messages</DisabledNavLink>
+                    <DisabledNavLink to="/jobs">
+                      <Briefcase /> Jobs
+                    </DisabledNavLink>
                   </li>
                 </>
               )}
@@ -106,7 +108,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     <DisabledNavLink to="/talent-pool">Talent Pool</DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/messages">Messages</DisabledNavLink>
+                    <DisabledNavLink to="/company/jobs">
+                      <Briefcase /> Jobs
+                    </DisabledNavLink>
                   </li>
                 </>
               )}

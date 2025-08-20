@@ -13,6 +13,7 @@ import { CompanySearch } from './views/Companies/CompanyTable';
 import { InternshipSearchPage } from './views/Jobs/InternshipSearchPage';
 import { CompanyProfile } from './views/Companies/Profile';
 import { TalentPool } from './views/Companies/TalentPool';
+import { CompanyJobsPage } from './views/Jobs/CompanyJobsPage';
 
 type PageRoute = {
   path: string;
@@ -30,14 +31,15 @@ export const AppRoutes = () => {
     { path: '/company/:id', element: <CompanyProfile />, withSidebar: true },
     { path: '/school/:id', element: <SchoolPage />, withSidebar: true },
 
-    { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
-
-    { path: '/jobs/search', element: <JobSearchPage />, withSidebar: true },
+    { path: '/jobs', element: <JobSearchPage />, withSidebar: true },
     { path: '/internships/search', element: <InternshipSearchPage />, withSidebar: true },
     { path: '/company/search', element: <CompanySearch />, withSidebar: true },
 
+    // Company Pages
     { path: '/talent-pool', element: <TalentPool />, withSidebar: true },
+    { path: '/company/jobs', element: <CompanyJobsPage />, withSidebar: true },
 
+    { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
     { path: '*', element: <Homepage />, withSidebar: true, noAuth: true },
   ];
 

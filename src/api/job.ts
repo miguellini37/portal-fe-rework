@@ -3,14 +3,18 @@ import { url } from '../config/url';
 
 export interface IJobPayload {
   id?: string;
-  companyId?: string; // if you pass company ref separately
   position?: string;
   location?: string;
-  salary?: string;
+  salary?: number;
   benefit?: string;
+  benefits?: string; // Added for benefits field
   description?: string;
   requirements?: string;
   type?: string; // 'internship' | 'job'
+  experience?: string; // Added for experience level
+  industry?: string; // Added for industry field
+  applicationDeadline?: Date; // Added for application deadline
+  createdDate?: Date;
   company?: {
     id?: string;
     companyName?: string;
@@ -47,8 +51,23 @@ export const getAllJobs = async (
   return response.data;
 };
 
+export interface ICreateOrUpdateJobPayload {
+  id?: string;
+  companyId?: string; // if you pass company ref separately
+  position?: string;
+  description?: string;
+  industry?: string;
+  experience?: string; // Added for experience level
+  applicationDeadline?: Date; // Added for application deadline
+  benefits?: string;
+  type?: string; // 'internship' | 'job'
+  requirements?: string;
+  location?: string;
+  salary?: number;
+}
+
 export const createJob = async (
-  data: IJobPayload,
+  data: ICreateOrUpdateJobPayload,
   authHeader: string | null
 ): Promise<IJobPayload> => {
   const response = await axios.post(`${url}/job`, data, {

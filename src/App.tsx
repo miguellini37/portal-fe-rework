@@ -4,8 +4,12 @@ import { authStore, IUserData } from './auth/store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AppRoutes } from './Routes';
+import Modal from 'react-modal';
 
 export const App = () => {
+  // Set the app element for accessibility (only needs to be set once)
+  Modal.setAppElement('#root');
+
   return (
     <>
       <ToastContainer

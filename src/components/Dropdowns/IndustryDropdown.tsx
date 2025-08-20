@@ -58,6 +58,7 @@ interface DropdownProps {
   disabled?: boolean;
   selected?: string;
   className?: string;
+  required?: boolean;
 }
 
 export const IndustryDropdown = ({
@@ -66,6 +67,7 @@ export const IndustryDropdown = ({
   disabled,
   selected,
   className,
+  required = false,
 }: DropdownProps) => {
   const options: DropdownOption[] = Object.values(INDUSTRIES).map((value) => ({
     value,
@@ -90,6 +92,7 @@ export const IndustryDropdown = ({
       styles={customDropdownStyle}
       isDisabled={disabled}
       className={className}
+      required={required}
     />
   );
 };

@@ -44,7 +44,7 @@ export const LoginPage = () => {
   return (
     <section className="form-center-section">
       <div className="form-container">
-        <form name="loginForm" className="form" onSubmit={handleLogin}>
+        <form name="loginForm" className="form login-form-centered" onSubmit={handleLogin}>
           <div className="form-header">
             <h2>Login</h2>
           </div>

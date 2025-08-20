@@ -1,28 +1,35 @@
 import { useState } from 'react';
-import { createJob, updateJob, IJobPayload } from '../../api/job';
+import { createJob, IJobPayload, ICreateOrUpdateJobPayload, updateJob } from '../../api/job';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
+import Modal from 'react-modal';
+import { IndustryDropdown } from '../../components/Dropdowns/IndustryDropdown';
+import CurrencyInput from 'react-currency-input-field';
 
 interface JobModalProps {
   job?: IJobPayload | null;
   onClose: () => void;
   onSuccess?: () => void;
   companyId?: string;
-  isEdit?: boolean;
 }
 
-export const JobModal: React.FC<JobModalProps> = ({
-  job,
-  onClose,
-  onSuccess,
-  companyId,
-  isEdit = false,
-}) => {
+export const JobModal: React.FC<JobModalProps> = ({ job, onClose, onSuccess, companyId }) => {
   const authHeader = useAuthHeader();
-  const [jobData, setJobData] = useState<IJobPayload>(job ?? {});
+  const [jobData, setJobData] = useState<ICreateOrUpdateJobPayload>({
+    position: job?.position || '',
+    location: job?.location || '',
+    salary: job?.salary,
+    benefits: job?.benefits || '',
+    description: job?.description || '',
+    requirements: job?.requirements || '',
+    type: job?.type || '',
+    experience: job?.experience || '',
+    industry: job?.industry || '',
+    applicationDeadline: job?.applicationDeadline,
+    companyId: companyId,
+  });
 
-  const handleChange = (field: keyof IJobPayload, value: string) => {
-    if (!isEdit) return;
+  const handleChange = (field: keyof ICreateOrUpdateJobPayload, value: string | number | Date) => {
     setJobData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -33,7 +40,7 @@ export const JobModal: React.FC<JobModalProps> = ({
         await updateJob({ ...jobData, id: job.id }, authHeader);
         toast.success('Job updated successfully');
       } else {
-        await createJob({ ...jobData, companyId }, authHeader);
+        await createJob(jobData, authHeader);
         toast.success('Job created successfully');
       }
       onSuccess?.();
@@ -45,122 +52,161 @@ export const JobModal: React.FC<JobModalProps> = ({
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2 className="modal-title">{job ? (isEdit ? 'Edit Job' : 'View Job') : 'Create Job'}</h2>
-        <form onSubmit={handleSubmit} className="modal-form">
-          {!isEdit && <div className="full-span">{job?.company?.companyName}</div>}
+    <Modal
+      isOpen={true}
+      onRequestClose={onClose}
+      shouldCloseOnOverlayClick={true}
+      contentLabel="Job Modal"
+    >
+      <div className="modal-container">
+        <div className="modal-header">
+          <h2>{job ? 'Edit Job' : 'Create New Job'}</h2>
+        </div>
 
-          <div>
-            <label htmlFor="type" className="modal-label">
-              Type
-            </label>
-            <select
-              id="type"
-              className="modal-input"
-              value={jobData.type ?? ''}
-              onChange={(e) => handleChange('type', e.target.value)}
-              disabled={!isEdit}
-            >
-              <option value="">Select Type</option>
-              <option value="internship">Internship</option>
-              <option value="job">Job</option>
-            </select>
-          </div>
+        <div className="modal-content-wrapper">
+          <form id="job-form" onSubmit={handleSubmit} className="job-modal-form">
+            <div className="job-form-section">
+              <h3>Job Details</h3>
+              <div className="job-form-row">
+                <div className="job-form-group">
+                  <label>Job Type</label>
+                  <select
+                    value={jobData.type ?? ''}
+                    onChange={(e) => handleChange('type', e.target.value)}
+                    required
+                  >
+                    <option value="">Select job type</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="internship">Internship</option>
+                  </select>
+                </div>
 
-          <div></div>
+                <div className="job-form-group">
+                  <label>Experience Level</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Entry Level, Mid Level, Senior"
+                    value={jobData.experience ?? ''}
+                    onChange={(e) => handleChange('experience', e.target.value)}
+                  />
+                </div>
+              </div>
 
-          <div>
-            <label htmlFor="position" className="modal-label">
-              Position
-            </label>
-            <input
-              id="position"
-              className="modal-input"
-              value={jobData.position ?? ''}
-              onChange={(e) => handleChange('position', e.target.value)}
-              disabled={!isEdit}
-              required
-            />
-          </div>
+              <div className="job-form-row">
+                <div className="job-form-group">
+                  <label>Industry</label>
+                  <IndustryDropdown
+                    selected={jobData.industry}
+                    onChange={(selectedOption) => {
+                      if (selectedOption) {
+                        handleChange('industry', selectedOption.value);
+                      }
+                    }}
+                    required
+                  />
+                </div>
 
-          <div>
-            <label htmlFor="location" className="modal-label">
-              Location
-            </label>
-            <input
-              id="location"
-              className="modal-input"
-              value={jobData.location ?? ''}
-              onChange={(e) => handleChange('location', e.target.value)}
-              disabled={!isEdit}
-            />
-          </div>
+                <div className="job-form-group">
+                  <label>Application Deadline</label>
+                  <input
+                    type="date"
+                    value={
+                      jobData?.applicationDeadline
+                        ? new Date(jobData.applicationDeadline).toISOString().split('T')[0]
+                        : ''
+                    }
+                    onChange={(e) => handleChange('applicationDeadline', new Date(e.target.value))}
+                  />
+                </div>
+              </div>
 
-          <div>
-            <label htmlFor="salary" className="modal-label">
-              Salary
-            </label>
-            <input
-              id="salary"
-              className="modal-input"
-              value={jobData.salary ?? ''}
-              onChange={(e) => handleChange('salary', e.target.value)}
-              disabled={!isEdit}
-            />
-          </div>
+              <div className="job-form-row">
+                <div className="job-form-group">
+                  <label>Position Title</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Software Engineer"
+                    value={jobData.position ?? ''}
+                    onChange={(e) => handleChange('position', e.target.value)}
+                    required
+                  />
+                </div>
 
-          <div>
-            <label htmlFor="benefit" className="modal-label">
-              Benefit
-            </label>
-            <input
-              id="benefit"
-              className="modal-input"
-              value={jobData.benefit ?? ''}
-              onChange={(e) => handleChange('benefit', e.target.value)}
-              disabled={!isEdit}
-            />
-          </div>
+                <div className="job-form-group">
+                  <label>Location</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., New York, NY or Remote"
+                    value={jobData.location ?? ''}
+                    onChange={(e) => handleChange('location', e.target.value)}
+                  />
+                </div>
+              </div>
 
-          <div className="full-span">
-            <label htmlFor="description" className="modal-label">
-              Description
-            </label>
-            <textarea
-              id="description"
-              className="modal-textarea"
-              value={jobData.description ?? ''}
-              onChange={(e) => handleChange('description', e.target.value)}
-              disabled={!isEdit}
-            />
-          </div>
+              <div className="job-form-group full-width">
+                <label>Salary</label>
+                <CurrencyInput
+                  placeholder="$80,000"
+                  value={jobData.salary}
+                  onValueChange={(value) => {
+                    const numericValue = value ? parseInt(value) : 0;
+                    handleChange('salary', numericValue);
+                  }}
+                  prefix="$"
+                  decimalsLimit={0}
+                  allowDecimals={false}
+                  allowNegativeValue={false}
+                />
+              </div>
+            </div>
 
-          <div className="full-span">
-            <label htmlFor="requirements" className="modal-label">
-              Requirements
-            </label>
-            <textarea
-              id="requirements"
-              className="modal-textarea"
-              value={jobData.requirements ?? ''}
-              onChange={(e) => handleChange('requirements', e.target.value)}
-              disabled={!isEdit}
-            />
-          </div>
+            <div className="job-form-section">
+              <h3>Position Description</h3>
+              <div className="job-form-group full-width">
+                <label>Job Description</label>
+                <textarea
+                  placeholder="Describe the role, responsibilities, and what the candidate will be doing..."
+                  value={jobData.description ?? ''}
+                  onChange={(e) => handleChange('description', e.target.value)}
+                  required
+                />
+              </div>
+            </div>
 
-          <div className="modal-actions">
-            <button type="button" onClick={onClose} className="btn-secondary">
-              Close
-            </button>
-            {isEdit && (
-              <button type="submit" className="btn-primary">
-                {job ? 'Update Job' : 'Create Job'}
-              </button>
-            )}
-          </div>
-        </form>
+            <div className="job-form-section">
+              <div className="job-form-row">
+                <div className="job-form-group">
+                  <label>Requirements</label>
+                  <textarea
+                    placeholder="List the required skills, qualifications, and experience..."
+                    value={jobData.requirements ?? ''}
+                    onChange={(e) => handleChange('requirements', e.target.value)}
+                  />
+                </div>
+
+                <div className="job-form-group">
+                  <label>Benefits</label>
+                  <textarea
+                    placeholder="List the benefits and perks offered..."
+                    value={jobData.benefits ?? ''}
+                    onChange={(e) => handleChange('benefits', e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div className="modal-actions">
+          <button type="button" className="btn btn-secondary" onClick={onClose}>
+            Cancel
+          </button>
+          <button type="submit" className="btn btn-primary" form="job-form">
+            {job ? 'Update Job' : 'Create Job'}
+          </button>
+        </div>
       </div>
-    </div>
+    </Modal>
   );
 };
