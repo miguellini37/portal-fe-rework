@@ -12,6 +12,8 @@ import {
   LogIn,
   UserPlus,
   GraduationCap,
+  Building,
+  Users,
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -87,7 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to={`/school/${user?.schoolRefId}`}>
-                      School Profile
+                      <Building /> School Profile
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
@@ -101,11 +103,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to={`/company/${user?.companyRefId}`}>
-                      Company Profile
+                      <Building /> Company Profile
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/talent-pool">Talent Pool</DisabledNavLink>
+                    <DisabledNavLink to="/talent-pool">
+                      <Users /> Talent Pool
+                    </DisabledNavLink>
                   </li>
                   <li className="mb-4">
                     <DisabledNavLink to="/company/jobs">

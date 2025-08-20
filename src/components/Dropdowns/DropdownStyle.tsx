@@ -21,6 +21,7 @@ export const customDropdownStyle: StylesConfig<any> = {
     height: '100%',
     display: 'flex',
     alignItems: 'center',
+    fontSize: '0.875rem',
   }),
   indicatorsContainer: (provided) => ({
     ...provided,
@@ -30,22 +31,26 @@ export const customDropdownStyle: StylesConfig<any> = {
   singleValue: (provided) => ({
     ...provided,
     color: 'var(--foreground)',
+    fontSize: '0.875rem',
   }),
   input: (provided) => ({
     ...provided,
     color: 'var(--foreground)',
     margin: '0px',
     padding: '0px',
+    fontSize: '0.875rem',
   }),
   placeholder: (provided) => ({
     ...provided,
     color: 'var(--muted-foreground)',
+    fontSize: '0.875rem',
   }),
   option: (provided, state) => ({
     ...provided,
     backgroundColor: state.isFocused ? 'var(--muted)' : 'transparent',
     color: 'var(--foreground)',
     cursor: 'pointer',
+    fontSize: '0.875rem',
   }),
   menu: (provided) => ({
     ...provided,
