@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
-import { JobModal } from './JobModal';
 import { getAllJobs, IJobPayload } from '../../api/job';
 import { JobsTable } from './JobsTable';
+import { JobModal } from './JobModal';
 
 export const JobSearchPage = () => {
   const authHeader = useAuthHeader();
@@ -16,7 +16,7 @@ export const JobSearchPage = () => {
 
   const fetchJobs = async () => {
     try {
-      const jobs = await getAllJobs(authHeader, { type: 'job' });
+      const jobs = await getAllJobs(authHeader, { type: ['full-time', 'part-time'] });
       setJobs(jobs);
     } catch {
       toast.error('Failed to fetch company');

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
-import { JobModal } from './JobModal';
 import { getAllJobs, IJobPayload } from '../../api/job';
 import { JobsTable } from './JobsTable';
+import { JobModal } from './JobModal';
 
 export const InternshipSearchPage = () => {
   const authHeader = useAuthHeader();

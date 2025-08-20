@@ -34,7 +34,7 @@ export const getJobById = async (id: string, authHeader: string | null): Promise
 
 export interface IJobsFilter {
   companyId?: string;
-  type?: string;
+  type?: string | string[];
 }
 
 export const getAllJobs = async (
