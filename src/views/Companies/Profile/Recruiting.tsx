@@ -1,6 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { ICompanyPaylod, RecruitingCategory, IRecruitingPayload } from '../../../api/company';
 import { IUpdateCompanyEmployeePayload } from '../../../api/companyEmployee';
+import { getFullName,getInitials } from '../../../util/name';
 
 interface Props {
   company: ICompanyPaylod;
@@ -25,9 +26,6 @@ const ensureRecruiting = (r?: IRecruitingPayload | null): Required<IRecruitingPa
     recruiterIds: r?.recruiterIds ?? [],
   };
 };
-
-const initials = (f?: string, l?: string) => ((f?.[0] ?? '') + (l?.[0] ?? '') || '?').toUpperCase();
-const fullName = (f?: string, l?: string) => [f, l].filter(Boolean).join(' ') || 'Unnamed';
 
 const upsert = <T extends object>(a: T[], i: number, patch: Partial<T>): T[] =>
   a.map((x, k) => (k === i ? ({ ...x, ...patch } as T) : x));
@@ -76,7 +74,7 @@ const setR = useCallback(
     const term = search.trim().toLowerCase();
     return employees.filter(e =>
       e.id && !r.recruiterIds.includes(e.id) &&
-      fullName(e.firstName, e.lastName).toLowerCase().includes(term)
+      getFullName(e ?? { firstName: '', lastName: '' }).toLowerCase().includes(term)
     );
   }, [employees, r.recruiterIds, search]);
 
@@ -175,7 +173,7 @@ const setR = useCallback(
                     <li key={e.id} className="recruiter-search-item">
                       <button type="button" className="recruiter-search-btn recruiter-search-btn-noicon"
                         onClick={() => e.id && addRecruiter(e.id)}>
-                        <span className="recruiter-search-name">{fullName(e.firstName, e.lastName)}</span>
+                        <span className="recruiter-search-name">{getFullName(e ?? { firstName: '', lastName: '' })}</span>
                         <span className="recruiter-search-position">{e.position ?? ''}</span>
                       </button>
                     </li>
@@ -195,8 +193,8 @@ const setR = useCallback(
             <li key={emp.id} className="employee-item">
               {!editMode && (
                 <>
-                  <div className="employee-avatar" aria-hidden="true">{initials(emp.firstName, emp.lastName)}</div>
-                  <div className="employee-name" style={{ textAlign: 'center' }}>{fullName(emp.firstName, emp.lastName)}</div>
+                  <div className="employee-avatar" aria-hidden="true">{getInitials(emp ?? { firstName: '', lastName: '' })}</div>
+                  <div className="employee-name" style={{ textAlign: 'center' }}>{getFullName(emp ?? { firstName: '', lastName: '' })}</div>
                   <div className="employee-position" style={{ textAlign: 'center' }}>
                     {emp.position?.trim() ? emp.position : 'Recruiter'}
                   </div>
@@ -204,7 +202,7 @@ const setR = useCallback(
               )}
               {editMode && (
                 <>
-                  <div className="employee-name">{fullName(emp.firstName, emp.lastName)}</div>
+                  <div className="employee-name">{getFullName(emp ?? { firstName: '', lastName: '' })}</div>
                   <div className="employee-position">{emp.position ?? ''}</div>
                   <button className="btn btn-tertiary" type="button"
                     onClick={() => emp.id && removeRecruiter(emp.id)} aria-label="Remove recruiter">
