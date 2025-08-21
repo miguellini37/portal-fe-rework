@@ -254,19 +254,3 @@ body {
   opacity: 1;
   pointer-events: auto;
 }
-
-.portal-title {
-  font-size: 1.875rem; /* text-3xl */
-  font-weight: 700; /* font-bold */
-  margin: 1rem; /* m-4 */
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* gap-2 */
-  border-bottom: 1px solid #e5e7eb; /* outline line on the bottom */
-  padding-bottom: 1rem;
-}
-
-.portal-icon {
-  width: 1.5rem; /* w-6 */
-  height: 1.5rem; /* h-6 */
-}

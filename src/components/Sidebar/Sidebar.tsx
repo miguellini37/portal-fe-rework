@@ -14,7 +14,9 @@ import {
   GraduationCap,
   Building,
   Users,
+  Menu,
 } from 'lucide-react';
+import { useState } from 'react';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -27,10 +29,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const navigate = useNavigate();
   const user = useAuthUser<IUserData>();
   const permission = user?.permission;
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleLogout = () => {
     signOut();
     navigate('/login');
+  };
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
   };
 
   const DisabledNavLink: React.FC<NavLinkProps> = ({ className = '', children, ...props }) => {
@@ -51,36 +58,65 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 
   return (
     <div className="sidebar-container">
-      <div className="sidebar">
+      <div className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
         <div>
-          <h1 className="portal-title">
-            <img src="/App Icon192.png" alt="Portal Icon" className="portal-icon" />
-            Portal
-          </h1>
+          <div className="sidebar-header">
+            <h1 className="portal-title">
+              <img src="/App Icon192.png" alt="Portal Icon" className="portal-icon" />
+              {!isCollapsed && <span>Portal</span>}
+            </h1>
+            {!isCollapsed && (
+              <button
+                onClick={toggleSidebar}
+                className="collapse-button"
+                aria-label="Collapse sidebar"
+                style={{
+                  width: '50px',
+                  height: '40px',
+                  padding: '0',
+                  margin: '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Menu />
+              </button>
+            )}
+          </div>
+          {isCollapsed && (
+            <button
+              onClick={toggleSidebar}
+              className="collapse-button-collapsed"
+              aria-label="Expand sidebar"
+            >
+              <Menu />
+            </button>
+          )}
           <nav>
             <ul>
               {!permission && (
                 <li className="mb-4">
-                  <NavLink to="/">
-                    <Home /> Home
+                  <NavLink to="/" title="Home">
+                    <Home /> {!isCollapsed && <span>Home</span>}
                   </NavLink>
                 </li>
               )}
               {permission === USER_PERMISSIONS.ATHLETE && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to="/jobs/">
-                      <Briefcase /> Jobs
+                    <DisabledNavLink to="/jobs/" title="Jobs">
+                      <Briefcase /> {!isCollapsed && <span>Jobs</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/internships/search">
-                      <GraduationCap /> Internships
+                    <DisabledNavLink to="/internships/search" title="Internships">
+                      <GraduationCap /> {!isCollapsed && <span>Internships</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/company/search">
-                      <Search /> Company Search
+                    <DisabledNavLink to="/company/search" title="Company Search">
+                      <Search /> {!isCollapsed && <span>Company Search</span>}
                     </DisabledNavLink>
                   </li>
                 </>
@@ -88,13 +124,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.SCHOOL && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to={`/school/${user?.schoolRefId}`}>
-                      <Building /> School Profile
+                    <DisabledNavLink to={`/school/${user?.schoolRefId}`} title="School Profile">
+                      <Building /> {!isCollapsed && <span>School Profile</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/jobs">
-                      <Briefcase /> Jobs
+                    <DisabledNavLink to="/jobs" title="Jobs">
+                      <Briefcase /> {!isCollapsed && <span>Jobs</span>}
                     </DisabledNavLink>
                   </li>
                 </>
@@ -102,18 +138,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.COMPANY && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to={`/company/${user?.companyRefId}`}>
-                      <Building /> Company Profile
+                    <DisabledNavLink to={`/company/${user?.companyRefId}`} title="Company Profile">
+                      <Building /> {!isCollapsed && <span>Company Profile</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/talent-pool">
-                      <Users /> Talent Pool
+                    <DisabledNavLink to="/talent-pool" title="Talent Pool">
+                      <Users /> {!isCollapsed && <span>Talent Pool</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to="/company/jobs">
-                      <Briefcase /> Jobs
+                    <DisabledNavLink to="/company/jobs" title="Jobs">
+                      <Briefcase /> {!isCollapsed && <span>Jobs</span>}
                     </DisabledNavLink>
                   </li>
                 </>
@@ -126,29 +162,38 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           {!isLoggedIn ? (
             <ul>
               <li className="mb-4">
-                <NavLink to="/login" className="text-blue-400 hover:text-blue-300">
-                  <LogIn /> Login
+                <NavLink to="/login" className="text-blue-400 hover:text-blue-300" title="Login">
+                  <LogIn /> {!isCollapsed && <span>Login</span>}
                 </NavLink>
               </li>
               <li className="mb-4">
-                <NavLink to="/register" className="text-blue-400 hover:text-blue-300">
-                  <UserPlus /> Register
+                <NavLink
+                  to="/register"
+                  className="text-blue-400 hover:text-blue-300"
+                  title="Register"
+                >
+                  <UserPlus /> {!isCollapsed && <span>Register</span>}
                 </NavLink>
               </li>
             </ul>
           ) : (
             <ul>
               <li className="mb-4">
-                <NavLink to="/profile" className="text-blue-400 hover:text-blue-300">
-                  <User /> Profile
+                <NavLink
+                  to="/profile"
+                  className="text-blue-400 hover:text-blue-300"
+                  title="Profile"
+                >
+                  <User /> {!isCollapsed && <span>Profile</span>}
                 </NavLink>
               </li>
               <li className="mb-4">
                 <button
                   onClick={handleLogout}
                   className="text-red-400 hover:text-red-300 focus:outline-none"
+                  title="Logout"
                 >
-                  <LogOut /> Logout
+                  <LogOut /> {!isCollapsed && <span>Logout</span>}
                 </button>
               </li>
             </ul>
@@ -156,7 +201,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         </div>
       </div>
 
-      <main className="sidebar-main">{children}</main>
+      <main className={`sidebar-main ${isCollapsed ? 'sidebar-main-collapsed' : ''}`}>
+        {children}
+      </main>
     </div>
   );
 };
