@@ -1,118 +1,77 @@
 import { useEffect, useState } from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  flexRender,
-  ColumnDef,
-} from '@tanstack/react-table';
-import { ColumnFilter } from '@tanstack/react-table';
-import { Link } from 'react-router-dom';
-import { Filter } from '../../components/Table/ColumnFilter';
+import { toast } from 'react-toastify';
 import { getCompanies, ICompanyPaylod } from '../../api/company';
-import '../../components/Table/Table.css';
+import { CompanyCard } from './CompanyCard';
 
-export const CompanySearch: React.FC<any> = () => {
+interface CompanySearchProps {
+  pageTitle?: string;
+  pageSubtitle?: string;
+}
+
+export const CompanySearch: React.FC<CompanySearchProps> = ({
+  pageTitle = 'Search Companies',
+  pageSubtitle = 'Discover companies and explore their opportunities',
+}) => {
   const [companies, setCompanies] = useState<ICompanyPaylod[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchCompanies = async () => {
+    try {
+      const data = await getCompanies();
+      setCompanies(data);
+    } catch {
+      toast.error('Failed to fetch companies');
+    }
+  };
 
   useEffect(() => {
-    getCompanies().then((data) => setCompanies(data));
+    fetchCompanies();
   }, []);
 
-  const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({});
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([]);
-
-  const columns: ColumnDef<ICompanyPaylod>[] = [
-    {
-      header: 'Company',
-      accessorFn: (row) => row.companyName,
-      id: 'companyName',
-      cell: (info) => {
-        const company = info.row.original;
-        return company ? (
-          <Link to={`/company/${company.id}`} className="text-blue-600 hover:underline">
-            {company.companyName}
-          </Link>
-        ) : (
-          'N/A'
-        );
-      },
-    },
-    {
-      header: 'Industry',
-      accessorFn: (row) => row.industry ?? 'N/A',
-      id: 'industry',
-      cell: (info) => {
-        return info.row.original.industry ?? 'N/A';
-      },
-    },
-    {
-      header: 'Jobs',
-      accessorFn: (row) => row?.jobs?.filter((j) => j.type == 'job').length ?? '0',
-      id: 'jobs',
-      // cell: (info) => {
-      //   return info.row.original.jobCount ?? 'N/A';
-      // },
-    },
-    {
-      header: 'Internships',
-      accessorFn: (row) => row?.jobs?.filter((j) => j.type == 'internship').length ?? '0',
-      id: 'internships',
-    },
-    {
-      header: 'NIL Oppurtunities',
-      accessorFn: (row) => row?.jobs?.filter((j) => j.type == 'nil').length ?? '0',
-      id: 'nil',
-    },
-  ];
-
-  const table = useReactTable({
-    data: companies,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: { columnVisibility, columnFilters },
-    onColumnVisibilityChange: setColumnVisibility,
-    onColumnFiltersChange: setColumnFilters,
-  });
+  // Filter companies based on search term
+  const filteredCompanies = companies.filter(
+    (company) =>
+      company.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      company.industry?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="table-container">
-      <table className="table">
-        <thead className="thead">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} className="th">
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                  {header.column.getCanFilter() ? (
-                    <div>
-                      <Filter column={header.column} />
-                    </div>
-                  ) : null}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="tr">
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="td">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        {companies.length === 0 && (
-          <p className="text-gray-300 text-center mt-4">No companies available for search.</p>
-        )}
+    <div className="search-page-root">
+      {/* Header */}
+      <div className="search-page-header">
+        <h1 className="search-page-title">{pageTitle}</h1>
+        <div className="search-page-subtitle">{pageSubtitle}</div>
       </div>
+
+      {/* Search Section */}
+      <div className="search-page-searchbar-row">
+        <input
+          className="search-page-searchbar"
+          type="text"
+          placeholder="Search companies by name, industry, or location..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <div className="search-page-results-count">
+          {filteredCompanies.length} result{filteredCompanies.length !== 1 ? 's' : ''}
+        </div>
+      </div>
+
+      <div className="search-page-grid">
+        {filteredCompanies.map((company) => (
+          <CompanyCard key={company.id} company={company} />
+        ))}
+      </div>
+
+      {filteredCompanies.length === 0 && (
+        <div className="empty-state">
+          <p>
+            {searchTerm
+              ? `No companies found matching "${searchTerm}"`
+              : 'No companies available for search.'}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

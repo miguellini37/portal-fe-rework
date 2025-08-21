@@ -1,20 +1,25 @@
 import { useEffect, useState } from 'react';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
-import { getAllJobs, IJobPayload } from '../../../api/job';
+import { getAllJobs, IJobPayload, IJobsFilter } from '../../../api/job';
 import { JobModal } from '../JobModal';
 import { JobCard } from './JobCard';
 import './JobPostingsDashboard.css';
 import '../../../styles/searchPage.css';
 
-interface CompanyJobsPageProps {
-  onView?: (job: IJobPayload) => void;
-  onEdit?: (job: IJobPayload) => void;
-  onCreate?: () => void;
-  companyName?: string;
+interface JobSearchProps {
+  pageTitle: string;
+  pageSubtitle: string;
+  canEditJobs?: boolean;
+  additionalFilters?: Partial<IJobsFilter>;
 }
 
-export const CompanyJobsPage = ({ onView, onEdit, onCreate }: CompanyJobsPageProps) => {
+export const JobSearch = ({
+  pageTitle,
+  pageSubtitle,
+  canEditJobs,
+  additionalFilters,
+}: JobSearchProps) => {
   const authHeader = useAuthHeader();
 
   const [jobs, setJobs] = useState<IJobPayload[]>([]);
@@ -24,7 +29,7 @@ export const CompanyJobsPage = ({ onView, onEdit, onCreate }: CompanyJobsPagePro
 
   const fetchJobs = async () => {
     try {
-      const jobs = await getAllJobs(authHeader, { type: 'job' });
+      const jobs = await getAllJobs(authHeader, { ...additionalFilters });
       setJobs(jobs);
     } catch {
       toast.error('Failed to fetch jobs');
@@ -38,21 +43,20 @@ export const CompanyJobsPage = ({ onView, onEdit, onCreate }: CompanyJobsPagePro
   const handleViewJob = (job: IJobPayload) => {
     setSelectedJob(job);
     setShowModal(true);
-    if (onView) onView(job);
   };
 
   return (
     <div className="search-page-root">
       {/* Header */}
       <div className="search-page-header">
-        <h1 className="search-page-title">Company Job Postings</h1>
-        <div className="search-page-subtitle">
-          Manage open positions and track student-athlete applications
-        </div>
+        <h1 className="search-page-title">{pageTitle}</h1>
+        <div className="search-page-subtitle">{pageSubtitle}</div>
         <div className="header-actions">
-          <button className="post-job-btn" onClick={() => setShowModal(true)}>
-            + Post New Job
-          </button>
+          {canEditJobs && (
+            <button className="post-job-btn" onClick={() => setShowModal(true)}>
+              + Post New Job
+            </button>
+          )}
         </div>
       </div>
 
@@ -61,7 +65,7 @@ export const CompanyJobsPage = ({ onView, onEdit, onCreate }: CompanyJobsPagePro
         <input
           className="search-page-searchbar"
           type="text"
-          placeholder="Search job titles, departments, job codes, or hiring managers..."
+          placeholder="Search by titles, departments, job codes, or hiring managers..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -71,13 +75,13 @@ export const CompanyJobsPage = ({ onView, onEdit, onCreate }: CompanyJobsPagePro
       {/* Job Cards */}
       <div className="search-page-grid">
         {jobs.map((job) => (
-          <JobCard key={job.id} job={job} onView={handleViewJob} onEdit={onEdit} />
+          <JobCard key={job.id} job={job} onView={handleViewJob} canEdit={canEditJobs} />
         ))}
       </div>
 
       {jobs.length === 0 && (
         <div className="empty-state">
-          <p>No job postings found.</p>
+          <p>No results found.</p>
         </div>
       )}
 

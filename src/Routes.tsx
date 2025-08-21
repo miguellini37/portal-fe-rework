@@ -13,7 +13,7 @@ import { CompanySearch } from './views/Companies/CompanyTable';
 import { InternshipSearchPage } from './views/Jobs/InternshipSearchPage';
 import { CompanyProfile } from './views/Companies/Profile';
 import { TalentPool } from './views/Companies/TalentPool';
-import { CompanyJobsPage } from './views/Jobs/CompanyJobs.tsx/CompanyJobsPage';
+import { CompanyJobsPage } from './views/Jobs/CompanyJobsPage';
 
 type PageRoute = {
   path: string;
