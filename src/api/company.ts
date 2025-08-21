@@ -1,17 +1,8 @@
 import axios from 'axios';
 import { url } from '../config/url';
 import { IJobPayload } from './job';
+import {IUpdateCompanyEmployeePayload } from './companyEmployee';
 
-
-export interface ICompanyPaylod {
-  id?: string;
-  companyName?: string;
-  ownerRefId?: string;
-  industry?: string;
-  jobs?: IJobPayload[];
-  culture?: CulturePayload;
-  benefits?: BenefitsPayload;
-}
 
 export interface CulturePayload {
   cultureValues?: CultureValue[];
@@ -35,6 +26,30 @@ export interface SpecificBenefits {
   title?: string;
   description?: string[];
   icon?: string;
+}
+
+export interface RecruitingCategory {
+  icon?: string;
+  title?: string;
+  description?: string;
+}
+
+export interface IRecruitingPayload {
+  strategy?: RecruitingCategory[];
+  processSteps?: string[];
+  recruiterIds?: string[]; // CompanyEmployee IDs
+}
+
+export interface ICompanyPaylod {
+  id?: string;
+  companyName?: string;
+  ownerRefId?: string;
+  industry?: string;
+  jobs?: IJobPayload[];
+  culture?: CulturePayload;
+  benefits?: BenefitsPayload;
+  companyEmployees?: IUpdateCompanyEmployeePayload[];
+  recruiting?: IRecruitingPayload;
 }
 
 export const getCompanyById = async (

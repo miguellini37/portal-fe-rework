@@ -6,6 +6,8 @@ export interface IUpdateCompanyEmployeePayload {
   firstName?: string;
   lastName?: string;
   companyName?: string;
+  id?: string;
+  position?: string;
 }
 
 export const updateCompanyEmployee = async (
