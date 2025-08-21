@@ -2,7 +2,7 @@ import axios from 'axios';
 import { url } from '../config/url';
 
 export interface IJobPayload {
-  id?: string;
+  id: string;
   position?: string;
   location?: string;
   salary?: number;

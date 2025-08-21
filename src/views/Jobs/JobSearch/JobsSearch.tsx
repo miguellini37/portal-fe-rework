@@ -6,12 +6,14 @@ import { JobModal } from '../JobModal';
 import { JobCard } from './JobCard';
 import './JobPostingsDashboard.css';
 import '../../../styles/searchPage.css';
+import { createApplication } from '../../../api/application';
 
 interface JobSearchProps {
   pageTitle: string;
   pageSubtitle: string;
   canEditJobs?: boolean;
   additionalFilters?: Partial<IJobsFilter>;
+  canApplyToJob?: boolean;
 }
 
 export const JobSearch = ({
@@ -19,6 +21,7 @@ export const JobSearch = ({
   pageSubtitle,
   canEditJobs,
   additionalFilters,
+  canApplyToJob,
 }: JobSearchProps) => {
   const authHeader = useAuthHeader();
 
@@ -43,6 +46,10 @@ export const JobSearch = ({
   const handleViewJob = (job: IJobPayload) => {
     setSelectedJob(job);
     setShowModal(true);
+  };
+
+  const applyToJob = async (job: IJobPayload) => {
+    await createApplication(authHeader, { jobId: job.id });
   };
 
   return (
@@ -75,7 +82,14 @@ export const JobSearch = ({
       {/* Job Cards */}
       <div className="search-page-grid">
         {jobs.map((job) => (
-          <JobCard key={job.id} job={job} onView={handleViewJob} canEdit={canEditJobs} />
+          <JobCard
+            key={job.id}
+            job={job}
+            onView={handleViewJob}
+            canEdit={canEditJobs}
+            canApply={canApplyToJob}
+            onApply={applyToJob}
+          />
         ))}
       </div>
 

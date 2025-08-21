@@ -6,6 +6,7 @@ export const JobSearchPage = () => {
       pageTitle="Search Jobs"
       pageSubtitle="Search for job opportunities and apply"
       additionalFilters={{ type: ['full-time', 'part-time'] }}
+      canApplyToJob
     />
   );
 };

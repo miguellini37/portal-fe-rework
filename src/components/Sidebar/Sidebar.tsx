@@ -6,13 +6,14 @@ import { IUserData, USER_PERMISSIONS } from '../../auth/store';
 import {
   Home,
   Briefcase,
-  Search,
+  FileText,
   User,
   LogOut,
   LogIn,
   UserPlus,
-  GraduationCap,
+  School,
   Building,
+  Building2,
   Users,
   Menu,
 } from 'lucide-react';
@@ -111,12 +112,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                   <li className="mb-4">
                     <DisabledNavLink to="/internships/search" title="Internships">
-                      <GraduationCap /> {!isCollapsed && <span>Internships</span>}
+                      <School /> {!isCollapsed && <span>Internships</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
                     <DisabledNavLink to="/company/search" title="Company Search">
-                      <Search /> {!isCollapsed && <span>Company Search</span>}
+                      <Building2 /> {!isCollapsed && <span>Company Search</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/applications" title="Applications">
+                      <FileText /> {!isCollapsed && <span>Applications</span>}
                     </DisabledNavLink>
                   </li>
                 </>
@@ -150,6 +156,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <li className="mb-4">
                     <DisabledNavLink to="/company/jobs" title="Jobs">
                       <Briefcase /> {!isCollapsed && <span>Jobs</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/applications" title="Applications">
+                      <FileText /> {!isCollapsed && <span>Applications</span>}
                     </DisabledNavLink>
                   </li>
                 </>

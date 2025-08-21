@@ -6,9 +6,11 @@ export interface JobCardProps {
   job: IJobPayload;
   onView: (job: IJobPayload) => void;
   canEdit?: boolean;
+  canApply?: boolean;
+  onApply?: (job: IJobPayload) => void;
 }
 
-export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit }) => {
+export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
   return (
     <div className="job-card">
       <div className="job-content">
@@ -43,6 +45,11 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit }) => {
         {canEdit && (
           <button className="action-btn primary" onClick={() => onView(job)}>
             Edit Job
+          </button>
+        )}
+        {canApply && (
+          <button className="action-btn primary" onClick={() => onApply?.(job)}>
+            Apply
           </button>
         )}
         <button

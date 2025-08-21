@@ -6,6 +6,7 @@ export const InternshipSearchPage = () => {
       pageTitle="Search Internships"
       pageSubtitle="Search for internship opportunities and apply"
       additionalFilters={{ type: 'internship' }}
+      canApplyToJob
     />
   );
 };
