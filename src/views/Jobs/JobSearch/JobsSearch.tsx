@@ -49,7 +49,12 @@ export const JobSearch = ({
   };
 
   const applyToJob = async (job: IJobPayload) => {
-    await createApplication(authHeader, { jobId: job.id });
+    try {
+      await createApplication(authHeader, { jobId: job.id });
+      toast.error('Successfully applied to job');
+    } catch {
+      toast.error('Failed to apply to job');
+    }
   };
 
   return (

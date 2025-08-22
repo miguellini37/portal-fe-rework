@@ -1,6 +1,7 @@
 import React from 'react';
 import './JobPostingsDashboard.css';
 import { IJobPayload } from '../../../api/job';
+import { useNavigate } from 'react-router';
 
 export interface JobCardProps {
   job: IJobPayload;
@@ -11,6 +12,8 @@ export interface JobCardProps {
 }
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="job-card">
       <div className="job-content">
@@ -55,7 +58,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
         <button
           className="action-btn secondary"
           onClick={() => {
-            /* Handle view applications */
+            navigate(`/job/${job.id}`);
           }}
         >
           View Full Job Details

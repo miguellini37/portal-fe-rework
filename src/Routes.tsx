@@ -15,6 +15,7 @@ import { CompanyProfile } from './views/Companies/Profile';
 import { TalentPool } from './views/Companies/TalentPool';
 import { CompanyJobsPage } from './views/Jobs/CompanyJobsPage';
 import { ApplicationSearch } from './views/Applications';
+import { JobPage } from './views/Jobs/JobPage';
 
 type PageRoute = {
   path: string;
@@ -31,6 +32,7 @@ export const AppRoutes = () => {
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
     { path: '/company/:id', element: <CompanyProfile />, withSidebar: true },
     { path: '/school/:id', element: <SchoolPage />, withSidebar: true },
+    { path: '/job/:id', element: <JobPage />, withSidebar: true },
 
     { path: '/jobs', element: <JobSearchPage />, withSidebar: true },
     { path: '/internships/search', element: <InternshipSearchPage />, withSidebar: true },
