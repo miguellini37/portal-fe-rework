@@ -12,6 +12,7 @@ import { CultureTab } from './Culture';
 import { BenefitsTab } from './Benefits';
 import { RecruitingTab } from './Recruiting';
 import { AnalyticsTab } from './Analytics';
+import { CompanyEmployeeTab } from './Employees';
 
 export const CompanyProfile = () => {
   const authHeader = useAuthHeader();
@@ -121,6 +122,13 @@ export const CompanyProfile = () => {
       label: 'Analytics',
       component: (company: IUpdateCompanyEmployeePayload) => (
         <AnalyticsTab company={company} editMode={editMode} setCompany={setCompany} />
+      ),
+    },
+    {
+      key: 'our-team',
+      label: 'Our Team',
+      component: (company: IUpdateCompanyEmployeePayload) => (
+        <CompanyEmployeeTab company={company} editMode={editMode} setCompany={setCompany} />
       ),
     },
   ];

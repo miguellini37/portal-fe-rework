@@ -3,9 +3,16 @@ import { url } from '../config/url';
 import { IUserData } from '../auth/store';
 
 export interface IUpdateCompanyEmployeePayload {
-  firstName?: string;
+  bio?: string;
+  companyRefId?: string;
+  email?: string;
+  firstName?: string
   lastName?: string;
+  location?: string;
+  phone?: string;
   companyName?: string;
+  id?: string;
+  position?: string;
 }
 
 export const updateCompanyEmployee = async (
