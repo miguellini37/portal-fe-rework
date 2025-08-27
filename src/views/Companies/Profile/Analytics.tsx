@@ -148,8 +148,8 @@ export const AnalyticsTab: FC<Props> = ({ company, editMode, setCompany }) => {
           <h2 className="section-title">Company Specific Analytics</h2>
           <aside className="aside">
             <ul className="aside-list">
-              {numbers.custom.map((metric, i) => (
-                <CustomListItem key={i} label={metric.label} value={formatCustomValue(metric)} />
+              {numbers.custom.map((metric) => (
+                <CustomListItem key={metric.id} label={metric.label} value={formatCustomValue(metric)} />
               ))}
             </ul>
           </aside>
