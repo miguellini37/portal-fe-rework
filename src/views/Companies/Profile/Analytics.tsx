@@ -1,198 +1,233 @@
-import React, { JSX } from 'react';
-
+import React, { FC, useMemo, useCallback, ReactNode, useState } from 'react';
 import { ICompanyPaylod } from '../../../api/company';
-import { isNil } from 'lodash';
+import './company.css';
+import { PlusCircle, XCircle } from 'lucide-react';
 
-interface AnalyticsTabProps {
+/** ---------- Data model: numbers only ---------- */
+type CustomAnalytic = {
+  id: string;
+  label: string;
+  value: number;
+};
+
+type AnalyticsNumbers = {
+  hiring: {
+    totalHires: number;
+    totalHiresDeltaPct: number;
+    totalInternships: number;
+    totalInternshipsDelta: number;
+    conversionToFullTimePct: number;
+    conversionToFullTimeDeltaPct: number;
+    timeToFirstSaleDays: number;
+    timeToFirstSaleDeltaDays: number;
+  };
+  nil: {
+    totalInvestmentUSD: number;
+    activePartnerships: number;
+  };
+  custom: CustomAnalytic[];
+};
+
+type WithAnalyticsNumbers = ICompanyPaylod & { analyticsNumbers?: AnalyticsNumbers };
+
+interface Props {
   company: ICompanyPaylod;
   editMode: boolean;
   setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>;
 }
 
-export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ company, editMode, setCompany }) => {
-  const skills = [
-    'Leadership',
-    'Team Collaboration',
-    'Time Management',
-    'Communication',
-    'Problem Solving',
-    'Adaptability',
-    'Work Ethic',
-    'Goal Setting',
-  ];
+/** ---------- Config & Helpers ---------- */
+const AVAILABLE_CUSTOM_ANALYTICS = [
+  { id: 'cost_per_hire_usd', label: 'Cost Per Hire ($)' },
+  { id: 'time_to_fill_days', label: 'Time to Fill (days)' },
+  { id: 'offer_acceptance_rate_pct', label: 'Offer Acceptance Rate (%)' },
+  { id: 'sourcing_channel_effectiveness_pct', label: 'Sourcing Channel Effectiveness (%)' },
+];
 
-  // Recursively count all fields and filled fields
-  const countFields = (obj: any): { total: number; filled: number } => {
-    if (typeof obj !== 'object' || obj === null) return { total: 0, filled: 0 };
-    let total = 0;
-    let filled = 0;
-    for (const key of Object.keys(obj)) {
-      const value = obj[key];
-      if (typeof value === 'object' && value !== null) {
-        const nested = countFields(value);
-        total += nested.total;
-        filled += nested.filled;
-      } else {
-        total += 1;
-        if (!isNil(value) && value !== '') filled += 1;
-      }
-    }
-    return { total, filled };
-  };
+const MOCK_DATA: AnalyticsNumbers = {
+  hiring: { totalHires: 342, totalHiresDeltaPct: 18.2, totalInternships: 91, totalInternshipsDelta: 3, conversionToFullTimePct: 67, conversionToFullTimeDeltaPct: 2.3, timeToFirstSaleDays: 52, timeToFirstSaleDeltaDays: -4 },
+  nil: { totalInvestmentUSD: 2_100_000, activePartnerships: 89 },
+  custom: [
+    { id: 'cost_per_hire_usd', label: 'Cost Per Hire ($)', value: 4120 },
+    { id: 'offer_acceptance_rate_pct', label: 'Offer Acceptance Rate (%)', value: 88 },
+  ],
+};
 
-  const getProfileCompletion = (
-    fields: Partial<ICompanyPaylod>
-  ): { colorClassName: string; percentComplete: number } => {
-    const { total, filled } = countFields(fields);
-    if (total === 0) {
-      return { colorClassName: 'incomplete', percentComplete: 0 };
-    }
-    const percentComplete = Math.round((filled / total) * 100);
-    if (percentComplete === 100) {
-      return { colorClassName: 'complete', percentComplete };
-    }
-    if (percentComplete >= 60) {
-      return { colorClassName: 'warning', percentComplete };
-    }
-    return { colorClassName: 'incomplete', percentComplete };
-  };
+const ensure = (a?: AnalyticsNumbers | null): AnalyticsNumbers => ({
+  hiring: { ...MOCK_DATA.hiring, ...(a?.hiring ?? {}) },
+  nil: { ...MOCK_DATA.nil, ...(a?.nil ?? {}) },
+  custom: a?.custom ?? [],
+});
 
-  const renderProfileCompletion = (
-    category: string,
-    fields: Partial<ICompanyPaylod>
-  ): JSX.Element => {
-    const { colorClassName, percentComplete } = getProfileCompletion(fields);
+const fmtPct = (n: number) => `${Number.isFinite(n) ? n.toFixed(n % 1 ? 1 : 0) : '0'}%`;
+const fmtDelta = (n: number, unit: '%' | 'd' = '%') => {
+    const sign = n >= 0 ? '+' : '';
+    if (unit === '%') return `${sign}${fmtPct(n)}`;
+    return `${sign}${n.toFixed(0)}${unit}`;
+};
+const fmtMoneyShort = (usd: number) => {
+  if (!Number.isFinite(usd)) return '$0';
+  if (Math.abs(usd) >= 1_000_000) return `$${(usd / 1_000_000).toFixed(1)}M`;
+  if (Math.abs(usd) >= 1_000) return `$${(usd / 1_000).toFixed(0)}K`;
+  return `$${usd.toFixed(0)}`;
+};
+const formatCustomValue = (metric: CustomAnalytic) => {
+    if (metric.id.endsWith('_pct')) return fmtPct(metric.value);
+    if (metric.id.endsWith('_usd')) return fmtMoneyShort(metric.value);
+    if (metric.id.endsWith('_days')) return `${metric.value}d`;
+    return metric.value;
+};
 
-    return (
-      <li className={`profile-completion ${colorClassName}`}>
-        <span>{category}</span>
-        <span className="progress-percent">
-          {percentComplete == 100 ? 'Complete' : `${percentComplete}%`}
-        </span>
-      </li>
-    );
-  };
+/** ---------- Reusable Child Components ---------- */
+const StatTile: FC<{ title: string; value: string; delta: string; context: string; color: string; deltaTone?: 'good' | 'bad' }> =
+  ({ title, value, delta, context, color, deltaTone = 'good' }) => (
+    <div className={`tile tile-${color}`}>
+      <div className="v">{value}</div>
+      <div className="l">{title}</div>
+      <div className={`d ${deltaTone}`}>{delta}</div>
+      <div className="c">{context}</div>
+    </div>
+  );
 
-  const { percentComplete } = getProfileCompletion(company);
+const CustomListItem: FC<{ label: string; value: ReactNode; }> =
+  ({ label, value }) => (
+    <li className="aside-row">
+      <span className="aside-label">{label}</span>
+      <span className="aside-value">{value}</span>
+    </li>
+  );
+
+const HiringPerformanceCard: FC<{ hiring: AnalyticsNumbers['hiring'] }> = ({ hiring }) => (
+  <section className="card analytics-card">
+    <h2 className="section-title">Hiring Performance</h2>
+    <div className="tiles">
+      <StatTile color="indigo" title="Total Hires YTD" value={String(hiring.totalHires)} delta={fmtDelta(hiring.totalHiresDeltaPct)} context="Δ vs last year" deltaTone={hiring.totalHiresDeltaPct >= 0 ? 'good' : 'bad'} />
+      <StatTile color="green" title="Internships" value={String(hiring.totalInternships)} delta={fmtDelta(hiring.totalInternshipsDelta, 'd')} context="Δ vs last year" deltaTone={hiring.totalInternshipsDelta >= 0 ? 'good' : 'bad'} />
+      <StatTile color="purple" title="Conversion to Full-Time" value={fmtPct(hiring.conversionToFullTimePct)} delta={fmtDelta(hiring.conversionToFullTimeDeltaPct)} context="Δ vs last year" deltaTone={hiring.conversionToFullTimeDeltaPct >= 0 ? 'good' : 'bad'} />
+      <StatTile color="amber" title="Time to First Sale" value={`${hiring.timeToFirstSaleDays}d`} delta={fmtDelta(hiring.timeToFirstSaleDeltaDays, 'd')} context="Δ" deltaTone={hiring.timeToFirstSaleDeltaDays < 0 ? 'good' : 'bad'} />
+    </div>
+  </section>
+);
+
+const NilInvestmentCard: FC<{ nil: AnalyticsNumbers['nil'] }> = ({ nil }) => (
+  <section className="card analytics-card">
+    <h2 className="section-title">NIL Investment</h2>
+    <aside className="aside">
+      <ul className="aside-list">
+        <CustomListItem label="Total NIL Investment" value={fmtMoneyShort(nil.totalInvestmentUSD)} />
+        <CustomListItem label="Active Partnerships" value={nil.activePartnerships} />
+      </ul>
+    </aside>
+  </section>
+);
+
+/** ---------- Main Analytics Tab Component ---------- */
+export const AnalyticsTab: FC<Props> = ({ company, editMode, setCompany }) => {
+  const numbers = useMemo(() => ensure((company as WithAnalyticsNumbers).analyticsNumbers), [company]);
+
+  const upCustom = useCallback((newList: CustomAnalytic[]) =>
+    setCompany(prev => ({ ...prev, analyticsNumbers: { ...ensure((prev as WithAnalyticsNumbers).analyticsNumbers), custom: newList } })),
+    [setCompany]
+  );
+
+  if (editMode) {
+    return <AnalyticsEditor numbers={numbers} upCustom={upCustom} />;
+  }
 
   return (
-    <div className="overview-grid overview-tab-container">
-      {/* Personal Information */}
-      <div className="personal-info card">
-        <h2 className="section-title">
-          <span className="icon">👤</span> Personal Information
-        </h2>
+    <div className="analytics-grid">
+      {/* --- View Mode: Hiring Performance --- */}
+      <HiringPerformanceCard hiring={numbers.hiring} />
 
-        <div className="info-row">
-          {/* <div className="avatar">{initials || '--'}</div>
+      {/* --- View Mode: NIL Investment --- */}
+      <NilInvestmentCard nil={numbers.nil} />
 
-          <div className="info-fields">
-            <div className="two-column">
-              <div className="field">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  className="first-name"
-                  value={company.firstName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  className="last-name"
-                  value={company.lastName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Email</label>
-                <input
-                  type="text"
-                  className="email"
-                  value={company.email || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Phone</label>
-                <input
-                  type="text"
-                  value={company.phone || ''}
-                  readOnly={!editMode}
-                  onChange={(e) => setCompany((a) => ({ ...a, phone: e.target.value }))}
-                />
-              </div>
+      {/* --- View Mode: Company Specific Analytics (conditional) --- */}
+      {numbers.custom.length > 0 && (
+        <section className="card analytics-card">
+          <h2 className="section-title">Company Specific Analytics</h2>
+          <aside className="aside">
+            <ul className="aside-list">
+              {numbers.custom.map((metric, i) => (
+                <CustomListItem key={i} label={metric.label} value={formatCustomValue(metric)} />
+              ))}
+            </ul>
+          </aside>
+        </section>
+      )}
+    </div>
+  );
+};
+
+/** ---------- Edit Mode Component ---------- */
+const AnalyticsEditor: FC<{
+  numbers: AnalyticsNumbers;
+  upCustom: (p: CustomAnalytic[]) => void;
+}> = ({ numbers, upCustom }) => {
+  const [selectedMetric, setSelectedMetric] = useState('');
+
+  const availableOptions = useMemo(() =>
+    AVAILABLE_CUSTOM_ANALYTICS.filter(opt => !numbers.custom.some(m => m.id === opt.id)),
+    [numbers.custom]
+  );
+
+  const handleAddCustom = (metricId: string) => {
+    if (!metricId) return;
+
+    const newMetricFromBackend = AVAILABLE_CUSTOM_ANALYTICS.find(opt => opt.id === metricId);
+    if (!newMetricFromBackend) return;
+
+    const mockValue = MOCK_DATA.custom.find(m => m.id === newMetricFromBackend.id)?.value ?? 0;
+    const newMetric = { ...newMetricFromBackend, value: mockValue };
+
+    upCustom([...numbers.custom, newMetric]);
+    setSelectedMetric(''); // Reset dropdown
+  };
+
+  const handleRemoveCustom = (index: number) => {
+    upCustom(numbers.custom.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="analytics-grid">
+      {/* --- Hiring Performance (Visible in Edit Mode) --- */}
+      <HiringPerformanceCard hiring={numbers.hiring} />
+
+      {/* --- NIL Investment (Visible in Edit Mode) --- */}
+      <NilInvestmentCard nil={numbers.nil} />
+
+      {/* --- Edit Mode: Company Specific Analytics --- */}
+      <section className="card analytics-card">
+        <h2 className="section-title">Company Specific Analytics</h2>
+        <aside className="aside">
+          <ul className="aside-list">
+            {numbers.custom.map((metric, i) => (
+              <li key={i} className="aside-row edit custom">
+                <span className="aside-label">{metric.label}</span>
+                <span className="aside-value">{formatCustomValue(metric)}</span>
+                <button onClick={() => handleRemoveCustom(i)} className="btn-icon" aria-label="Remove metric">
+                  <XCircle size={20} />
+                </button>
+              </li>
+            ))}
+          </ul>
+          {availableOptions.length > 0 && (
+            <div className="add-metric-control">
+              <PlusCircle size={16} className="add-metric-icon" />
+              <select
+                value={selectedMetric}
+                onChange={(e) => handleAddCustom(e.target.value)}
+                className="add-metric-select"
+              >
+                <option value="">Add Metric...</option>
+                {availableOptions.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                ))}
+              </select>
             </div>
-            <div className="field full-width">
-              <label>Location</label>
-              <input
-                type="text"
-                value={company.location || ''}
-                readOnly={!editMode}
-                onChange={(e) => setCompany((a) => ({ ...a, location: e.target.value }))}
-              />
-            </div>
-          </div> */}
-        </div>
-
-        <div className="bio">
-          <label>Professional Bio</label>
-          {/* <textarea
-            rows={3}
-            readOnly={!editMode}
-            value={company.bio || ''}
-            onChange={(e) => setCompany((a) => ({ ...a, bio: e.target.value }))}
-          /> */}
-        </div>
-      </div>
-
-      {/* Profile Completion */}
-      <div className="completion-card card">
-        <h2 className="section-title">Profile Completion</h2>
-
-        <div className="progress-header">
-          <span>Overall Progress</span>
-          <span className="progress-percent">{percentComplete}%</span>
-        </div>
-
-        <div className="progress-bar">
-          <div className="progress-bar-fill" style={{ width: `${percentComplete}%` }} />
-        </div>
-
-        <ul className="completion-list">
-          {/* {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
-          {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
-          {renderProfileCompletion('🏆 Athletic Info', { athletics })} */}
-          {/* <li className="warning">
-            <span>📄 Resume</span>
-            <span>Needs Update</span>
-          </li>
-          <li className="incomplete">
-            <span>📷 Media</span>
-            <span>Incomplete</span>
-          </li> */}
-        </ul>
-      </div>
-
-      {/* Skills & Interests */}
-      <div className="skills-card card">
-        <h2 className="section-title">Skills & Interests</h2>
-        <div className="skills-description">
-          These are some of the skills and interests that set you apart as a student-company:
-        </div>
-        <div className="skills-list">
-          {skills.map((skill) => (
-            <span className="skill-tag" key={skill}>
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
+          )}
+        </aside>
+      </section>
     </div>
   );
 };
