@@ -2,7 +2,8 @@ import React from 'react';
 import './talentPool.css';
 import { GetAthletesResponse } from '../../../api/athlete';
 import { getFullName, getInitials } from '../../../util/name';
-import { Eye, MessageCircle } from 'lucide-react';
+import { Eye } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 export interface AthleteCardProps {
   athlete: GetAthletesResponse;
@@ -53,14 +54,14 @@ export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
         </div>
       </div>
       <div className="athlete-card-actions">
-        <button className="athlete-view-profile" onClick={() => {}}>
+        <NavLink className="action-btn primary" to={`/athlete/${athlete.id}`}>
           <Eye size={18} style={{ marginRight: 6, marginBottom: -2 }} />
           View Profile
-        </button>
-        <button className="athlete-contact" onClick={() => {}}>
+        </NavLink>
+        {/* <button className="athlete-contact" onClick={() => {}}>
           <MessageCircle size={18} style={{ marginRight: 6, marginBottom: -2 }} />
           Contact
-        </button>
+        </button> */}
       </div>
     </div>
   );

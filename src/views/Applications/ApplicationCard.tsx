@@ -2,12 +2,20 @@ import React from 'react';
 import { IApplicationPayload } from '../../api/application';
 import '../Companies/company.css';
 import './applications.css';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { IUserData, USER_PERMISSIONS } from '../../auth/store';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export interface ApplicationCardProps {
   application: IApplicationPayload;
 }
 
 export const ApplicationCard: React.FC<ApplicationCardProps> = ({ application }) => {
+  const user = useAuthUser<IUserData>();
+  const isCompanyPermission = user?.permission === USER_PERMISSIONS.COMPANY;
+
+  const navigate = useNavigate();
+
   const formatDate = (date: Date | string | undefined) => {
     if (!date) return 'N/A';
     try {
@@ -46,9 +54,11 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({ application })
               <h3 className="company-title">
                 {application.job?.position || 'Position not specified'}
               </h3>
-              <div className="company-industry">
-                {application.job?.company?.companyName || 'Company not specified'}
-              </div>
+              {!isCompanyPermission && (
+                <div className="company-industry">
+                  {application.job?.company?.companyName || 'Company not specified'}
+                </div>
+              )}
             </div>
           </div>
 
@@ -73,18 +83,32 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({ application })
                   {application.status || 'Pending'}
                 </span>
               </div>
-              {/* {application.athlete && (
+              {isCompanyPermission && (
                 <div className="info-row">
                   <span className="info-label">Applicant:</span>
                   <span className="info-value">
-                    {`${application.athlete.firstName || ''} ${
-                      application.athlete.lastName || ''
+                    {`${application.athlete?.firstName || ''} ${
+                      application.athlete?.lastName || ''
                     }`.trim() || 'N/A'}
                   </span>
                 </div>
-              )} */}
+              )}
             </div>
           </div>
+
+          {isCompanyPermission && (
+            <div className="job-actions mt-2">
+              <button className="action-btn primary" onClick={() => {}}>
+                Schedule Interview
+              </button>
+              <NavLink className="action-btn secondary" to={`/athlete/${application.athlete?.id}`}>
+                View Athlete Profile
+              </NavLink>
+              <button className="action-btn danger" onClick={() => {}}>
+                Deny Application
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

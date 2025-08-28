@@ -25,8 +25,7 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
     try {
       const data = await getApplications(authHeader);
       setApplications(data);
-    } catch (error) {
-      console.error('Failed to fetch applications:', error);
+    } catch {
       toast.error('Failed to fetch applications');
     } finally {
       setLoading(false);

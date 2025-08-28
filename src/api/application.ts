@@ -16,6 +16,7 @@ export interface IApplicationPayload {
     };
   };
   athlete?: {
+    id?: string;
     firstName?: string;
     lastName?: string;
   };

@@ -2,17 +2,22 @@ import { useEffect, useState } from 'react';
 import { OverviewTab } from './Overview';
 import { AcademicsTab } from './Academics';
 import { AthleticsTab } from './AthleticsTab';
-import './athlete.css'; // Ensure styles are applied globally
+import './athlete.css';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { toast } from 'react-toastify';
 import { IUpdateAthletePayload, getAthleteById, updateAthlete } from '../../../api/athlete';
 import { IUserData } from '../../../auth/store';
+import { useParams } from 'react-router-dom';
 
 export const AthleteProfile = () => {
   const authHeader = useAuthHeader();
   const user = useAuthUser<IUserData>();
-  const id = user?.id;
+  const userId = user?.id;
+  const params = useParams<{ id: string }>();
+
+  const id = params.id ?? userId;
+  const canEdit = id === userId;
 
   const [athlete, setAthlete] = useState<IUpdateAthletePayload>({});
   const [editMode, setEditMode] = useState(false);
@@ -45,7 +50,6 @@ export const AthleteProfile = () => {
   };
 
   const handleCancelClick = async () => {
-    if (!id) return;
     try {
       const refreshedData = await getAthleteById(id as string, authHeader);
       setAthlete(refreshedData);
@@ -108,7 +112,7 @@ export const AthleteProfile = () => {
     <div className="w-full max-w-6xl mx-auto mt-6 relative">
       {/* Tabs + Edit/Save Button */}
       <div className="relative border-b border-gray-300 pb-0 mb-0">
-        <EditSaveButton />
+        {canEdit && <EditSaveButton />}
         <div className="flex space-x-4 mt-2">
           {TABS.map((tab) => (
             <button

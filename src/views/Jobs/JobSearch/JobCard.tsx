@@ -2,6 +2,7 @@ import React from 'react';
 import './JobPostingsDashboard.css';
 import { IJobPayload } from '../../../api/job';
 import { useNavigate } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 export interface JobCardProps {
   job: IJobPayload;
@@ -55,14 +56,9 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
             Apply
           </button>
         )}
-        <button
-          className="action-btn secondary"
-          onClick={() => {
-            navigate(`/job/${job.id}`);
-          }}
-        >
+        <NavLink className="action-btn secondary" to={`/job/${job.id}`}>
           View Full Job Details
-        </button>
+        </NavLink>
       </div>
     </div>
   );

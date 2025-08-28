@@ -176,6 +176,18 @@
   border-color: #9ca3af;
 }
 
+.action-btn.danger {
+  background: white;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.action-btn.danger:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .company-card {

@@ -45,8 +45,7 @@ export const JobModal: React.FC<JobModalProps> = ({ job, onClose, onSuccess, com
       }
       onSuccess?.();
       onClose();
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error('Failed to save job');
     }
   };

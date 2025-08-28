@@ -16,14 +16,30 @@ export const CompanyEmployeeTab: React.FC<Props> = ({ company }) => {
   const [selected, setSelected] = useState<IUpdateCompanyEmployeePayload | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const openEmployee = useCallback((emp: IUpdateCompanyEmployeePayload) => { setSelected(emp); setIsOpen(true); }, []);
-  const closeModal = useCallback(() => { setIsOpen(false); setSelected(null); }, []);
-  const onKeyOpen = useCallback((e: KeyboardEvent<HTMLLIElement>, emp: IUpdateCompanyEmployeePayload) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEmployee(emp); }
-  }, [openEmployee]);
+  const openEmployee = useCallback((emp: IUpdateCompanyEmployeePayload) => {
+    setSelected(emp);
+    setIsOpen(true);
+  }, []);
+  const closeModal = useCallback(() => {
+    setIsOpen(false);
+    setSelected(null);
+  }, []);
+  const onKeyOpen = useCallback(
+    (e: KeyboardEvent<HTMLLIElement>, emp: IUpdateCompanyEmployeePayload) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openEmployee(emp);
+      }
+    },
+    [openEmployee]
+  );
 
   return (
-    <div className="employees-grid card" contentEditable={false} onKeyDownCapture={(e) => e.stopPropagation()}>
+    <div
+      className="employees-grid card"
+      contentEditable={false}
+      onKeyDownCapture={(e) => e.stopPropagation()}
+    >
       <section className="card employees-card">
         <h3 className="section-title">Our Team</h3>
         <p className="section-subtitle">The people behind the work.</p>
@@ -33,7 +49,8 @@ export const CompanyEmployeeTab: React.FC<Props> = ({ company }) => {
         ) : (
           <ul className="employee-list" aria-label="Employees">
             {employees.map((emp, i) => {
-              const key = emp.id ?? `${emp.firstName ?? ''}-${emp.lastName ?? ''}-${emp.position ?? ''}-${i}`;
+              const key =
+                emp.id ?? `${emp.firstName ?? ''}-${emp.lastName ?? ''}-${emp.position ?? ''}-${i}`;
               return (
                 <li
                   key={key}
@@ -44,7 +61,9 @@ export const CompanyEmployeeTab: React.FC<Props> = ({ company }) => {
                   onClick={() => openEmployee(emp)}
                   onKeyDown={(e) => onKeyOpen(e, emp)}
                 >
-                  <div className="employee-avatar" aria-hidden="true">{getInitials(emp)}</div>
+                  <div className="employee-avatar" aria-hidden="true">
+                    {getInitials(emp)}
+                  </div>
                   <div className="employee-name">{getFullName(emp)}</div>
                   <div className="employee-position">{emp.position ?? 'Recruiter'}</div>
                 </li>
@@ -63,7 +82,9 @@ export const CompanyEmployeeTab: React.FC<Props> = ({ company }) => {
       >
         {selected && (
           <div className="employee-modal-center">
-            <button className="modal-close" onClick={closeModal} aria-label="Close dialog">×</button>
+            <button className="modal-close" onClick={closeModal} aria-label="Close dialog">
+              ×
+            </button>
             <div className="employee-avatar employee-avatar-lg" aria-hidden="true">
               {getInitials(selected)}
             </div>
@@ -72,17 +93,25 @@ export const CompanyEmployeeTab: React.FC<Props> = ({ company }) => {
 
             <div className="employee-modal-contact">
               <div className="employee-contact-row">
-                <span className="employee-contact-emoji" aria-hidden="true">✉️</span>
+                <span className="employee-contact-emoji" aria-hidden="true">
+                  ✉️
+                </span>
                 {selected.email ? (
-                  <a href={`mailto:${selected.email}`} className="employee-contact-link">{selected.email}</a>
+                  <a href={`mailto:${selected.email}`} className="employee-contact-link">
+                    {selected.email}
+                  </a>
                 ) : (
                   <span className="employee-contact-muted">Email not provided</span>
                 )}
               </div>
               <div className="employee-contact-row">
-                <span className="employee-contact-emoji" aria-hidden="true">📞</span>
+                <span className="employee-contact-emoji" aria-hidden="true">
+                  📞
+                </span>
                 {selected.phone ? (
-                  <a href={`tel:${selected.phone}`} className="employee-contact-link">{selected.phone}</a>
+                  <a href={`tel:${selected.phone}`} className="employee-contact-link">
+                    {selected.phone}
+                  </a>
                 ) : (
                   <span className="employee-contact-muted">Phone not provided</span>
                 )}

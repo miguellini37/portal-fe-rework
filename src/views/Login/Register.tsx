@@ -25,8 +25,8 @@ export const Register = () => {
     try {
       await register({ permission: registerType, ...user } as ICreateUserInput);
       navigate('/login');
-    } catch (error) {
-      console.error('Error creating user:', error);
+    } catch {
+      toast('Error creating user');
     }
   };
 

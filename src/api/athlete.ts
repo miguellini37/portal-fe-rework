@@ -69,6 +69,7 @@ export class GetAthletesFilter {
 }
 
 export type GetAthletesResponse = {
+  id?: string;
   firstName?: string;
   lastName?: string;
   email?: string;

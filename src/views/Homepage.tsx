@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export const Homepage = () => {
   const navigate = useNavigate();
@@ -19,26 +19,24 @@ export const Homepage = () => {
               Connecting NCAA student-athletes with top employers and NIL opportunities.
             </p>
             <div className="flex flex-col md:flex-row gap-2 md:gap-4 justify-center">
-              <button
+              <NavLink
                 className="btn btn-primary text-base shadow-lg px-6 py-2"
-                onClick={() => {
-                  navigate('/register?athlete');
-                }}
+                to="/register?athlete"
               >
                 Join Now (Athletes)
-              </button>
-              <button
+              </NavLink>
+              <NavLink
                 className="btn btn-secondary text-base shadow px-6 py-2 font-semibold"
-                onClick={() => navigate('/register?type=company')}
+                to="/register?type=company"
               >
                 Hire Talent (Employers)
-              </button>
-              <button
+              </NavLink>
+              <NavLink
                 className="btn btn-secondary text-base shadow px-6 py-2 font-semibold"
-                onClick={() => navigate('/register?type=school')}
+                to="/register?type=school"
               >
                 Help Students (Schools)
-              </button>
+              </NavLink>
             </div>
           </div>
         </div>
