@@ -1,32 +1,7 @@
 import React, { FC, useMemo, useCallback, ReactNode, useState } from 'react';
-import { ICompanyPaylod } from '../../../api/company';
+import { ICompanyPaylod, AnalyticsNumbers, CustomAnalytic } from '../../../api/company';
 import './company.css';
 import { PlusCircle, XCircle } from 'lucide-react';
-
-/** ---------- Data model: numbers only ---------- */
-type CustomAnalytic = {
-  id: string;
-  label: string;
-  value: number;
-};
-
-type AnalyticsNumbers = {
-  hiring: {
-    totalHires: number;
-    totalHiresDeltaPct: number;
-    totalInternships: number;
-    totalInternshipsDelta: number;
-    conversionToFullTimePct: number;
-    conversionToFullTimeDeltaPct: number;
-    timeToFirstSaleDays: number;
-    timeToFirstSaleDeltaDays: number;
-  };
-  nil: {
-    totalInvestmentUSD: number;
-    activePartnerships: number;
-  };
-  custom: CustomAnalytic[];
-};
 
 type WithAnalyticsNumbers = ICompanyPaylod & { analyticsNumbers?: AnalyticsNumbers };
 
@@ -72,6 +47,7 @@ const fmtMoneyShort = (usd: number) => {
   return `$${usd.toFixed(0)}`;
 };
 const formatCustomValue = (metric: CustomAnalytic) => {
+    if(!metric.id || !metric.value) return null;
     if (metric.id.endsWith('_pct')) return fmtPct(metric.value);
     if (metric.id.endsWith('_usd')) return fmtMoneyShort(metric.value);
     if (metric.id.endsWith('_days')) return `${metric.value}d`;
@@ -101,10 +77,10 @@ const HiringPerformanceCard: FC<{ hiring: AnalyticsNumbers['hiring'] }> = ({ hir
   <section className="card analytics-card">
     <h2 className="section-title">Hiring Performance</h2>
     <div className="tiles">
-      <StatTile color="indigo" title="Total Hires YTD" value={String(hiring.totalHires)} delta={fmtDelta(hiring.totalHiresDeltaPct)} context="Δ vs last year" deltaTone={hiring.totalHiresDeltaPct >= 0 ? 'good' : 'bad'} />
-      <StatTile color="green" title="Internships" value={String(hiring.totalInternships)} delta={fmtDelta(hiring.totalInternshipsDelta, 'd')} context="Δ vs last year" deltaTone={hiring.totalInternshipsDelta >= 0 ? 'good' : 'bad'} />
-      <StatTile color="purple" title="Conversion to Full-Time" value={fmtPct(hiring.conversionToFullTimePct)} delta={fmtDelta(hiring.conversionToFullTimeDeltaPct)} context="Δ vs last year" deltaTone={hiring.conversionToFullTimeDeltaPct >= 0 ? 'good' : 'bad'} />
-      <StatTile color="amber" title="Time to First Sale" value={`${hiring.timeToFirstSaleDays}d`} delta={fmtDelta(hiring.timeToFirstSaleDeltaDays, 'd')} context="Δ" deltaTone={hiring.timeToFirstSaleDeltaDays < 0 ? 'good' : 'bad'} />
+      <StatTile color="indigo" title="Total Hires YTD" value={String(hiring.totalHires)} delta={fmtDelta(hiring.totalHiresDeltaPct ?? 0)} context="Δ vs last year" deltaTone={hiring.totalHiresDeltaPct ?? 0 >= 0 ? 'good' : 'bad'} />
+      <StatTile color="green" title="Internships" value={String(hiring.totalInternships)} delta={fmtDelta(hiring.totalInternshipsDelta ?? 0, 'd')} context="Δ vs last year" deltaTone={hiring.totalInternshipsDelta ?? 0 >= 0 ? 'good' : 'bad'} />
+      <StatTile color="purple" title="Conversion to Full-Time" value={fmtPct(hiring.conversionToFullTimePct ?? 0)} delta={fmtDelta(hiring.conversionToFullTimeDeltaPct ?? 0)} context="Δ vs last year" deltaTone={hiring.conversionToFullTimeDeltaPct ?? 0 >= 0 ? 'good' : 'bad'} />
+      <StatTile color="amber" title="Time to First Sale" value={`${hiring.timeToFirstSaleDays}d`} delta={fmtDelta(hiring.timeToFirstSaleDeltaDays ?? 0, 'd')} context="Δ" deltaTone={hiring.timeToFirstSaleDeltaDays ?? 0 < 0 ? 'good' : 'bad'} />
     </div>
   </section>
 );
@@ -114,8 +90,8 @@ const NilInvestmentCard: FC<{ nil: AnalyticsNumbers['nil'] }> = ({ nil }) => (
     <h2 className="section-title">NIL Investment</h2>
     <aside className="aside">
       <ul className="aside-list">
-        <CustomListItem label="Total NIL Investment" value={fmtMoneyShort(nil.totalInvestmentUSD)} />
-        <CustomListItem label="Active Partnerships" value={nil.activePartnerships} />
+        <CustomListItem label="Total NIL Investment" value={fmtMoneyShort(nil.totalInvestmentUSD ?? 0)} />
+        <CustomListItem label="Active Partnerships" value={nil.activePartnerships ?? 0} />
       </ul>
     </aside>
   </section>
@@ -143,13 +119,13 @@ export const AnalyticsTab: FC<Props> = ({ company, editMode, setCompany }) => {
       <NilInvestmentCard nil={numbers.nil} />
 
       {/* --- View Mode: Company Specific Analytics (conditional) --- */}
-      {numbers.custom.length > 0 && (
+      {(numbers.custom ?? []).length > 0 && (
         <section className="card analytics-card">
           <h2 className="section-title">Company Specific Analytics</h2>
           <aside className="aside">
             <ul className="aside-list">
-              {numbers.custom.map((metric) => (
-                <CustomListItem key={metric.id} label={metric.label} value={formatCustomValue(metric)} />
+              {(ensure(numbers).custom ?? []).map((metric) => (
+                <CustomListItem key={metric.id} label={metric.label ?? ''} value={formatCustomValue(metric)} />
               ))}
             </ul>
           </aside>
@@ -167,7 +143,7 @@ const AnalyticsEditor: FC<{
   const [selectedMetric, setSelectedMetric] = useState('');
 
   const availableOptions = useMemo(() =>
-    AVAILABLE_CUSTOM_ANALYTICS.filter(opt => !numbers.custom.some(m => m.id === opt.id)),
+    AVAILABLE_CUSTOM_ANALYTICS.filter(opt => !(numbers.custom ?? []).some(m => m.id === opt.id)),
     [numbers.custom]
   );
 
@@ -177,15 +153,15 @@ const AnalyticsEditor: FC<{
     const newMetricFromBackend = AVAILABLE_CUSTOM_ANALYTICS.find(opt => opt.id === metricId);
     if (!newMetricFromBackend) return;
 
-    const mockValue = MOCK_DATA.custom.find(m => m.id === newMetricFromBackend.id)?.value ?? 0;
+    const mockValue = MOCK_DATA.custom?.find(m => m.id === newMetricFromBackend.id)?.value ?? 0;
     const newMetric = { ...newMetricFromBackend, value: mockValue };
 
-    upCustom([...numbers.custom, newMetric]);
+    upCustom([...(numbers.custom ?? []), newMetric]);
     setSelectedMetric(''); // Reset dropdown
   };
 
   const handleRemoveCustom = (index: number) => {
-    upCustom(numbers.custom.filter((_, i) => i !== index));
+    upCustom((numbers.custom ?? []).filter((_, i) => i !== index));
   };
 
   return (
@@ -201,7 +177,7 @@ const AnalyticsEditor: FC<{
         <h2 className="section-title">Company Specific Analytics</h2>
         <aside className="aside">
           <ul className="aside-list">
-            {numbers.custom.map((metric, i) => (
+            {(ensure(numbers).custom ?? []).map((metric, i) => (
               <li key={i} className="aside-row edit custom">
                 <span className="aside-label">{metric.label}</span>
                 <span className="aside-value">{formatCustomValue(metric)}</span>
