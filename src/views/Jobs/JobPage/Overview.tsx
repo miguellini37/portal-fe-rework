@@ -6,9 +6,10 @@ interface OverviewTabProps {
   job: IJobPayload;
   onJobUpdate: () => void;
   canEdit?: boolean;
+  onApply?: () => void; // added
 }
 
-export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate, canEdit }) => {
+export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate /* canEdit, onApply */ }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const handleSuccess = () => {
@@ -37,9 +38,7 @@ export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate, canEdit
 
   return (
     <div className="space-y-6">
-      {/* Job Header Info with Details */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-        {/* Header Section */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
@@ -49,16 +48,12 @@ export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate, canEdit
               {job.company?.companyName || 'Company Not Specified'}
             </p>
           </div>
+
+          {/* Only show salary here; actions moved to JobPage header */}
           <div className="flex flex-col items-end ml-6">
-            <p className="text-xl font-bold text-green-600 mb-2">{formatSalary(job.salary)}</p>
-            {canEdit && (
-              <button
-                onClick={() => setEditModalOpen(true)}
-                className="btn btn-primary btn-sm"
-              >
-                Edit Job
-              </button>
-            )}
+            <p className="text-xl font-bold text-green-600 mb-2">
+              {job.salary ? `$${job.salary.toLocaleString()}` : 'Not specified'}
+            </p>
           </div>
         </div>
 

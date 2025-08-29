@@ -7,6 +7,7 @@ import { getJobById, IJobPayload } from '../../../api/job';
 import { IUserData } from '../../../auth/store';
 import { Overview } from './Overview';
 import { Requirements } from './Requirements';
+import { createApplication } from '../../../api/application';
 import { JobModal } from '../JobModal';
 
 export const JobPage: FC = () => {
@@ -32,18 +33,32 @@ export const JobPage: FC = () => {
     fetchJob();
   }, [id]);
 
-  const handleSuccess = () => {
+  const applyToJob = async () => {
+    if (!job) return;
+    try {
+      await createApplication(authHeader, { jobId: job.id });
+      toast.success('Successfully applied to job');
+    } catch {
+      toast.error('Failed to apply to job');
+    }
+  };
+
+  const handleEditSuccess = () => {
     setEditModalOpen(false);
     fetchJob();
   };
 
-  const canEdit = user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id;
+  const canEdit = Boolean(
+    user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
+  );
 
   const TABS = [
     {
       key: 'overview',
       label: 'Overview',
-      component: (job: IJobPayload) => <Overview job={job} onJobUpdate={fetchJob} />,
+      component: (job: IJobPayload) => (
+        <Overview job={job} onJobUpdate={fetchJob} canEdit={canEdit} onApply={applyToJob} />
+      ),
     },
     {
       key: 'requirements',
@@ -76,41 +91,53 @@ export const JobPage: FC = () => {
     );
   }
 
-  const EditButton: FC = () => (
-    <div className="absolute top-0 right-0 z-10">
-      <button onClick={() => setEditModalOpen(true)} className="btn btn-primary">
-        Edit Job
-      </button>
-    </div>
-  );
-
   return (
-    <div className="w-full max-w-6xl mx-auto mt-6 relative">
-      {isEditModalOpen && (
-        <JobModal job={job} onClose={() => setEditModalOpen(false)} onSuccess={handleSuccess} />
+    <div className="w-full max-w-6xl mx-auto mt-6">
+      {isEditModalOpen && job && (
+        <JobModal job={job} onClose={() => setEditModalOpen(false)} onSuccess={handleEditSuccess} />
       )}
-      {/* Tabs + Edit/Save Button */}
-      <div className="relative border-b border-gray-300 pb-0 mb-0">
-        {canEdit && <EditButton />}
-        <div className="flex space-x-4 mt-2">
-          {TABS.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`py-2 px-4 text-sm font-medium ${
-                activeTab === tab.key
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-blue-500'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+
+      <div className="border-b border-gray-300">
+        <div className="flex items-center justify-between">
+          <div className="flex space-x-4 mt-2">
+            {TABS.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`py-2 px-4 text-sm font-medium ${
+                  activeTab === tab.key
+                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    : 'text-gray-600 hover:text-blue-500'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Top-right actions */}
+          <div className="flex items-center gap-2">
+            {canEdit ? (
+              <button
+                onClick={() => setEditModalOpen(true)}
+                className="btn btn-primary btn-sm"
+              >
+                Edit Job
+              </button>
+            ) : (
+              <button
+                onClick={applyToJob}
+                className="btn btn-primary btn-sm"
+                disabled={!job}
+              >
+                Apply
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Tab Content */}
-      <div className="m-4 min-h-[400px] relative">{currentTab?.component(job)}</div>
+      <div className="m-4 min-h-[400px]">{currentTab?.component(job)}</div>
     </div>
   );
 };
