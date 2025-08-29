@@ -1,23 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IJobPayload } from '../../../api/job';
-import { JobModal } from '../JobModal';
 
 interface OverviewTabProps {
   job: IJobPayload;
-  onJobUpdate: () => void;
-  canEdit?: boolean;
-  onApply?: () => void; // added
 }
 
-
-export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate }) => {
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-
-  const handleSuccess = () => {
-    setEditModalOpen(false);
-    onJobUpdate();
-  };
-
+export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
   const formatDate = (date: Date | string | undefined) => {
     if (!date) return 'N/A';
     try {

@@ -57,7 +57,7 @@ export const JobPage: FC = () => {
       key: 'overview',
       label: 'Overview',
       component: (job: IJobPayload) => (
-        <Overview job={job} onJobUpdate={fetchJob} canEdit={canEdit} onApply={applyToJob} />
+        <Overview job={job}  />
       ),
     },
     {
