@@ -6,6 +6,10 @@ interface OverviewTabProps {
 }
 
 export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
+  const formatSalary = (salary: number | undefined) => {
+    if (!salary) return 'Not specified';
+    return `$${salary.toLocaleString()}`;
+  };
   const formatDate = (date: Date | string | undefined) => {
     if (!date) return 'N/A';
     try {
@@ -20,16 +24,9 @@ export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
     }
   };
 
-  const formatSalary = (salary: number | undefined) => {
-    if (!salary) return 'Not specified';
-    return `$${salary.toLocaleString()}`;
-  };
-
   return (
     <div className="space-y-6">
-      {/* Job Header Info with Details */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-        {/* Header Section */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
@@ -39,6 +36,8 @@ export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
               {job.company?.companyName || 'Company Not Specified'}
             </p>
           </div>
+
+          {/* Only show salary here; actions moved to JobPage header */}
           <div className="text-right ml-6">
             <p className="text-xl font-bold text-green-600 mb-1">{formatSalary(job.salary)}</p>
             {job.type && (
