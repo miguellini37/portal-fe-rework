@@ -128,7 +128,6 @@ export const JobPage: FC = () => {
               <button
                 onClick={applyToJob}
                 className="btn btn-primary btn-sm"
-                disabled={!job}
               >
                 Apply
               </button>
