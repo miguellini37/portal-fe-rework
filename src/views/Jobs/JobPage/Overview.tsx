@@ -9,7 +9,14 @@ interface OverviewTabProps {
   onApply?: () => void; // added
 }
 
-export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate /* canEdit, onApply */ }) => {
+
+export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate }) => {
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+
+  const handleSuccess = () => {
+    setEditModalOpen(false);
+    onJobUpdate();
+  };
 
   const formatDate = (date: Date | string | undefined) => {
     if (!date) return 'N/A';
