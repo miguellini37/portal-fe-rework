@@ -4,7 +4,7 @@ import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { getJobById, IJobPayload } from '../../../api/job';
-import { IUserData } from '../../../auth/store';
+import { IUserData, USER_PERMISSIONS } from '../../../auth/store';
 import { Overview } from './Overview';
 import { Requirements } from './Requirements';
 import { createApplication } from '../../../api/application';
@@ -51,7 +51,7 @@ export const JobPage: FC = () => {
   const canEdit = Boolean(
     user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
   );
-  const canApply = Boolean(user?.companyRefId == null);
+  const canApply = user?.permission === USER_PERMISSIONS.ATHLETE;
 
   const TABS = [
     {
