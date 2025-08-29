@@ -51,6 +51,7 @@ export const JobPage: FC = () => {
   const canEdit = Boolean(
     user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
   );
+  const canApply = Boolean(user?.companyRefId == null);
 
   const TABS = [
     {
@@ -124,15 +125,14 @@ export const JobPage: FC = () => {
               >
                 Edit Job
               </button>
-            ) : (
+            ) : canApply ? (
               <button
                 onClick={applyToJob}
                 className="btn btn-primary btn-sm"
-                disabled={!job}
               >
                 Apply
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
