@@ -30,6 +30,7 @@ export interface IUpdateAthletePayload {
   phone?: string;
   location?: string;
   bio?: string;
+  skills?: string[];
   academics?: AcademicsPayload;
   athletics?: AthleticsPayload;
   schoolRef?: ISchoolPaylod;

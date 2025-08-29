@@ -3,6 +3,29 @@ import { url } from '../config/url';
 import { IJobPayload } from './job';
 import {IUpdateCompanyEmployeePayload } from './companyEmployee';
 
+export interface CustomAnalytic {
+  id?: string;
+  label?: string;
+  value?: number;
+};
+
+export interface AnalyticsNumbers {
+  hiring: {
+    totalHires?: number;
+    totalHiresDeltaPct?: number;
+    totalInternships?: number;
+    totalInternshipsDelta?: number;
+    conversionToFullTimePct?: number;
+    conversionToFullTimeDeltaPct?: number;
+    timeToFirstSaleDays?: number;
+    timeToFirstSaleDeltaDays?: number;
+  };
+  nil: {
+    totalInvestmentUSD?: number;
+    activePartnerships?: number;
+  };
+  custom?: CustomAnalytic[];
+};
 
 export interface CulturePayload {
   cultureValues?: CultureValue[];
@@ -50,6 +73,7 @@ export interface ICompanyPaylod {
   benefits?: BenefitsPayload;
   companyEmployees?: IUpdateCompanyEmployeePayload[];
   recruiting?: IRecruitingPayload;
+  analytics?: AnalyticsNumbers;
 }
 
 export const getCompanyById = async (

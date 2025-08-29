@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React, { JSX, useState } from 'react';
 
 import { IUpdateAthletePayload } from '../../../api/athlete';
 import { isNil } from 'lodash';
@@ -9,17 +9,38 @@ interface OverviewTabProps {
   setAthlete: React.Dispatch<React.SetStateAction<IUpdateAthletePayload>>;
 }
 
+const PREDEFINED_SKILLS = [
+  'Leadership',
+  'Team Collaboration',
+  'Time Management',
+  'Communication',
+  'Problem Solving',
+  'Adaptability',
+  'Work Ethic',
+  'Goal Setting',
+];
+
 export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, setAthlete }) => {
-  const skills = [
-    'Leadership',
-    'Team Collaboration',
-    'Time Management',
-    'Communication',
-    'Problem Solving',
-    'Adaptability',
-    'Work Ethic',
-    'Goal Setting',
-  ];
+  const [customSkill, setCustomSkill] = useState('');
+  const [showAllSkills, setShowAllSkills] = useState(false);
+
+  const athleteSkills = athlete.skills || [];
+  const allAvailableSkills = Array.from(new Set([...PREDEFINED_SKILLS, ...athleteSkills]));
+
+  const handleSkillToggle = (skill: string) => {
+    const newSkills = athleteSkills.includes(skill)
+      ? athleteSkills.filter((s) => s !== skill)
+      : [...athleteSkills, skill];
+    setAthlete((a) => ({ ...a, skills: newSkills }));
+  };
+
+  const handleAddCustomSkill = () => {
+    if (customSkill && !athleteSkills.includes(customSkill)) {
+      setAthlete((a) => ({ ...a, skills: [...(a.skills || []), customSkill] }));
+      setCustomSkill('');
+    }
+  };
+
   const initials = `${athlete.firstName?.[0] || ''}${athlete.lastName?.[0] || ''}`.toUpperCase();
 
   // Recursively count all fields and filled fields
@@ -170,7 +191,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
           </div>
 
           <ul className="completion-list">
-            {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
+            {renderProfileCompletion('🧍 Personal Info', { ...overViewInfo, skills: athlete.skills })}
             {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
             {renderProfileCompletion('🏆 Athletic Info', { athletics })}
             {/* <li className="warning">
@@ -192,12 +213,44 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
           These are some of the skills and interests that set you apart as a student-athlete:
         </div>
         <div className="skills-list">
-          {skills.map((skill) => (
-            <span className="skill-tag" key={skill}>
-              {skill}
+          {(editMode ? allAvailableSkills : athleteSkills)
+            .slice(0, showAllSkills || !editMode ? undefined : 8)
+            .map((skill) => (
+              <span
+                className={`skill-tag ${athleteSkills.includes(skill) ? 'selected' : ''} ${
+                  editMode ? 'selectable' : ''
+                }`}
+                key={skill}
+                onClick={() => editMode && handleSkillToggle(skill)}
+              >
+                {skill}
+              </span>
+            ))}
+          {editMode && allAvailableSkills.length > 8 && !showAllSkills && (
+            <span className="skill-tag selectable" onClick={() => setShowAllSkills(true)}>
+              +{allAvailableSkills.length - 8} more
             </span>
-          ))}
+          )}
         </div>
+        {editMode && (
+          <div className="add-skill-container">
+            <input
+              type="text"
+              className="add-skill-input"
+              placeholder="Add a custom skill"
+              value={customSkill}
+              onChange={(e) => setCustomSkill(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleAddCustomSkill()}
+            />
+            <button
+              className="add-skill-button"
+              onClick={handleAddCustomSkill}
+              disabled={!customSkill || athleteSkills.includes(customSkill)}
+            >
+              Add
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
