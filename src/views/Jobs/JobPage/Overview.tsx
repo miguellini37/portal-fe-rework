@@ -9,7 +9,7 @@ interface OverviewTabProps {
   onApply?: () => void; // added
 }
 
-export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate /* canEdit, onApply */ }) => {
+export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const handleSuccess = () => {
