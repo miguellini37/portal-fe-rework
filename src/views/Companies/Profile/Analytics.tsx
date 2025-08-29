@@ -3,7 +3,6 @@ import { ICompanyPaylod, AnalyticsNumbers, CustomAnalytic } from '../../../api/c
 import './company.css';
 import { PlusCircle, XCircle } from 'lucide-react';
 
-type WithAnalyticsNumbers = ICompanyPaylod & { analyticsNumbers?: AnalyticsNumbers };
 
 interface Props {
   company: ICompanyPaylod;
@@ -99,10 +98,10 @@ const NilInvestmentCard: FC<{ nil: AnalyticsNumbers['nil'] }> = ({ nil }) => (
 
 /** ---------- Main Analytics Tab Component ---------- */
 export const AnalyticsTab: FC<Props> = ({ company, editMode, setCompany }) => {
-  const numbers = useMemo(() => ensure((company as WithAnalyticsNumbers).analyticsNumbers), [company]);
+  const numbers = useMemo(() => ensure((company as ICompanyPaylod).analytics), [company]);
 
   const upCustom = useCallback((newList: CustomAnalytic[]) =>
-    setCompany(prev => ({ ...prev, analyticsNumbers: { ...ensure((prev as WithAnalyticsNumbers).analyticsNumbers), custom: newList } })),
+    setCompany(prev => ({ ...prev, analyticsNumbers: { ...ensure((prev as ICompanyPaylod).analytics), custom: newList } })),
     [setCompany]
   );
 
