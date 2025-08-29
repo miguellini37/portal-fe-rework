@@ -38,10 +38,13 @@ export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
           </div>
 
           {/* Only show salary here; actions moved to JobPage header */}
-          <div className="flex flex-col items-end ml-6">
-            <p className="text-xl font-bold text-green-600 mb-2">
-              {formatSalary(job.salary)}
-            </p>
+          <div className="text-right ml-6">
+            <p className="text-xl font-bold text-green-600 mb-1">{formatSalary(job.salary)}</p>
+            {job.type && (
+              <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
+                {job.type.charAt(0).toUpperCase() + job.type.slice(1)}
+              </span>
+            )}
           </div>
         </div>
 
