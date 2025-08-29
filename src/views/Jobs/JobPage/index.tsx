@@ -1,17 +1,22 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { getJobById, IJobPayload } from '../../../api/job';
+import { IUserData } from '../../../auth/store';
 import { Overview } from './Overview';
 import { Requirements } from './Requirements';
+import { JobModal } from '../JobModal';
 
-export const JobPage = () => {
+export const JobPage: FC = () => {
   const authHeader = useAuthHeader();
+  const user = useAuthUser<IUserData>();
   const { id } = useParams<{ id: string }>();
 
   const [job, setJob] = useState<IJobPayload>();
   const [activeTab, setActiveTab] = useState('overview');
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const fetchJob = async () => {
     try {
@@ -27,11 +32,18 @@ export const JobPage = () => {
     fetchJob();
   }, [id]);
 
+  const handleSuccess = () => {
+    setEditModalOpen(false);
+    fetchJob();
+  };
+
+  const canEdit = user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id;
+
   const TABS = [
     {
       key: 'overview',
       label: 'Overview',
-      component: (job: IJobPayload) => <Overview job={job} />,
+      component: (job: IJobPayload) => <Overview job={job} onJobUpdate={fetchJob} />,
     },
     {
       key: 'requirements',
@@ -58,17 +70,28 @@ export const JobPage = () => {
 
   if (!job) {
     return (
-      <div className="w-full max-w-6xl mx-auto mt-6 p-8 text-center">
-        <div className="text-gray-500">Loading job details...</div>
+      <div className="w-full max-w-6xl mx-auto mt-6 text-center">
+        <p>Loading job details...</p>
       </div>
     );
   }
 
+  const EditButton: FC = () => (
+    <div className="absolute top-0 right-0 z-10">
+      <button onClick={() => setEditModalOpen(true)} className="btn btn-primary">
+        Edit Job
+      </button>
+    </div>
+  );
+
   return (
     <div className="w-full max-w-6xl mx-auto mt-6 relative">
+      {isEditModalOpen && (
+        <JobModal job={job} onClose={() => setEditModalOpen(false)} onSuccess={handleSuccess} />
+      )}
       {/* Tabs + Edit/Save Button */}
       <div className="relative border-b border-gray-300 pb-0 mb-0">
-        {/* {canEditPage && <EditSaveButton />} */}
+        {canEdit && <EditButton />}
         <div className="flex space-x-4 mt-2">
           {TABS.map((tab) => (
             <button

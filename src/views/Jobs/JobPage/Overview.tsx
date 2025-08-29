@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IJobPayload } from '../../../api/job';
+import { JobModal } from '../JobModal';
 
 interface OverviewTabProps {
   job: IJobPayload;
+  onJobUpdate: () => void;
+  canEdit?: boolean;
 }
 
-export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
+export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate, canEdit }) => {
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+
+  const handleSuccess = () => {
+    setEditModalOpen(false);
+    onJobUpdate();
+  };
+
   const formatDate = (date: Date | string | undefined) => {
     if (!date) return 'N/A';
     try {
@@ -39,12 +49,15 @@ export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
               {job.company?.companyName || 'Company Not Specified'}
             </p>
           </div>
-          <div className="text-right ml-6">
-            <p className="text-xl font-bold text-green-600 mb-1">{formatSalary(job.salary)}</p>
-            {job.type && (
-              <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
-                {job.type.charAt(0).toUpperCase() + job.type.slice(1)}
-              </span>
+          <div className="flex flex-col items-end ml-6">
+            <p className="text-xl font-bold text-green-600 mb-2">{formatSalary(job.salary)}</p>
+            {canEdit && (
+              <button
+                onClick={() => setEditModalOpen(true)}
+                className="btn btn-primary btn-sm"
+              >
+                Edit Job
+              </button>
             )}
           </div>
         </div>
@@ -119,6 +132,15 @@ export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Job Modal */}
+      {isEditModalOpen && (
+        <JobModal
+          onClose={() => setEditModalOpen(false)}
+          onSuccess={handleSuccess}
+          job={job}
+        />
       )}
     </div>
   );
