@@ -10,12 +10,6 @@ interface OverviewTabProps {
 }
 
 export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate /* canEdit, onApply */ }) => {
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-
-  const handleSuccess = () => {
-    setEditModalOpen(false);
-    onJobUpdate();
-  };
 
   const formatDate = (date: Date | string | undefined) => {
     if (!date) return 'N/A';
@@ -29,11 +23,6 @@ export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate /* canEd
     } catch {
       return 'Invalid Date';
     }
-  };
-
-  const formatSalary = (salary: number | undefined) => {
-    if (!salary) return 'Not specified';
-    return `$${salary.toLocaleString()}`;
   };
 
   return (
@@ -127,15 +116,6 @@ export const Overview: React.FC<OverviewTabProps> = ({ job, onJobUpdate /* canEd
             </div>
           </div>
         </div>
-      )}
-
-      {/* Edit Job Modal */}
-      {isEditModalOpen && (
-        <JobModal
-          onClose={() => setEditModalOpen(false)}
-          onSuccess={handleSuccess}
-          job={job}
-        />
       )}
     </div>
   );
