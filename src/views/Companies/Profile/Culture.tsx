@@ -1,15 +1,28 @@
 import React from 'react';
 import Select from 'react-select';
-import {
-  ICompanyPaylod,
-  CulturePayload,
-} from '../../../api/company';
+import { ICompanyPaylod, CulturePayload } from '../../../api/company';
 import './company.css';
 
 const VALUE_PRESETS = [
-  { value: 'competitive', label: 'Competitive Excellence', icon: '🌀', description: 'We hire athletes because they understand what it takes to win and perform under pressure.' },
-  { value: 'team', label: 'Team First', icon: '🧑‍🤝‍🧑', description: 'Success comes from collaboration, just like in sports. We win together.' },
-  { value: 'continuous', label: 'Continuous Improvement', icon: '📈', description: "Like training for the next season, we're always getting better." },
+  {
+    value: 'competitive',
+    label: 'Competitive Excellence',
+    icon: '🌀',
+    description:
+      'We hire athletes because they understand what it takes to win and perform under pressure.',
+  },
+  {
+    value: 'team',
+    label: 'Team First',
+    icon: '🧑‍🤝‍🧑',
+    description: 'Success comes from collaboration, just like in sports. We win together.',
+  },
+  {
+    value: 'continuous',
+    label: 'Continuous Improvement',
+    icon: '📈',
+    description: "Like training for the next season, we're always getting better.",
+  },
 ];
 
 const ENVIRONMENT_PRESETS = [
@@ -43,7 +56,7 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
 
   // For values, allow multi-select up to 5
   const handleValuesChange = (selected: any) => {
-    setCompany(a => ({
+    setCompany((a) => ({
       ...a,
       culture: {
         ...a.culture,
@@ -58,7 +71,7 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
 
   // For environment, allow multi-select up to 4
   const handleEnvChange = (selected: any) => {
-    setCompany(a => ({
+    setCompany((a) => ({
       ...a,
       culture: {
         ...a.culture,
@@ -72,7 +85,7 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
 
   // For thrive points, allow multi-select from presets
   const handleThriveChange = (selected: any) => {
-    setCompany(a => ({
+    setCompany((a) => ({
       ...a,
       culture: {
         ...a.culture,
@@ -82,8 +95,13 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
   };
 
   return (
-    <div className="culture-grid card" contentEditable={false}
-      onKeyDownCapture={(e) => { if (editMode) e.stopPropagation(); }}>
+    <div
+      className="culture-grid card"
+      contentEditable={false}
+      onKeyDownCapture={(e) => {
+        if (editMode) e.stopPropagation();
+      }}
+    >
       <section className="card values-card">
         <h3 className="section-title">Our Values</h3>
         <p className="section-subtitle">The principles that guide everything we do.</p>
@@ -91,20 +109,20 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
           <Select
             isMulti
             options={VALUE_PRESETS}
-            value={VALUE_PRESETS.filter(preset =>
-              culture.cultureValues?.some(v => v.title === preset.label)
+            value={VALUE_PRESETS.filter((preset) =>
+              culture.cultureValues?.some((v) => v.title === preset.label)
             )}
             onChange={handleValuesChange}
             closeMenuOnSelect={false}
-            isOptionDisabled={() =>
-              (culture.cultureValues?.length ?? 0) >= 5
-            }
-            getOptionLabel={option => option.label}
-            formatOptionLabel={option => (
+            isOptionDisabled={() => (culture.cultureValues?.length ?? 0) >= 5}
+            getOptionLabel={(option) => option.label}
+            formatOptionLabel={(option) => (
               <span>
                 <span style={{ marginRight: 8 }}>{option.icon}</span>
                 {option.label}
-                <span style={{ color: '#6b7280', marginLeft: 8, fontSize: '0.9em' }}>{option.description}</span>
+                <span style={{ color: '#6b7280', marginLeft: 8, fontSize: '0.9em' }}>
+                  {option.description}
+                </span>
               </span>
             )}
           />
@@ -130,18 +148,18 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
           <Select
             isMulti
             options={ENVIRONMENT_PRESETS}
-            value={ENVIRONMENT_PRESETS.filter(preset =>
-              culture.environmentTiles?.some(t => t.title === preset.label)
+            value={ENVIRONMENT_PRESETS.filter((preset) =>
+              culture.environmentTiles?.some((t) => t.title === preset.label)
             )}
             onChange={handleEnvChange}
             closeMenuOnSelect={false}
-            isOptionDisabled={() =>
-              (culture.environmentTiles?.length ?? 0) >= 4
-            }
-            formatOptionLabel={option => (
+            isOptionDisabled={() => (culture.environmentTiles?.length ?? 0) >= 4}
+            formatOptionLabel={(option) => (
               <span>
                 <span style={{ fontWeight: 700 }}>{option.label}</span>
-                <span style={{ color: '#6b7280', marginLeft: 8, fontSize: '0.9em' }}>{option.description}</span>
+                <span style={{ color: '#6b7280', marginLeft: 8, fontSize: '0.9em' }}>
+                  {option.description}
+                </span>
               </span>
             )}
           />
@@ -149,8 +167,18 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
           <div className="env-tiles">
             {culture.environmentTiles?.map((t, i) => (
               <div key={i} className="env-tile">
-                <div className="env-tile-title" style={{ textAlign: 'center', fontWeight: 700, fontSize: '1.1em' }}>{t.title}</div>
-                <div className="env-tile-sub" style={{ textAlign: 'center', color: '#6b7280', fontSize: '0.98em' }}>{t.subtitle}</div>
+                <div
+                  className="env-tile-title"
+                  style={{ textAlign: 'center', fontWeight: 700, fontSize: '1.1em' }}
+                >
+                  {t.title}
+                </div>
+                <div
+                  className="env-tile-sub"
+                  style={{ textAlign: 'center', color: '#6b7280', fontSize: '0.98em' }}
+                >
+                  {t.subtitle}
+                </div>
               </div>
             ))}
           </div>
@@ -159,21 +187,20 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
         {editMode ? (
           <Select
             isMulti
-            options={THRIVE_POINTS_PRESETS.map(p => ({ value: p, label: p }))}
-            value={THRIVE_POINTS_PRESETS.filter(p =>
-              culture.thrivePoints?.includes(p)
-            ).map(p => ({ value: p, label: p }))}
+            options={THRIVE_POINTS_PRESETS.map((p) => ({ value: p, label: p }))}
+            value={THRIVE_POINTS_PRESETS.filter((p) => culture.thrivePoints?.includes(p)).map(
+              (p) => ({ value: p, label: p })
+            )}
             onChange={handleThriveChange}
             closeMenuOnSelect={false}
-            isOptionDisabled={() =>
-              (culture.thrivePoints?.length ?? 0) >= 6
-            }
+            isOptionDisabled={() => (culture.thrivePoints?.length ?? 0) >= 6}
           />
         ) : (
           <ul className="thrive-list">
             {culture.thrivePoints?.map((p, i) => (
               <li key={i} style={{ listStyle: 'none', marginLeft: 0 }}>
-                <span style={{ marginRight: 8 }}>🔹</span>{p}
+                <span style={{ marginRight: 8 }}>🔹</span>
+                {p}
               </li>
             ))}
           </ul>

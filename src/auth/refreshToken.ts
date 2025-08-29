@@ -14,7 +14,7 @@ export const refreshToken = createRefresh<IUserData>({
   }) => {
     try {
       const response = await axios.post(
-        `${url}/auth/refresh`,
+        `${url}/refresh`,
         { refreshToken },
         {
           headers: {

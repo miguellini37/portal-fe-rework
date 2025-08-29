@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { url } from '../config/url';
 import { IJobPayload } from './job';
-import {IUpdateCompanyEmployeePayload } from './companyEmployee';
+import { IUpdateCompanyEmployeePayload } from './companyEmployee';
 
 export interface CustomAnalytic {
   id?: string;
   label?: string;
   value?: number;
-};
+}
 
 export interface AnalyticsNumbers {
   hiring: {
@@ -25,15 +25,22 @@ export interface AnalyticsNumbers {
     activePartnerships?: number;
   };
   custom?: CustomAnalytic[];
-};
+}
 
 export interface CulturePayload {
   cultureValues?: CultureValue[];
   environmentTiles?: EnvironmentTile[];
   thrivePoints?: string[];
 }
-export interface CultureValue { icon?: string; title?: string; description?: string }
-export interface EnvironmentTile { title?: string; subtitle?: string }
+export interface CultureValue {
+  icon?: string;
+  title?: string;
+  description?: string;
+}
+export interface EnvironmentTile {
+  title?: string;
+  subtitle?: string;
+}
 
 export interface BenefitsPayload {
   baseSalaryMin?: number;
@@ -80,7 +87,7 @@ export const getCompanyById = async (
   id: string,
   authHeader: string | null
 ): Promise<ICompanyPaylod> => {
-  const response = await axios.get(`${url}/company/${id}`, {
+  const response = await axios.get(`${url}/getCompany/${id}`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -94,7 +101,7 @@ export const updateCompany = async (
   data: ICompanyPaylod,
   authHeader: string | null
 ): Promise<ICompanyPaylod> => {
-  const response = await axios.put(`${url}/company/`, data, {
+  const response = await axios.put(`${url}/updateCompany`, data, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -105,7 +112,7 @@ export const updateCompany = async (
 };
 
 export const getCompanies = async (): Promise<ICompanyPaylod[]> => {
-  const response = await axios.get(`${url}/company/`, {
+  const response = await axios.get(`${url}/getCompanies`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
     },

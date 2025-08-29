@@ -6,7 +6,7 @@ export interface IUpdateCompanyEmployeePayload {
   bio?: string;
   companyRefId?: string;
   email?: string;
-  firstName?: string
+  firstName?: string;
   lastName?: string;
   location?: string;
   phone?: string;
@@ -19,7 +19,7 @@ export const updateCompanyEmployee = async (
   data: IUpdateCompanyEmployeePayload,
   authHeader: string | null
 ): Promise<IUserData> => {
-  const response = await axios.put(`${url}/companyEmployee/`, data, {
+  const response = await axios.put(`${url}/updateCompanyEmployee`, data, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -33,7 +33,7 @@ export const getCompanyEmployeeById = async (
   id: string,
   authHeader: string | null
 ): Promise<IUpdateCompanyEmployeePayload> => {
-  const response = await axios.get(`${url}/companyEmployee/${id}`, {
+  const response = await axios.get(`${url}/getCompanyEmployee/${id}`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,

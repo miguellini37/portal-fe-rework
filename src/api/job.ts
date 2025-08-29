@@ -23,7 +23,7 @@ export interface IJobPayload {
 }
 
 export const getJobById = async (id: string, authHeader: string | null): Promise<IJobPayload> => {
-  const response = await axios.get(`${url}/job/${id}`, {
+  const response = await axios.get(`${url}/getJob/${id}`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -41,7 +41,7 @@ export const getAllJobs = async (
   authHeader: string | null,
   filter?: IJobsFilter
 ): Promise<IJobPayload[]> => {
-  const response = await axios.get(`${url}/job`, {
+  const response = await axios.get(`${url}/getJobs`, {
     params: filter,
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -70,7 +70,7 @@ export const createJob = async (
   data: ICreateOrUpdateJobPayload,
   authHeader: string | null
 ): Promise<IJobPayload> => {
-  const response = await axios.post(`${url}/job`, data, {
+  const response = await axios.post(`${url}/createJob`, data, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -83,7 +83,7 @@ export const updateJob = async (
   data: IJobPayload,
   authHeader: string | null
 ): Promise<IJobPayload> => {
-  const response = await axios.put(`${url}/job`, data, {
+  const response = await axios.put(`${url}/updateJob`, data, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,

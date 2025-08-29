@@ -191,7 +191,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
           </div>
 
           <ul className="completion-list">
-            {renderProfileCompletion('🧍 Personal Info', { ...overViewInfo, skills: athlete.skills })}
+            {renderProfileCompletion('🧍 Personal Info', {
+              ...overViewInfo,
+              skills: athlete.skills,
+            })}
             {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
             {renderProfileCompletion('🏆 Athletic Info', { athletics })}
             {/* <li className="warning">

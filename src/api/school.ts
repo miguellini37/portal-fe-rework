@@ -11,7 +11,7 @@ export const getSchoolById = async (
   id: string,
   authHeader: string | null
 ): Promise<ISchoolPaylod> => {
-  const response = await axios.get(`${url}/school/${id}`, {
+  const response = await axios.get(`${url}/getSchool/${id}`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -25,7 +25,7 @@ export const updateSchool = async (
   data: ISchoolPaylod,
   authHeader: string | null
 ): Promise<ISchoolPaylod> => {
-  const response = await axios.put(`${url}/school/`, data, {
+  const response = await axios.put(`${url}/updateSchool`, data, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -36,7 +36,7 @@ export const updateSchool = async (
 };
 
 export const getSchools = async (): Promise<ISchoolPaylod[]> => {
-  const response = await axios.get(`${url}/school/`, {
+  const response = await axios.get(`${url}/getSchools`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
     },

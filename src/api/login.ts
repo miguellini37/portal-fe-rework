@@ -12,7 +12,7 @@ export interface ILoginResponse {
 }
 
 export const login = async (email: string, password: string): Promise<ILoginResponse> => {
-  const response = await axios.post(`${url}/auth/login`, {
+  const response = await axios.post(`${url}/login`, {
     email,
     password,
     headers: {
@@ -36,7 +36,7 @@ export interface ICreateUserInput {
 }
 
 export const register = async (data: ICreateUserInput): Promise<IUserData> => {
-  const response = await axios.post(`${url}/user/register`, data, {
+  const response = await axios.post(`${url}/register`, data, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
     },

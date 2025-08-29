@@ -41,7 +41,7 @@ export const updateAthlete = async (
   data: IUpdateAthletePayload,
   authHeader: string | null
 ): Promise<IUserData> => {
-  const response = await axios.put(`${url}/athlete/`, data, {
+  const response = await axios.put(`${url}/updateAthlete`, data, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -55,7 +55,7 @@ export const getAthleteById = async (
   id: string,
   authHeader: string | null
 ): Promise<IUpdateAthletePayload> => {
-  const response = await axios.get(`${url}/athlete/${id}`, {
+  const response = await axios.get(`${url}/getAthlete/${id}`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -87,7 +87,7 @@ export const getAthletes = async (
   filter: GetAthletesFilter,
   authHeader: string | null
 ): Promise<GetAthletesResponse[]> => {
-  const response = await axios.get(`${url}/athlete/`, {
+  const response = await axios.get(`${url}/getAthletes`, {
     params: filter,
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',

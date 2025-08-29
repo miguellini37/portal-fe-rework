@@ -3,7 +3,6 @@ import { ICompanyPaylod, AnalyticsNumbers, CustomAnalytic } from '../../../api/c
 import './company.css';
 import { PlusCircle, XCircle } from 'lucide-react';
 
-
 interface Props {
   company: ICompanyPaylod;
   editMode: boolean;
@@ -19,7 +18,16 @@ const AVAILABLE_CUSTOM_ANALYTICS = [
 ];
 
 const MOCK_DATA: AnalyticsNumbers = {
-  hiring: { totalHires: 342, totalHiresDeltaPct: 18.2, totalInternships: 91, totalInternshipsDelta: 3, conversionToFullTimePct: 67, conversionToFullTimeDeltaPct: 2.3, timeToFirstSaleDays: 52, timeToFirstSaleDeltaDays: -4 },
+  hiring: {
+    totalHires: 342,
+    totalHiresDeltaPct: 18.2,
+    totalInternships: 91,
+    totalInternshipsDelta: 3,
+    conversionToFullTimePct: 67,
+    conversionToFullTimeDeltaPct: 2.3,
+    timeToFirstSaleDays: 52,
+    timeToFirstSaleDeltaDays: -4,
+  },
   nil: { totalInvestmentUSD: 2_100_000, activePartnerships: 89 },
   custom: [
     { id: 'cost_per_hire_usd', label: 'Cost Per Hire ($)', value: 4120 },
@@ -35,9 +43,9 @@ const ensure = (a?: AnalyticsNumbers | null): AnalyticsNumbers => ({
 
 const fmtPct = (n: number) => `${Number.isFinite(n) ? n.toFixed(n % 1 ? 1 : 0) : '0'}%`;
 const fmtDelta = (n: number, unit: '%' | 'd' = '%') => {
-    const sign = n >= 0 ? '+' : '';
-    if (unit === '%') return `${sign}${fmtPct(n)}`;
-    return `${sign}${n.toFixed(0)}${unit}`;
+  const sign = n >= 0 ? '+' : '';
+  if (unit === '%') return `${sign}${fmtPct(n)}`;
+  return `${sign}${n.toFixed(0)}${unit}`;
 };
 const fmtMoneyShort = (usd: number) => {
   if (!Number.isFinite(usd)) return '$0';
@@ -46,40 +54,73 @@ const fmtMoneyShort = (usd: number) => {
   return `$${usd.toFixed(0)}`;
 };
 const formatCustomValue = (metric: CustomAnalytic) => {
-    if(!metric.id || !metric.value) return null;
-    if (metric.id.endsWith('_pct')) return fmtPct(metric.value);
-    if (metric.id.endsWith('_usd')) return fmtMoneyShort(metric.value);
-    if (metric.id.endsWith('_days')) return `${metric.value}d`;
-    return metric.value;
+  if (!metric.id || !metric.value) return null;
+  if (metric.id.endsWith('_pct')) return fmtPct(metric.value);
+  if (metric.id.endsWith('_usd')) return fmtMoneyShort(metric.value);
+  if (metric.id.endsWith('_days')) return `${metric.value}d`;
+  return metric.value;
 };
 
 /** ---------- Reusable Child Components ---------- */
-const StatTile: FC<{ title: string; value: string; delta: string; context: string; color: string; deltaTone?: 'good' | 'bad' }> =
-  ({ title, value, delta, context, color, deltaTone = 'good' }) => (
-    <div className={`tile tile-${color}`}>
-      <div className="v">{value}</div>
-      <div className="l">{title}</div>
-      <div className={`d ${deltaTone}`}>{delta}</div>
-      <div className="c">{context}</div>
-    </div>
-  );
+const StatTile: FC<{
+  title: string;
+  value: string;
+  delta: string;
+  context: string;
+  color: string;
+  deltaTone?: 'good' | 'bad';
+}> = ({ title, value, delta, context, color, deltaTone = 'good' }) => (
+  <div className={`tile tile-${color}`}>
+    <div className="v">{value}</div>
+    <div className="l">{title}</div>
+    <div className={`d ${deltaTone}`}>{delta}</div>
+    <div className="c">{context}</div>
+  </div>
+);
 
-const CustomListItem: FC<{ label: string; value: ReactNode; }> =
-  ({ label, value }) => (
-    <li className="aside-row">
-      <span className="aside-label">{label}</span>
-      <span className="aside-value">{value}</span>
-    </li>
-  );
+const CustomListItem: FC<{ label: string; value: ReactNode }> = ({ label, value }) => (
+  <li className="aside-row">
+    <span className="aside-label">{label}</span>
+    <span className="aside-value">{value}</span>
+  </li>
+);
 
 const HiringPerformanceCard: FC<{ hiring: AnalyticsNumbers['hiring'] }> = ({ hiring }) => (
   <section className="card analytics-card">
     <h2 className="section-title">Hiring Performance</h2>
     <div className="tiles">
-      <StatTile color="indigo" title="Total Hires YTD" value={String(hiring.totalHires)} delta={fmtDelta(hiring.totalHiresDeltaPct ?? 0)} context="Δ vs last year" deltaTone={hiring.totalHiresDeltaPct ?? 0 >= 0 ? 'good' : 'bad'} />
-      <StatTile color="green" title="Internships" value={String(hiring.totalInternships)} delta={fmtDelta(hiring.totalInternshipsDelta ?? 0, 'd')} context="Δ vs last year" deltaTone={hiring.totalInternshipsDelta ?? 0 >= 0 ? 'good' : 'bad'} />
-      <StatTile color="purple" title="Conversion to Full-Time" value={fmtPct(hiring.conversionToFullTimePct ?? 0)} delta={fmtDelta(hiring.conversionToFullTimeDeltaPct ?? 0)} context="Δ vs last year" deltaTone={hiring.conversionToFullTimeDeltaPct ?? 0 >= 0 ? 'good' : 'bad'} />
-      <StatTile color="amber" title="Time to First Sale" value={`${hiring.timeToFirstSaleDays}d`} delta={fmtDelta(hiring.timeToFirstSaleDeltaDays ?? 0, 'd')} context="Δ" deltaTone={hiring.timeToFirstSaleDeltaDays ?? 0 < 0 ? 'good' : 'bad'} />
+      <StatTile
+        color="indigo"
+        title="Total Hires YTD"
+        value={String(hiring.totalHires)}
+        delta={fmtDelta(hiring.totalHiresDeltaPct ?? 0)}
+        context="Δ vs last year"
+        deltaTone={(hiring.totalHiresDeltaPct ?? 0 >= 0) ? 'good' : 'bad'}
+      />
+      <StatTile
+        color="green"
+        title="Internships"
+        value={String(hiring.totalInternships)}
+        delta={fmtDelta(hiring.totalInternshipsDelta ?? 0, 'd')}
+        context="Δ vs last year"
+        deltaTone={(hiring.totalInternshipsDelta ?? 0 >= 0) ? 'good' : 'bad'}
+      />
+      <StatTile
+        color="purple"
+        title="Conversion to Full-Time"
+        value={fmtPct(hiring.conversionToFullTimePct ?? 0)}
+        delta={fmtDelta(hiring.conversionToFullTimeDeltaPct ?? 0)}
+        context="Δ vs last year"
+        deltaTone={(hiring.conversionToFullTimeDeltaPct ?? 0 >= 0) ? 'good' : 'bad'}
+      />
+      <StatTile
+        color="amber"
+        title="Time to First Sale"
+        value={`${hiring.timeToFirstSaleDays}d`}
+        delta={fmtDelta(hiring.timeToFirstSaleDeltaDays ?? 0, 'd')}
+        context="Δ"
+        deltaTone={(hiring.timeToFirstSaleDeltaDays ?? 0 < 0) ? 'good' : 'bad'}
+      />
     </div>
   </section>
 );
@@ -89,7 +130,10 @@ const NilInvestmentCard: FC<{ nil: AnalyticsNumbers['nil'] }> = ({ nil }) => (
     <h2 className="section-title">NIL Investment</h2>
     <aside className="aside">
       <ul className="aside-list">
-        <CustomListItem label="Total NIL Investment" value={fmtMoneyShort(nil.totalInvestmentUSD ?? 0)} />
+        <CustomListItem
+          label="Total NIL Investment"
+          value={fmtMoneyShort(nil.totalInvestmentUSD ?? 0)}
+        />
         <CustomListItem label="Active Partnerships" value={nil.activePartnerships ?? 0} />
       </ul>
     </aside>
@@ -100,8 +144,12 @@ const NilInvestmentCard: FC<{ nil: AnalyticsNumbers['nil'] }> = ({ nil }) => (
 export const AnalyticsTab: FC<Props> = ({ company, editMode, setCompany }) => {
   const numbers = useMemo(() => ensure((company as ICompanyPaylod).analytics), [company]);
 
-  const upCustom = useCallback((newList: CustomAnalytic[]) =>
-    setCompany(prev => ({ ...prev, analyticsNumbers: { ...ensure((prev as ICompanyPaylod).analytics), custom: newList } })),
+  const upCustom = useCallback(
+    (newList: CustomAnalytic[]) =>
+      setCompany((prev) => ({
+        ...prev,
+        analyticsNumbers: { ...ensure((prev as ICompanyPaylod).analytics), custom: newList },
+      })),
     [setCompany]
   );
 
@@ -124,7 +172,11 @@ export const AnalyticsTab: FC<Props> = ({ company, editMode, setCompany }) => {
           <aside className="aside">
             <ul className="aside-list">
               {(ensure(numbers).custom ?? []).map((metric) => (
-                <CustomListItem key={metric.id} label={metric.label ?? ''} value={formatCustomValue(metric)} />
+                <CustomListItem
+                  key={metric.id}
+                  label={metric.label ?? ''}
+                  value={formatCustomValue(metric)}
+                />
               ))}
             </ul>
           </aside>
@@ -141,18 +193,21 @@ const AnalyticsEditor: FC<{
 }> = ({ numbers, upCustom }) => {
   const [selectedMetric, setSelectedMetric] = useState('');
 
-  const availableOptions = useMemo(() =>
-    AVAILABLE_CUSTOM_ANALYTICS.filter(opt => !(numbers.custom ?? []).some(m => m.id === opt.id)),
+  const availableOptions = useMemo(
+    () =>
+      AVAILABLE_CUSTOM_ANALYTICS.filter(
+        (opt) => !(numbers.custom ?? []).some((m) => m.id === opt.id)
+      ),
     [numbers.custom]
   );
 
   const handleAddCustom = (metricId: string) => {
     if (!metricId) return;
 
-    const newMetricFromBackend = AVAILABLE_CUSTOM_ANALYTICS.find(opt => opt.id === metricId);
+    const newMetricFromBackend = AVAILABLE_CUSTOM_ANALYTICS.find((opt) => opt.id === metricId);
     if (!newMetricFromBackend) return;
 
-    const mockValue = MOCK_DATA.custom?.find(m => m.id === newMetricFromBackend.id)?.value ?? 0;
+    const mockValue = MOCK_DATA.custom?.find((m) => m.id === newMetricFromBackend.id)?.value ?? 0;
     const newMetric = { ...newMetricFromBackend, value: mockValue };
 
     upCustom([...(numbers.custom ?? []), newMetric]);
@@ -180,7 +235,11 @@ const AnalyticsEditor: FC<{
               <li key={i} className="aside-row edit custom">
                 <span className="aside-label">{metric.label}</span>
                 <span className="aside-value">{formatCustomValue(metric)}</span>
-                <button onClick={() => handleRemoveCustom(i)} className="btn-icon" aria-label="Remove metric">
+                <button
+                  onClick={() => handleRemoveCustom(i)}
+                  className="btn-icon"
+                  aria-label="Remove metric"
+                >
                   <XCircle size={20} />
                 </button>
               </li>
@@ -195,8 +254,10 @@ const AnalyticsEditor: FC<{
                 className="add-metric-select"
               >
                 <option value="">Add Metric...</option>
-                {availableOptions.map(opt => (
-                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                {availableOptions.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.label}
+                  </option>
                 ))}
               </select>
             </div>

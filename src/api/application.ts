@@ -35,7 +35,7 @@ export const createApplication = async (
   authHeader: string | null,
   applicationData: ICreateApplicationRequest
 ): Promise<ICreateApplicationResponse> => {
-  const response = await axios.post(`${url}/application`, applicationData, {
+  const response = await axios.post(`${url}/createApplication`, applicationData, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -47,7 +47,7 @@ export const createApplication = async (
 export const getApplications = async (
   authHeader: string | null
 ): Promise<IApplicationPayload[]> => {
-  const response = await axios.get(`${url}/application`, {
+  const response = await axios.get(`${url}/getApplications`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
