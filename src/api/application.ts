@@ -1,15 +1,13 @@
 import axios from 'axios';
 import { url } from '../config/url';
 
-export interface ApplicationStatus {
-  applied: 'applied';
-  under_review: 'under_review';
-  interview_requested: 'interview_requested';
-  accepted: 'accepted';
-  rejected: 'rejected';
-  withdrawn: 'withdrawn';
-}
-
+export type ApplicationStatus =
+  | 'applied'
+  | 'under_review'
+  | 'interview_requested'
+  | 'accepted'
+  | 'rejected'
+  | 'withdrawn';
 export interface IApplicationPayload {
   id?: string;
   jobId: string;

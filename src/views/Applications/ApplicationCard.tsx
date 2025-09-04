@@ -65,14 +65,14 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
         let result: IApplicationPayload | undefined;
 
         if (onUpdateStatus) {
-          result = await onUpdateStatus(currentApp.id, status as unknown as ApplicationStatus);
+          result = await onUpdateStatus(currentApp.id, status as ApplicationStatus);
         }
 
         if (result) {
           setCurrentApp(result);
         } else {
           // If parent didn't return payload, optimistically update status
-          setCurrentApp(prev => ({ ...(prev ?? {}), status: status as unknown as any }));
+          setCurrentApp(prev => ({ ...(prev ?? {}), status: status as ApplicationStatus }));
         }
       } catch {
         toast.error('Failed to update application');
