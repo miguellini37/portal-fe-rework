@@ -1,0 +1,50 @@
+.status-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+/* Applied = gray/neutral */
+.status-applied {
+  background: #f3f4f6;      /* light gray */
+  color: #374151;           /* dark slate text */
+  border-color: rgba(55, 65, 81, 0.2);
+}
+
+/* Under review = blue */
+.status-under_review {
+  background: #e0f2fe;      /* sky-100 */
+  color: #1d4ed8;           /* blue-700 */
+  border-color: rgba(29, 78, 216, 0.2);
+}
+
+/* Interview requested = purple */
+.status-interview_requested {
+  background: #f3e8ff;      /* violet-100 */
+  color: #6d28d9;           /* violet-700 */
+  border-color: rgba(109, 40, 217, 0.25);
+}
+
+/* Accepted = green */
+.status-accepted {
+  background: #dcfce7;      /* green-100 */
+  color: #047857;           /* green-700 */
+  border-color: rgba(4, 120, 87, 0.25);
+}
+
+/* Rejected = red */
+.status-rejected {
+  background: #fee2e2;      /* red-100 */
+  color: #b91c1c;           /* red-700 */
+  border-color: rgba(185, 28, 28, 0.25);
+}
+
+/* Withdrawn = slate */
+.status-withdrawn {
+  background: #e5e7eb;      /* gray-200 */
+  color: #374151;           /* gray-700 */
+  border-color: rgba(55, 65, 81, 0.2);
+}

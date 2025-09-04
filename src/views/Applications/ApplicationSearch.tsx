@@ -37,12 +37,13 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
   }, [authHeader]);
 
   // Filter applications based on search term
-  const filteredApplications = applications.filter(
-    (application) =>
-      application.job?.position?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      application.job?.company?.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      application.status?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredApplications = applications.filter((application) => {
+    const query = searchTerm.toLowerCase();
+    const position = application.job?.position?.toLowerCase() ?? '';
+    const company = application.job?.company?.companyName?.toLowerCase() ?? '';
+    const status = application.status ? application.status.toString().toLowerCase() : '';
+    return position.includes(query) || company.includes(query) || status.includes(query);
+  });
 
   if (loading) {
     return (
@@ -82,7 +83,7 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
 
       <div className="search-page-grid">
         {filteredApplications.map((application) => (
-          <ApplicationCard key={application.id} application={application} />
+          <ApplicationCard key={application.id} application={application}/>
         ))}
       </div>
 
