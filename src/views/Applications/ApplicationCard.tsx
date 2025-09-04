@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IApplicationPayload, ApplicationStatus } from '../../api/application';
 import '../Companies/company.css';
 import './applications.css';
@@ -9,10 +10,14 @@ import { toast } from 'react-toastify';
 
 interface Props {
   application: IApplicationPayload;
-  onUpdateStatus?: (applicationId?: string, status?: ApplicationStatus) => IApplicationPayload | Promise<IApplicationPayload>;
+  onUpdateStatus?: (
+    applicationId?: string,
+    status?: ApplicationStatus
+  ) => IApplicationPayload | Promise<IApplicationPayload>;
 }
 
 export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
+  const navigate = useNavigate();
   const user = useAuthUser<IUserData>();
   const isCompanyPermission = user?.permission === USER_PERMISSIONS.COMPANY;
   const isAthletePermission = user?.permission === USER_PERMISSIONS.ATHLETE;
@@ -61,10 +66,13 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
 
         if (onUpdateStatus) {
           result = await onUpdateStatus(currentApp.id, status as unknown as ApplicationStatus);
-        } 
+        }
 
         if (result) {
           setCurrentApp(result);
+        } else {
+          // If parent didn't return payload, optimistically update status
+          setCurrentApp(prev => ({ ...(prev ?? {}), status: status as unknown as any }));
         }
       } catch {
         toast.error('Failed to update application');
@@ -78,13 +86,36 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
   const statusStr = String(currentApp?.status ?? 'applied').toLowerCase();
   const statusColor = getStatusColor(statusStr);
 
+  const openJob = useCallback(() => {
+    const jobId = currentApp?.job?.id;
+    if (!jobId) return;
+    // navigate to JobPage route and include application id in location state (optional)
+    navigate(`/job/${jobId}`, { state: { applicationId: currentApp?.id } });
+  }, [currentApp?.job?.id, currentApp?.id, navigate]);
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openJob();
+    }
+  };
+
   return (
-    <div className="company-card">
+    <div
+      className="company-card clickable-card"
+      role="button"
+      tabIndex={0}
+      onClick={openJob}
+      onKeyDown={onKeyDown}
+      aria-label={`Open job ${currentApp?.job?.position ?? 'job'}`}
+    >
       <div className="company-card-layout">
         <div className="company-content">
           <div className="company-header">
             <div className="company-title-section">
-              <h3 className="company-title">{currentApp?.job?.position || 'Position not specified'}</h3>
+              <h3 className="company-title">
+                {currentApp?.job?.position || 'Position not specified'}
+              </h3>
               {!isCompanyPermission && (
                 <div className="company-industry">
                   {currentApp?.job?.company?.companyName || 'Company not specified'}
@@ -98,13 +129,19 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
               <div className="info-row">
                 <span className="info-label">Applied Date:</span>
                 <span className="info-value">
-                  {formatDate((currentApp as IApplicationPayload & { creationDate?: string }).creationDate ?? currentApp?.createdDate)}
+                  {formatDate(
+                    (currentApp as IApplicationPayload & { creationDate?: string }).creationDate ??
+                      currentApp?.createdDate
+                  )}
                 </span>
               </div>
 
               <div className="info-row" style={{ alignItems: 'center', gap: 8 }}>
                 <span className="info-label">Status:</span>
-                <span className="info-value" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span
+                  className="info-value"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+                >
                   <span
                     className="status-pill"
                     style={{
@@ -141,7 +178,10 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
                 <button
                   type="button"
                   className="action-btn primary"
-                  onClick={() => handleUpdate('accepted')}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUpdate('accepted');
+                  }}
                   disabled={loading}
                   aria-label="Accept application"
                 >
@@ -150,7 +190,10 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
                 <button
                   type="button"
                   className="action-btn secondary"
-                  onClick={() => handleUpdate('interview_requested')}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUpdate('interview_requested');
+                  }}
                   disabled={loading}
                   aria-label="Request interview"
                 >
@@ -159,7 +202,10 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
                 <button
                   type="button"
                   className="action-btn danger"
-                  onClick={() => handleUpdate('rejected')}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUpdate('rejected');
+                  }}
                   disabled={loading}
                   aria-label="Reject application"
                 >
@@ -174,17 +220,16 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
                   <button
                     type="button"
                     className="action-btn danger"
-                    onClick={() => handleUpdate('withdrawn')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpdate('withdrawn');
+                    }}
                     disabled={loading}
                     aria-label="Withdraw application"
                   >
                     Withdraw
                   </button>
-                ) : (
-                  <button type="button" className="action-btn secondary" disabled>
-                    {statusStr.replace(/_/g, ' ')}
-                  </button>
-                )}
+                ) : null}
               </>
             )}
           </div>
@@ -193,4 +238,3 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
     </div>
   );
 };
- 

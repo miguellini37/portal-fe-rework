@@ -8,7 +8,10 @@ interface CompanyApplicationsProps {
   jobId?: string;
   pageTitle?: string;
   pageSubtitle?: string;
-  onUpdateStatus?: (applicationId?: string, status? : ApplicationStatus) => IApplicationPayload | Promise<IApplicationPayload>;
+  onUpdateStatus?: (
+    applicationId?: string,
+    status?: ApplicationStatus
+  ) => IApplicationPayload | Promise<IApplicationPayload>;
 }
 
 export const Application: FC<CompanyApplicationsProps> = ({
@@ -72,7 +75,9 @@ export const Application: FC<CompanyApplicationsProps> = ({
     });
 
     return filtered.sort((a, b) =>
-      sortOrder === 'desc' ? getCreatedAtMs(b) - getCreatedAtMs(a) : getCreatedAtMs(a) - getCreatedAtMs(b)
+      sortOrder === 'desc'
+        ? getCreatedAtMs(b) - getCreatedAtMs(a)
+        : getCreatedAtMs(a) - getCreatedAtMs(b)
     );
   }, [applications, searchTerm, sortOrder]);
 
@@ -127,8 +132,8 @@ export const Application: FC<CompanyApplicationsProps> = ({
             {searchTerm
               ? `No applications found matching "${searchTerm}"`
               : applications.length === 0
-              ? 'No applications found for this company.'
-              : 'No applications match your search criteria.'}
+                ? 'No applications found for this company.'
+                : 'No applications match your search criteria.'}
           </p>
         </div>
       )}

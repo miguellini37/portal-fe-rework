@@ -83,7 +83,7 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
 
       <div className="search-page-grid">
         {filteredApplications.map((application) => (
-          <ApplicationCard key={application.id} application={application}/>
+          <ApplicationCard key={application.id} application={application} />
         ))}
       </div>
 

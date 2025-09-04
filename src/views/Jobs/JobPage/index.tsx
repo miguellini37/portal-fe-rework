@@ -33,7 +33,7 @@ const toMs = (v?: string | Date) => {
 const normalizeStatus = (s?: unknown) =>
   (typeof s === 'string' ? s : String(s ?? 'applied')).toLowerCase();
 
-const statusLabel = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+const statusLabel = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
 const JobPage: FC = () => {
   const authHeader = useAuthHeader();
@@ -47,12 +47,16 @@ const JobPage: FC = () => {
   const [withdrawing, setWithdrawing] = useState(false);
 
   const isCompany = user?.permission === USER_PERMISSIONS.COMPANY;
-  const canEdit = Boolean(isCompany && user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id);
+  const canEdit = Boolean(
+    isCompany && user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
+  );
   const canApply = user?.permission === USER_PERMISSIONS.ATHLETE;
   const canViewApplications = Boolean(isCompany && canEdit);
 
   const rawStatus = normalizeStatus(myApplication?.status as string | undefined);
-  const canWithdraw = Boolean(myApplication) && ['applied', 'under_review', 'interview_requested'].includes(rawStatus);
+  const canWithdraw =
+    Boolean(myApplication) &&
+    ['applied', 'under_review', 'interview_requested'].includes(rawStatus);
 
   const fetchJob = useCallback(async () => {
     if (!id) return;
@@ -69,7 +73,11 @@ const JobPage: FC = () => {
     try {
       const apps = await getApplications(authHeader, job.id);
       if (apps?.length) {
-        apps.sort((a, b) => toMs((b.creationDate as any) ?? b.createdDate) - toMs((a.creationDate as any) ?? a.createdDate));
+        apps.sort(
+          (a, b) =>
+            toMs((b.creationDate as any) ?? b.createdDate) -
+            toMs((a.creationDate as any) ?? a.createdDate)
+        );
         setMyApplication(apps[0]);
       } else {
         toast.error('No application found for this job');
@@ -122,7 +130,7 @@ const JobPage: FC = () => {
         throw e instanceof Error ? e : new Error('Failed to update application status');
       }
     },
-    [authHeader, myApplication?.id],
+    [authHeader, myApplication?.id]
   );
 
   const withdrawApplication = useCallback(async () => {
@@ -147,7 +155,7 @@ const JobPage: FC = () => {
 
   const TABS = useMemo(
     () =>
-      ([
+      [
         {
           key: 'overview',
           label: 'Overview',
@@ -172,13 +180,15 @@ const JobPage: FC = () => {
         {
           key: 'performance',
           label: 'Performance',
-          render: () => <div className="p-8 text-center text-gray-500">Performance tab coming soon</div>,
+          render: () => (
+            <div className="p-8 text-center text-gray-500">Performance tab coming soon</div>
+          ),
         },
-      ] as const),
-    [canViewApplications, updateStatus],
+      ] as const,
+    [canViewApplications, updateStatus]
   );
 
-  const currentTab = TABS.find(t => t.key === activeTab) ?? TABS[0];
+  const currentTab = TABS.find((t) => t.key === activeTab) ?? TABS[0];
 
   const handleEditSuccess = () => {
     setEditModalOpen(false);
@@ -198,7 +208,7 @@ const JobPage: FC = () => {
       <div className="border-b border-gray-300">
         <div className="flex items-center justify-between">
           <div className="flex gap-4">
-            {TABS.map(tab => (
+            {TABS.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
