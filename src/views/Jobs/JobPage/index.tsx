@@ -75,8 +75,8 @@ const JobPage: FC = () => {
       if (apps?.length) {
         apps.sort(
           (a, b) =>
-            toMs((b.creationDate as any) ?? b.createdDate) -
-            toMs((a.creationDate as any) ?? a.createdDate)
+            toMs((b.creationDate as Date) ?? b.createdDate) -
+            toMs((a.creationDate as Date) ?? a.createdDate)
         );
         setMyApplication(apps[0]);
       } else {
@@ -138,7 +138,7 @@ const JobPage: FC = () => {
     setWithdrawing(true);
 
     const prev = myApplication;
-    const withdrawn = 'withdrawn' as unknown as ApplicationStatus;
+    const withdrawn = 'withdrawn' as ApplicationStatus;
     setMyApplication({ ...prev, status: withdrawn });
 
     try {

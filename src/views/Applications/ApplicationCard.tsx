@@ -72,7 +72,7 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
           setCurrentApp(result);
         } else {
           // If parent didn't return payload, optimistically update status
-          setCurrentApp(prev => ({ ...(prev ?? {}), status: status as ApplicationStatus }));
+          setCurrentApp((prev) => ({ ...(prev ?? {}), status: status as ApplicationStatus }));
         }
       } catch {
         toast.error('Failed to update application');

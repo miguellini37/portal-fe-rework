@@ -48,7 +48,7 @@ export const Application: FC<CompanyApplicationsProps> = ({
     const q = searchTerm.toLowerCase();
     const getCreatedAtMs = (app: IApplicationPayload): number => {
       const creationDate = (app as IApplicationPayload & { creationDate?: string }).creationDate;
-      const createdDate = app.createdDate as unknown as string | Date | undefined;
+      const createdDate = app.createdDate as Date | undefined;
       const value = creationDate ?? createdDate;
       if (!value) return 0;
       if (value instanceof Date) return value.getTime();
@@ -58,7 +58,7 @@ export const Application: FC<CompanyApplicationsProps> = ({
 
     const filtered = applications.filter((application) => {
       const pos = (application.job?.position ?? '').toLowerCase();
-      const status = (application.status as unknown as string | undefined)?.toLowerCase?.() ?? '';
+      const status = (application.status as ApplicationStatus | undefined)?.toLowerCase?.() ?? '';
       const firstName = (application.athlete?.firstName ?? '').toLowerCase();
       const lastName = (application.athlete?.lastName ?? '').toLowerCase();
       const fullName = `${firstName} ${lastName}`.trim();
