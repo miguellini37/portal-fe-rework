@@ -5,7 +5,7 @@ import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 
-import { getJobById, IJobPayload } from '../../../api/job';
+import { getJobById, IJobPayload, updateJob, JobStatus } from '../../../api/job';
 import {
   createApplication,
   updateApplicationStatus,
@@ -33,8 +33,6 @@ const toMs = (v?: string | Date) => {
 const normalizeStatus = (s?: unknown) =>
   (typeof s === 'string' ? s : String(s ?? 'applied')).toLowerCase();
 
-const statusLabel = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-
 const JobPage: FC = () => {
   const authHeader = useAuthHeader();
   const user = useAuthUser<IUserData>();
@@ -45,6 +43,11 @@ const JobPage: FC = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [myApplication, setMyApplication] = useState<IApplicationPayload>();
   const [withdrawing, setWithdrawing] = useState(false);
+
+  // Job status dropdown state for company users who can edit
+  const [statusMenuOpen, setStatusMenuOpen] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const JOB_STATUS_OPTIONS: JobStatus[] = ['open', 'closed', 'filled'];
 
   const isCompany = user?.permission === USER_PERMISSIONS.COMPANY;
   const canEdit = Boolean(
@@ -195,6 +198,30 @@ const JobPage: FC = () => {
     fetchJob();
   };
 
+  const statusLabel = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+  const handleChangeJobStatus = useCallback(
+    async (newStatus: JobStatus) => {
+      if (!job?.id) return;
+      setUpdatingStatus(true);
+      setStatusMenuOpen(false);
+      const prevJob = job;
+      // optimistic update
+      setJob({ ...job, status: newStatus });
+      try {
+        const newJob = { ...job, status: newStatus } as IJobPayload;
+        await updateJob(newJob, authHeader);
+        setJob(newJob);
+      } catch {
+        setJob(prevJob);
+        toast.error('Failed to update job status');
+      } finally {
+        setUpdatingStatus(false);
+      }
+    },
+    [authHeader, job]
+  );
+
   if (!job) {
     return (
       <div className="w-full max-w-6xl mx-auto mt-6 text-center">
@@ -225,9 +252,67 @@ const JobPage: FC = () => {
 
           <div className="flex items-center gap-2">
             {canEdit ? (
-              <button onClick={() => setEditModalOpen(true)} className="btn btn-primary btn-sm">
-                Edit Job
-              </button>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', position: 'relative' }}>
+                {/* status pill with dropdown */}
+                <div style={{ position: 'relative' }}>
+                  <button
+                    type="button"
+                    className={`status-pill status-${job?.status ?? 'open'}`}
+                    onClick={() => setStatusMenuOpen((v) => !v)}
+                    aria-haspopup="true"
+                    aria-expanded={statusMenuOpen}
+                    disabled={updatingStatus}
+                    title="Change job status"
+                  >
+                    {statusLabel(job?.status ?? 'open')} <span style={{ marginLeft: 8 }}>▾</span>
+                  </button>
+
+                  {statusMenuOpen && (
+                    <ul
+                      role="menu"
+                      className="status-dropdown"
+                      style={{
+                        position: 'absolute',
+                        right: 0,
+                        top: 'calc(100% + 8px)',
+                        background: '#fff',
+                        boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+                        borderRadius: 8,
+                        padding: 8,
+                        listStyle: 'none',
+                        zIndex: 40,
+                      }}
+                    >
+                      {JOB_STATUS_OPTIONS.map((opt) => (
+                        <li key={opt} role="none">
+                          <button
+                            role="menuitem"
+                            type="button"
+                            className={`status-dropdown-item ${job?.status === opt ? 'active' : ''}`}
+                            onClick={() => handleChangeJobStatus(opt)}
+                            disabled={updatingStatus}
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              padding: '6px 12px',
+                              textAlign: 'left',
+                              background: 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {statusLabel(opt)}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <button onClick={() => setEditModalOpen(true)} className="btn btn-primary btn-sm">
+                  Edit Job
+                </button>
+              </div>
             ) : canApply ? (
               myApplication ? (
                 <>
