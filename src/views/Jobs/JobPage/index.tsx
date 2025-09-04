@@ -212,6 +212,7 @@ const JobPage: FC = () => {
         const newJob = { ...job, status: newStatus } as IJobPayload;
         await updateJob(newJob, authHeader);
         setJob(newJob);
+        toast.success('Job status updated');
       } catch {
         setJob(prevJob);
         toast.error('Failed to update job status');
@@ -250,103 +251,83 @@ const JobPage: FC = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
             {canEdit ? (
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', position: 'relative' }}>
-                {/* status pill with dropdown */}
-                <div style={{ position: 'relative' }}>
-                  <button
-                    type="button"
-                    className={`status-pill status-${job?.status ?? 'open'}`}
-                    onClick={() => setStatusMenuOpen((v) => !v)}
-                    aria-haspopup="true"
-                    aria-expanded={statusMenuOpen}
-                    disabled={updatingStatus}
-                    title="Change job status"
-                  >
-                    {statusLabel(job?.status ?? 'open')} <span style={{ marginLeft: 8 }}>▾</span>
-                  </button>
-
-                  {statusMenuOpen && (
-                    <ul
-                      role="menu"
-                      className="status-dropdown"
-                      style={{
-                        position: 'absolute',
-                        right: 0,
-                        top: 'calc(100% + 8px)',
-                        background: '#fff',
-                        boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
-                        borderRadius: 8,
-                        padding: 8,
-                        listStyle: 'none',
-                        zIndex: 40,
-                      }}
-                    >
-                      {JOB_STATUS_OPTIONS.map((opt) => (
-                        <li key={opt} role="none">
-                          <button
-                            role="menuitem"
-                            type="button"
-                            className={`status-dropdown-item ${job?.status === opt ? 'active' : ''}`}
-                            onClick={() => handleChangeJobStatus(opt)}
-                            disabled={updatingStatus}
-                            style={{
-                              display: 'block',
-                              width: '100%',
-                              padding: '6px 12px',
-                              textAlign: 'left',
-                              background: 'transparent',
-                              border: 'none',
-                              cursor: 'pointer',
-                            }}
-                          >
-                            {statusLabel(opt)}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-
-                <button onClick={() => setEditModalOpen(true)} className="btn btn-primary btn-sm">
-                  Edit Job
+              <>
+              <div className="relative">
+                <button
+                type="button"
+                className={`job-status-pill status-${job?.status ?? 'open'}`}
+                onClick={() => setStatusMenuOpen((v) => !v)}
+                aria-haspopup="true"
+                aria-expanded={statusMenuOpen}
+                disabled={updatingStatus}
+                title="Change job status"
+                >
+                {statusLabel(job?.status ?? 'open')} <span aria-hidden>▾</span>
                 </button>
+
+                {statusMenuOpen && (
+                <ul role="menu" className="status-dropdown">
+                  {JOB_STATUS_OPTIONS.map((opt) => (
+                  <li key={opt} role="none">
+                    <button
+                    role="menuitem"
+                    type="button"
+                    className={`status-dropdown-item ${
+                      job?.status === opt ? 'active' : ''
+                    }`}
+                    onClick={() => handleChangeJobStatus(opt)}
+                    disabled={updatingStatus}
+                    >
+                    {statusLabel(opt)}
+                    </button>
+                  </li>
+                  ))}
+                </ul>
+                )}
               </div>
+              <button
+                onClick={() => setEditModalOpen(true)}
+                className="btn btn-primary btn-sm"
+              >
+                Edit Job
+              </button>
+              </>
             ) : canApply ? (
               myApplication ? (
-                <>
-                  <span className={`status-pill status-${rawStatus || 'applied'}`}>
-                    {statusLabel(rawStatus || 'applied')}
-                  </span>
-                  {canWithdraw && (
-                    <button
-                      onClick={withdrawApplication}
-                      className="btn btn-secondary btn-sm"
-                      disabled={withdrawing}
-                      aria-label="Withdraw application"
-                    >
-                      {withdrawing ? 'Withdrawing...' : 'Withdraw Application'}
-                    </button>
-                  )}
-                </>
-              ) : (
-                <button onClick={applyToJob} className="btn btn-primary btn-sm">
-                  Apply
+              <>
+                <span className={`status-pill status-${rawStatus || 'applied'}`}>
+                {statusLabel(rawStatus || 'applied')}
+                </span>
+                {canWithdraw && (
+                <button
+                  onClick={withdrawApplication}
+                  className="btn btn-secondary btn-sm"
+                  disabled={withdrawing}
+                  aria-label="Withdraw application"
+                >
+                  {withdrawing ? 'Withdrawing...' : 'Withdraw Application'}
                 </button>
+                )}
+              </>
+              ) : (
+              <button onClick={applyToJob} className="btn btn-primary btn-sm">
+                Apply
+              </button>
               )
             ) : null}
+            </div>
           </div>
+          </div>
+
+          <div className="m-4 min-h-[400px]">{currentTab.render(job)}</div>
+
+          {isEditModalOpen && (
+          <JobModal onClose={() => setEditModalOpen(false)} job={job} onSuccess={handleEditSuccess} />
+          )}
         </div>
-      </div>
+        );
+      };
 
-      <div className="m-4 min-h-[400px]">{currentTab.render(job)}</div>
-
-      {isEditModalOpen && (
-        <JobModal onClose={() => setEditModalOpen(false)} job={job} onSuccess={handleEditSuccess} />
-      )}
-    </div>
-  );
-};
-
-export { JobPage };
+      export { JobPage };

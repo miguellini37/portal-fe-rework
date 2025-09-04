@@ -1,3 +1,9 @@
+.job-actions {
+  display: flex;
+  flex-wrap: wrap; /* Allows buttons to wrap to the next line on small screens */
+  gap: 10px; /* Adds space between the buttons */
+  align-items: center; /* Vertically aligns buttons if they have different heights */
+}
 .status-pill {
   display: inline-block;
   padding: 4px 10px;
@@ -47,4 +53,84 @@
   background: #e5e7eb;      /* gray-200 */
   color: #374151;           /* gray-700 */
   border-color: rgba(55, 65, 81, 0.2);
+}
+
+/* moved styles from inline to CSS */
+
+.job-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: relative;
+}
+
+
+/* disabled pill */
+.status-pill[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* status variants (override colors as needed) */
+.status-pill.status-open {
+  background: #3b82f6;
+  color: #fff;
+}
+.status-pill.status-closed {
+  background: #6b7280;
+  color: #fff;
+}
+.status-pill.status-filled {
+  background: #10b981;
+  color: #fff;
+}
+/* status pill base */
+.job-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  background: #eef2ff;
+  color: #1f2937;
+}
+
+/* dropdown */
+.status-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 8x;
+  padding: 8px;
+  list-style: none;
+  z-index: 40;
+  min-width: 160px;
+}
+
+/* dropdown items */
+.status-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.status-dropdown-item:hover {
+  background: #f3f4f6;
+}
+
+.status-dropdown-item.active {
+  font-weight: 600;
+  background: #eef2ff;
 }
