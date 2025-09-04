@@ -1,3 +1,54 @@
+.job-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.job-title-section {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Status pill for job cards */
+.job-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Variants */
+.job-status-open { background: #10b981; }     /* green */
+.job-status-closed { background: #6b7280; }   /* gray */
+.job-status-filled { background: #3b82f6; }   /* blue */
+
+/* Actions row: center and keep same size buttons */
+.job-card-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* Normalize sizes for buttons and links */
+.job-card-actions .job-card-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;     /* same width */
+  height: 42px;         /* same height */
+  box-sizing: border-box;
+  text-decoration: none; /* make NavLink look like a button */
+  white-space: nowrap;
+}
 .job-actions {
   display: flex;
   flex-wrap: wrap; /* Allows buttons to wrap to the next line on small screens */

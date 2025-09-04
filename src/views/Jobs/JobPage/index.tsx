@@ -251,83 +251,90 @@ const JobPage: FC = () => {
             ))}
           </div>
 
-            <div className="flex items-center gap-2">
-            {canEdit ? (
-              <>
-              <div className="relative">
+          <div className="flex items-center gap-2">
+            {/* Always show job status */}
+            <div className="relative">
+              {canEdit ? (
                 <button
-                type="button"
-                className={`job-status-pill status-${job?.status ?? 'open'}`}
-                onClick={() => setStatusMenuOpen((v) => !v)}
-                aria-haspopup="true"
-                aria-expanded={statusMenuOpen}
-                disabled={updatingStatus}
-                title="Change job status"
+                  type="button"
+                  className={`job-status-pill job-status-${job?.status ?? 'open'}`}
+                  onClick={() => setStatusMenuOpen(v => !v)}
+                  aria-haspopup="true"
+                  aria-expanded={statusMenuOpen}
+                  disabled={updatingStatus}
+                  title="Change job status"
                 >
-                {statusLabel(job?.status ?? 'open')} <span aria-hidden>▾</span>
+                  {statusLabel(job?.status ?? 'open')} <span aria-hidden>▾</span>
                 </button>
+              ) : (
+                <span
+                  className={`job-status-pill job-status-${job?.status ?? 'open'}`}
+                  aria-label={`Job status: ${statusLabel(job?.status ?? 'open')}`}
+                >
+                  {statusLabel(job?.status ?? 'open')}
+                </span>
+              )}
 
-                {statusMenuOpen && (
+              {canEdit && statusMenuOpen && (
                 <ul role="menu" className="status-dropdown">
-                  {JOB_STATUS_OPTIONS.map((opt) => (
-                  <li key={opt} role="none">
-                    <button
-                    role="menuitem"
-                    type="button"
-                    className={`status-dropdown-item ${
-                      job?.status === opt ? 'active' : ''
-                    }`}
-                    onClick={() => handleChangeJobStatus(opt)}
-                    disabled={updatingStatus}
-                    >
-                    {statusLabel(opt)}
-                    </button>
-                  </li>
+                  {JOB_STATUS_OPTIONS.map(opt => (
+                    <li key={opt} role="none">
+                      <button
+                        role="menuitem"
+                        type="button"
+                        className={`status-dropdown-item ${job?.status === opt ? 'active' : ''}`}
+                        onClick={() => handleChangeJobStatus(opt)}
+                        disabled={updatingStatus}
+                      >
+                        {statusLabel(opt)}
+                      </button>
+                    </li>
                   ))}
                 </ul>
-                )}
-              </div>
+              )}
+            </div>
+
+            {canEdit ? (
               <button
                 onClick={() => setEditModalOpen(true)}
                 className="btn btn-primary btn-sm"
               >
                 Edit Job
               </button>
-              </>
             ) : canApply ? (
               myApplication ? (
-              <>
-                <span className={`status-pill status-${rawStatus || 'applied'}`}>
-                {statusLabel(rawStatus || 'applied')}
-                </span>
-                {canWithdraw && (
-                <button
-                  onClick={withdrawApplication}
-                  className="btn btn-secondary btn-sm"
-                  disabled={withdrawing}
-                  aria-label="Withdraw application"
-                >
-                  {withdrawing ? 'Withdrawing...' : 'Withdraw Application'}
-                </button>
-                )}
-              </>
+                <>
+                  <span className={`status-pill status-${rawStatus || 'applied'}`}>
+                    {statusLabel(rawStatus || 'applied')}
+                  </span>
+                  {canWithdraw && (
+                    <button
+                      onClick={withdrawApplication}
+                      className="btn btn-secondary btn-sm"
+                      disabled={withdrawing}
+                      aria-label="Withdraw application"
+                    >
+                      {withdrawing ? 'Withdrawing...' : 'Withdraw Application'}
+                    </button>
+                  )}
+                </>
               ) : (
-              <button onClick={applyToJob} className="btn btn-primary btn-sm">
-                Apply
-              </button>
+                <button onClick={applyToJob} className="btn btn-primary btn-sm">
+                  Apply
+                </button>
               )
             ) : null}
-            </div>
           </div>
-          </div>
-
-          <div className="m-4 min-h-[400px]">{currentTab.render(job)}</div>
-
-          {isEditModalOpen && (
-          <JobModal onClose={() => setEditModalOpen(false)} job={job} onSuccess={handleEditSuccess} />
-          )}
         </div>
-        );
-      };
+      </div>
 
-      export { JobPage };
+      <div className="m-4 min-h-[400px]">{currentTab.render(job)}</div>
+
+      {isEditModalOpen && (
+        <JobModal onClose={() => setEditModalOpen(false)} job={job} onSuccess={handleEditSuccess} />
+      )}
+    </div>
+  );
+};
+
+export { JobPage };
