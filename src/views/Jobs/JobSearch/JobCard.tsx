@@ -13,7 +13,7 @@ export interface JobCardProps {
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
   // Hide any card that is not explicitly open
-  if (canApply && job.status !== 'open') return null;
+  if (job.status !== 'open' && !canEdit) return null;
 
   const statusText = (job.status ?? 'open')
     .replace(/_/g, ' ')
