@@ -63,7 +63,7 @@ const JobPage: FC = () => {
     ['applied', 'under_review', 'interview_requested'].includes(rawStatus);
 
   const fetchJob = useCallback(async () => {
-    if (!id ) return;
+    if (!id) return;
     try {
       const jobData = await getJobById(id, authHeader);
       setJob(jobData);
