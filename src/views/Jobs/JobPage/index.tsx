@@ -265,7 +265,7 @@ const JobPage: FC = () => {
                   disabled={updatingStatus}
                   title="Change job status"
                 >
-                  {statusLabel(job?.status ?? 'open')} <span aria-hidden>▾</span>
+                  {statusLabel(job?.status ?? 'open')} <span aria-hidden="true">▾</span>
                 </button>
               ) : (
                 <span
