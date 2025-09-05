@@ -30,9 +30,10 @@ export interface IApplicationPayload {
   };
 }
 
-export interface IUpdateApplicationStatusRequest {
+export interface IApplicationRequest {
   id: string;
   status?: ApplicationStatus;
+  jobId?: string;
 }
 
 export interface ICreateApplicationRequest {
@@ -62,7 +63,7 @@ export const getApplications = async (
   jobId?: string
 ): Promise<IApplicationPayload[]> => {
   const response = await axios.get(`${url}/getApplications`, {
-    params: jobId ? { jobId } : undefined,
+    params: { jobId: jobId },
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
@@ -73,7 +74,7 @@ export const getApplications = async (
 
 export const updateApplicationStatus = async (
   authHeader: string | null,
-  data: IUpdateApplicationStatusRequest
+  data: IApplicationRequest
 ): Promise<IApplicationPayload> => {
   if (!authHeader) throw new Error('Not authenticated');
   const resp = await axios.patch<IApplicationPayload>(`${url}/updateApplicationStatus`, data, {

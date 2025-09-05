@@ -1,11 +1,11 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IApplicationPayload, ApplicationStatus, updateApplicationStatus } from '../../api/application';
+import { IApplicationPayload, ApplicationStatus } from '../../api/application';
 import '../Companies/company.css';
 import './applications.css';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData, USER_PERMISSIONS } from '../../auth/store';
-import { getFullName, toTitleCase} from '../../util/name';
+import { getFullName, toTitleCase } from '../../util/name';
 import { toast } from 'react-toastify';
 
 interface Props {
@@ -17,7 +17,11 @@ interface Props {
   showJobPosition?: boolean;
 }
 
-export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus, showJobPosition = true }) => {
+export const ApplicationCard: FC<Props> = ({
+  application,
+  onUpdateStatus,
+  showJobPosition = true,
+}) => {
   const navigate = useNavigate();
   const user = useAuthUser<IUserData>();
   const isCompanyPermission = user?.permission === USER_PERMISSIONS.COMPANY;
@@ -125,11 +129,7 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus, showJo
             <div className="application-info">
               <div className="info-row">
                 <span className="info-label">Applied Date:</span>
-                <span className="info-value">
-                  {formatDate(
-                    (currentApp?.creationDate)
-                  )}
-                </span>
+                <span className="info-value">{formatDate(currentApp?.creationDate)}</span>
               </div>
 
               <div className="info-row" style={{ alignItems: 'center', gap: 8 }}>

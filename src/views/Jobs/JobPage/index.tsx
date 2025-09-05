@@ -10,7 +10,7 @@ import {
   createApplication,
   updateApplicationStatus,
   ApplicationStatus,
-  IUpdateApplicationStatusRequest,
+  IApplicationRequest,
   getApplications,
   IApplicationPayload,
 } from '../../../api/application';
@@ -25,7 +25,7 @@ import { toTitleCase } from '../../../util/name';
 type TabKey = 'overview' | 'requirements' | 'applications' | 'performance';
 // Title-case helper for statuses like "under_review" -> "Under Review"
 
-const JobPage: FC = () => {
+export const JobPage: FC = () => {
   const authHeader = useAuthHeader();
   const user = useAuthUser<IUserData>();
   const { id } = useParams<{ id: string }>();
@@ -44,13 +44,19 @@ const JobPage: FC = () => {
   const canEdit = Boolean(
     isCompany && user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
   );
-  const canApply = user?.permission === USER_PERMISSIONS.ATHLETE
-    && job?.status === JobStatus.Open && !job.hasApplied;
+  const canApply =
+    user?.permission === USER_PERMISSIONS.ATHLETE &&
+    job?.status === JobStatus.Open &&
+    !job.hasApplied;
   const canViewApplications = Boolean(isCompany && canEdit);
 
   const canWithdraw =
     Boolean(myApplication) &&
-    [ApplicationStatus.Applied, ApplicationStatus.UnderReview, ApplicationStatus.InterviewRequested].includes(myApplication?.status ?? ApplicationStatus.Applied);
+    [
+      ApplicationStatus.Applied,
+      ApplicationStatus.UnderReview,
+      ApplicationStatus.InterviewRequested,
+    ].includes(myApplication?.status ?? ApplicationStatus.Applied);
 
   const fetchJob = useCallback(async () => {
     if (!id) return;
@@ -89,7 +95,7 @@ const JobPage: FC = () => {
   }, [canViewApplications, activeTab]);
 
   const applyToJob = useCallback(async () => {
-    if (!authHeader || !job?.id) return;
+    if (!job?.id) return;
     try {
       await createApplication(authHeader, { jobId: job.id });
       toast.success('Successfully applied to job');
@@ -101,21 +107,20 @@ const JobPage: FC = () => {
 
   const updateStatus = useCallback(
     async (applicationId?: string, status?: ApplicationStatus): Promise<IApplicationPayload> => {
-      if (!authHeader) {
-        toast.error('Not authenticated');
-        throw new Error('Not authenticated');
-      }
-      if (!applicationId) throw new Error('Missing applicationId');
+      if (!applicationId){
+        toast.error('No application ID provided');
+        return Promise.reject();
+      };
 
       try {
-        const req: IUpdateApplicationStatusRequest = { id: applicationId, status };
+        const req: IApplicationRequest = { id: applicationId, status };
         const result = await updateApplicationStatus(authHeader, req);
         toast.success('Application status updated');
         if (myApplication?.id === applicationId) setMyApplication(result);
         return result;
       } catch (e) {
         toast.error('Failed to update application status');
-        throw e instanceof Error ? e : new Error('Failed to update application status');
+        return Promise.reject(e);
       }
     },
     [authHeader, myApplication?.id]
@@ -248,13 +253,13 @@ const JobPage: FC = () => {
                 <button
                   type="button"
                   className={`job-status-pill job-status-${job?.status ?? JobStatus.Open}`}
-                  onClick={() => setStatusMenuOpen(v => !v)}
+                  onClick={() => setStatusMenuOpen((v) => !v)}
                   aria-haspopup="true"
                   aria-expanded={statusMenuOpen}
                   disabled={updatingStatus}
                   title="Change job status"
                 >
-                  {(jobStatusLabel ?? JobStatus.Open)} <span aria-hidden="true">▾</span>
+                  {jobStatusLabel ?? JobStatus.Open} <span aria-hidden="true">▾</span>
                 </button>
               ) : (
                 <span
@@ -267,7 +272,7 @@ const JobPage: FC = () => {
 
               {canEdit && statusMenuOpen && (
                 <ul role="menu" className="status-dropdown">
-                  {Object.values(JobStatus).map(opt => (
+                  {Object.values(JobStatus).map((opt) => (
                     <li key={opt} role="none">
                       <button
                         role="menuitem"
@@ -286,16 +291,15 @@ const JobPage: FC = () => {
             </div>
 
             {canEdit ? (
-              <button
-                onClick={() => setEditModalOpen(true)}
-                className="btn btn-primary btn-sm"
-              >
+              <button onClick={() => setEditModalOpen(true)} className="btn btn-primary btn-sm">
                 Edit Job
               </button>
             ) : canApply ? (
               myApplication ? (
                 <>
-                  <span className={`status-pill status-${myApplication.status?.toString().toLowerCase()}`}>
+                  <span
+                    className={`status-pill status-${myApplication.status?.toString().toLowerCase()}`}
+                  >
                     {myAppStatusLabel}
                   </span>
                   {canWithdraw && (
@@ -328,4 +332,3 @@ const JobPage: FC = () => {
   );
 };
 
-export { JobPage };
