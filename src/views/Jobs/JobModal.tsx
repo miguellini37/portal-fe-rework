@@ -27,6 +27,7 @@ export const JobModal: React.FC<JobModalProps> = ({ job, onClose, onSuccess, com
     industry: job?.industry || '',
     applicationDeadline: job?.applicationDeadline,
     companyId: companyId,
+    status: job?.status || 'open',
   });
 
   const handleChange = (field: keyof ICreateOrUpdateJobPayload, value: string | number | Date) => {
