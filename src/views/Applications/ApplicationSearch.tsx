@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
-import { getApplications, IApplicationPayload } from '../../api/application';
+import { toast } from 'react-toastify';
+import {
+  getApplications,
+  updateApplicationStatus,
+  IApplicationPayload,
+  ApplicationStatus,
+} from '../../api/application';
 import { ApplicationCard } from './ApplicationCard';
 import '../Companies/company.css';
 import './applications.css';
@@ -15,12 +20,12 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
   pageTitle = 'My Applications',
   pageSubtitle = 'Track your job applications and their status',
 }) => {
-  const [applications, setApplications] = useState<IApplicationPayload[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
   const authHeader = useAuthHeader();
+  const [applications, setApplications] = useState<IApplicationPayload[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchApplications = async () => {
+  const fetchApplications = async (): Promise<void> => {
     setLoading(true);
     try {
       const data = await getApplications(authHeader);
@@ -35,6 +40,21 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
   useEffect(() => {
     fetchApplications();
   }, [authHeader]);
+
+  // Provide an updater so ApplicationCard can change status from this page
+  const handleUpdateStatus = async (
+    applicationId?: string,
+    status?: ApplicationStatus
+  ): Promise<IApplicationPayload> => {
+    if (!applicationId) throw new Error('Missing applicationId');
+
+    const updated = await updateApplicationStatus(authHeader, { id: applicationId, status });
+    setApplications(prev => prev.map(a => (a.id === updated.id ? updated : a)));
+
+    const s = String(updated.status ?? '').replace(/_/g, ' ');
+    toast.success(`Application ${s || 'updated'}`);
+    return updated;
+  };
 
   // Filter applications based on search term
   const filteredApplications = applications.filter((application) => {
@@ -82,8 +102,12 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
       </div>
 
       <div className="search-page-grid">
-        {filteredApplications.map((application) => (
-          <ApplicationCard key={application.id} application={application} />
+        {filteredApplications.map(app => (
+          <ApplicationCard
+            key={app.id}
+            application={app}
+            onUpdateStatus={handleUpdateStatus}
+          />
         ))}
       </div>
 
