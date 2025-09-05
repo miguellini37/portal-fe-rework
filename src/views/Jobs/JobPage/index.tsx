@@ -20,18 +20,10 @@ import { Overview } from './Overview';
 import { Requirements } from './Requirements';
 import { JobModal } from '../JobModal';
 import { Application } from './Applications';
+import { toTitleCase } from '../../../util/name';
 
 type TabKey = 'overview' | 'requirements' | 'applications' | 'performance';
-
-const toMs = (v?: string | Date) => {
-  if (!v) return 0;
-  if (v instanceof Date) return v.getTime();
-  const ms = Date.parse(v);
-  return Number.isNaN(ms) ? 0 : ms;
-};
-
-const normalizeStatus = (s?: unknown) =>
-  (typeof s === 'string' ? s : String(s ?? 'applied')).toLowerCase();
+// Title-case helper for statuses like "under_review" -> "Under Review"
 
 const JobPage: FC = () => {
   const authHeader = useAuthHeader();
@@ -47,20 +39,18 @@ const JobPage: FC = () => {
   // Job status dropdown state for company users who can edit
   const [statusMenuOpen, setStatusMenuOpen] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const JOB_STATUS_OPTIONS: JobStatus[] = ['open', 'closed', 'filled'];
 
   const isCompany = user?.permission === USER_PERMISSIONS.COMPANY;
   const canEdit = Boolean(
     isCompany && user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
   );
-  const canApply = user?.permission === USER_PERMISSIONS.ATHLETE 
-    && job?.status === JOB_STATUS_OPTIONS[0] && !job.hasApplied;
+  const canApply = user?.permission === USER_PERMISSIONS.ATHLETE
+    && job?.status === JobStatus.Open && !job.hasApplied;
   const canViewApplications = Boolean(isCompany && canEdit);
 
-  const rawStatus = normalizeStatus(myApplication?.status as string | undefined);
   const canWithdraw =
     Boolean(myApplication) &&
-    ['applied', 'under_review', 'interview_requested'].includes(rawStatus);
+    [ApplicationStatus.Applied, ApplicationStatus.UnderReview, ApplicationStatus.InterviewRequested].includes(myApplication?.status ?? ApplicationStatus.Applied);
 
   const fetchJob = useCallback(async () => {
     if (!id) return;
@@ -77,14 +67,8 @@ const JobPage: FC = () => {
     try {
       const apps = await getApplications(authHeader, job.id);
       if (apps?.length) {
-        apps.sort(
-          (a, b) =>
-            toMs((b.creationDate as Date) ?? b.createdDate) -
-            toMs((a.creationDate as Date) ?? a.createdDate)
-        );
         setMyApplication(apps[0]);
       } else {
-        toast.error('No application found for this job');
         setMyApplication(undefined);
       }
     } catch {
@@ -199,8 +183,6 @@ const JobPage: FC = () => {
     fetchJob();
   };
 
-  const statusLabel = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-
   const handleChangeJobStatus = useCallback(
     async (newStatus: JobStatus) => {
       if (!job?.id) return;
@@ -223,6 +205,13 @@ const JobPage: FC = () => {
     },
     [authHeader, job]
   );
+
+  // derive current application status (lowercased for CSS class) and title-cased label for UI
+  const myAppStatus = String(myApplication?.status ?? ApplicationStatus.Applied).toLowerCase();
+  const myAppStatusLabel = toTitleCase(myAppStatus);
+
+  const jobStatus = String(job?.status ?? JobStatus.Open).toLowerCase();
+  const jobStatusLabel = toTitleCase(jobStatus);
 
   if (!job) {
     return (
@@ -258,27 +247,27 @@ const JobPage: FC = () => {
               {canEdit ? (
                 <button
                   type="button"
-                  className={`job-status-pill job-status-${job?.status ?? 'open'}`}
+                  className={`job-status-pill job-status-${job?.status ?? JobStatus.Open}`}
                   onClick={() => setStatusMenuOpen(v => !v)}
                   aria-haspopup="true"
                   aria-expanded={statusMenuOpen}
                   disabled={updatingStatus}
                   title="Change job status"
                 >
-                  {statusLabel(job?.status ?? 'open')} <span aria-hidden="true">▾</span>
+                  {(jobStatusLabel ?? JobStatus.Open)} <span aria-hidden="true">▾</span>
                 </button>
               ) : (
                 <span
-                  className={`job-status-pill job-status-${job?.status ?? 'open'}`}
-                  aria-label={`Job status: ${statusLabel(job?.status ?? 'open')}`}
+                  className={`job-status-pill job-status-${job?.status ?? JobStatus.Open}`}
+                  aria-label={`Job status: ${jobStatusLabel}`}
                 >
-                  {statusLabel(job?.status ?? 'open')}
+                  {jobStatusLabel}
                 </span>
               )}
 
               {canEdit && statusMenuOpen && (
                 <ul role="menu" className="status-dropdown">
-                  {JOB_STATUS_OPTIONS.map(opt => (
+                  {Object.values(JobStatus).map(opt => (
                     <li key={opt} role="none">
                       <button
                         role="menuitem"
@@ -286,8 +275,9 @@ const JobPage: FC = () => {
                         className={`status-dropdown-item ${job?.status === opt ? 'active' : ''}`}
                         onClick={() => handleChangeJobStatus(opt)}
                         disabled={updatingStatus}
+                        aria-pressed={job?.status === opt}
                       >
-                        {statusLabel(opt)}
+                        {toTitleCase(String(opt))}
                       </button>
                     </li>
                   ))}
@@ -305,8 +295,8 @@ const JobPage: FC = () => {
             ) : canApply ? (
               myApplication ? (
                 <>
-                  <span className={`status-pill status-${rawStatus || 'applied'}`}>
-                    {statusLabel(rawStatus || 'applied')}
+                  <span className={`status-pill status-${myApplication.status?.toString().toLowerCase()}`}>
+                    {myAppStatusLabel}
                   </span>
                   {canWithdraw && (
                     <button

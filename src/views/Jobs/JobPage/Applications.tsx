@@ -47,12 +47,10 @@ export const Application: FC<CompanyApplicationsProps> = ({
   const filteredApplications = useMemo(() => {
     const q = searchTerm.toLowerCase();
     const getCreatedAtMs = (app: IApplicationPayload): number => {
-      const creationDate = (app as IApplicationPayload & { creationDate?: string }).creationDate;
-      const createdDate = app.createdDate as Date | undefined;
-      const value = creationDate ?? createdDate;
-      if (!value) return 0;
-      if (value instanceof Date) return value.getTime();
-      const ms = Date.parse(value);
+      const creationDate = app.creationDate;
+      if (!creationDate) return 0;
+      if (creationDate instanceof Date) return creationDate.getTime();
+      const ms = Date.parse(creationDate);
       return Number.isNaN(ms) ? 0 : ms;
     };
 
@@ -116,6 +114,7 @@ export const Application: FC<CompanyApplicationsProps> = ({
             key={application.id}
             application={application}
             onUpdateStatus={onUpdateStatus}
+            showJobPosition={false}
           />
         ))}
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import './JobPostingsDashboard.css';
-import { IJobPayload } from '../../../api/job';
+import { IJobPayload, JobStatus } from '../../../api/job';
 import { NavLink } from 'react-router-dom';
 
 export interface JobCardProps {
@@ -13,9 +13,9 @@ export interface JobCardProps {
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
   // Hide any card that is not explicitly open
-  if (job.status !== 'open' && !canEdit) return null;
+  if (job.status !== JobStatus.Open && !canEdit) return null;
 
-  const statusText = (job.status ?? 'open')
+  const statusText = (job.status ?? JobStatus.Open)
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
   const showAppliedBadge = Boolean(!canEdit && !canApply);
@@ -36,7 +36,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
           {/* Status pill */}
           {job.status && (
             <span
-              className={`job-status-pill job-status-${job.status}`}
+              className={`job-status-pill job-status-${job.status.toString().toLowerCase()}`}
               aria-label={`Job status: ${statusText}`}
             >
               {statusText}

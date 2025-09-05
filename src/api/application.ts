@@ -1,18 +1,18 @@
 import axios from 'axios';
 import { url } from '../config/url';
 
-export type ApplicationStatus =
-  | 'applied'
-  | 'under_review'
-  | 'interview_requested'
-  | 'accepted'
-  | 'rejected'
-  | 'withdrawn';
+export enum ApplicationStatus {
+  Applied = 'applied',
+  UnderReview = 'under_review',
+  InterviewRequested = 'interview_requested',
+  Accepted = 'accepted',
+  Rejected = 'rejected',
+  Withdrawn = 'withdrawn',
+}
 export interface IApplicationPayload {
   id?: string;
   jobId: string;
   athleteId?: string;
-  createdDate?: Date;
   creationDate?: Date;
   status?: ApplicationStatus;
   job?: {

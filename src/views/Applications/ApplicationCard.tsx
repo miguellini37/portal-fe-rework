@@ -1,11 +1,11 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IApplicationPayload, ApplicationStatus } from '../../api/application';
+import { IApplicationPayload, ApplicationStatus, updateApplicationStatus } from '../../api/application';
 import '../Companies/company.css';
 import './applications.css';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData, USER_PERMISSIONS } from '../../auth/store';
-import { getFullName } from '../../util/name';
+import { getFullName, toTitleCase} from '../../util/name';
 import { toast } from 'react-toastify';
 
 interface Props {
@@ -14,9 +14,10 @@ interface Props {
     applicationId?: string,
     status?: ApplicationStatus
   ) => IApplicationPayload | Promise<IApplicationPayload>;
+  showJobPosition?: boolean;
 }
 
-export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
+export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus, showJobPosition = true }) => {
   const navigate = useNavigate();
   const user = useAuthUser<IUserData>();
   const isCompanyPermission = user?.permission === USER_PERMISSIONS.COMPANY;
@@ -24,6 +25,9 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
 
   const [loading, setLoading] = useState(false);
   const [currentApp, setCurrentApp] = useState<IApplicationPayload>(application);
+
+  const myAppStatus = String(currentApp?.status ?? ApplicationStatus.Applied).toLowerCase();
+  const statusText = toTitleCase(myAppStatus);
 
   useEffect(() => {
     setCurrentApp(application);
@@ -39,18 +43,20 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
     }
   };
 
-  const getStatusColor = (status: string | undefined): string => {
-    switch (status?.toLowerCase()) {
-      case 'applied':
+  const getStatusColor = (status: ApplicationStatus | undefined): string => {
+    switch (status) {
+      case ApplicationStatus.Applied:
         return '#6b7280';
-      case 'under_review':
+      case ApplicationStatus.UnderReview:
         return '#3b82f6';
-      case 'interview_requested':
+      case ApplicationStatus.InterviewRequested:
         return '#6d28d9';
-      case 'accepted':
+      case ApplicationStatus.Accepted:
         return '#10b981';
-      case 'rejected':
+      case ApplicationStatus.Rejected:
         return '#ef4444';
+      case ApplicationStatus.Withdrawn:
+        return '#f97316';
       default:
         return '#6b7280';
     }
@@ -83,22 +89,14 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
     [currentApp?.id, onUpdateStatus]
   );
 
-  const statusStr = String(currentApp?.status ?? 'applied').toLowerCase();
-  const statusColor = getStatusColor(statusStr);
+  const statusColor = getStatusColor(currentApp?.status ?? ApplicationStatus.Applied);
 
   const openJob = useCallback(() => {
     const jobId = currentApp?.job?.id;
     if (!jobId) return;
     // navigate to JobPage route and include application id in location state (optional)
-    navigate(`/job/${jobId}`, { state: { applicationId: currentApp?.id } });
+    navigate(`/job/${jobId}`);
   }, [currentApp?.job?.id, currentApp?.id, navigate]);
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      openJob();
-    }
-  };
 
   return (
     <div
@@ -106,7 +104,6 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
       role="button"
       tabIndex={0}
       onClick={openJob}
-      onKeyDown={onKeyDown}
       aria-label={`Open job ${currentApp?.job?.position ?? 'job'}`}
     >
       <div className="company-card-layout">
@@ -114,7 +111,7 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
           <div className="company-header">
             <div className="company-title-section">
               <h3 className="company-title">
-                {currentApp?.job?.position || 'Position not specified'}
+                {showJobPosition && (currentApp?.job?.position || 'Position not specified')}
               </h3>
               {!isCompanyPermission && (
                 <div className="company-industry">
@@ -130,8 +127,7 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
                 <span className="info-label">Applied Date:</span>
                 <span className="info-value">
                   {formatDate(
-                    (currentApp as IApplicationPayload & { creationDate?: string }).creationDate ??
-                      currentApp?.createdDate
+                    (currentApp?.creationDate)
                   )}
                 </span>
               </div>
@@ -153,9 +149,9 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
                       textTransform: 'capitalize',
                       display: 'inline-block',
                     }}
-                    aria-label={`Status: ${statusStr}`}
+                    aria-label={`Status: ${statusText}`}
                   >
-                    {statusStr.replace(/_/g, ' ')}
+                    {statusText}
                   </span>
                 </span>
               </div>
@@ -216,7 +212,11 @@ export const ApplicationCard: FC<Props> = ({ application, onUpdateStatus }) => {
 
             {isAthletePermission && (
               <>
-                {['applied', 'under_review', 'interview_requested'].includes(statusStr) ? (
+                {[
+                  ApplicationStatus.Applied,
+                  ApplicationStatus.UnderReview,
+                  ApplicationStatus.InterviewRequested,
+                ].includes(currentApp?.status ?? ApplicationStatus.Applied) ? (
                   <button
                     type="button"
                     className="action-btn danger"

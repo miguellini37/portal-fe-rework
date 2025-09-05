@@ -66,9 +66,9 @@
 }
 /* Applied = gray/neutral */
 .status-applied {
-  background: #f3f4f6;      /* light gray */
-  color: #374151;           /* dark slate text */
-  border-color: rgba(55, 65, 81, 0.2);
+  background: #fef3c7;      /* amber-100 */
+  color: #92400e;           /* amber-800 */
+  border-color: rgba(180, 83, 9, 0.25);
 }
 
 /* Under review = blue */
@@ -101,9 +101,9 @@
 
 /* Withdrawn = slate */
 .status-withdrawn {
-  background: #e5e7eb;      /* gray-200 */
-  color: #374151;           /* gray-700 */
-  border-color: rgba(55, 65, 81, 0.2);
+  background: #f1f5f9;      /* slate-100 */
+  color: #334155;           /* slate-700 */
+  border-color: rgba(51, 65, 85, 0.2);
 }
 
 /* moved styles from inline to CSS */

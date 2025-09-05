@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createJob, IJobPayload, ICreateOrUpdateJobPayload, updateJob } from '../../api/job';
+import { createJob, IJobPayload, ICreateOrUpdateJobPayload, updateJob, JobStatus } from '../../api/job';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
@@ -27,7 +27,7 @@ export const JobModal: React.FC<JobModalProps> = ({ job, onClose, onSuccess, com
     industry: job?.industry || '',
     applicationDeadline: job?.applicationDeadline,
     companyId: companyId,
-    status: job?.status || 'open',
+    status: job?.status || JobStatus.Open,
   });
 
   const handleChange = (field: keyof ICreateOrUpdateJobPayload, value: string | number | Date) => {

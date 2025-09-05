@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { url } from '../config/url';
 
-export type JobStatus = 'open' | 'closed' | 'filled';
+export enum JobStatus {
+  Open = 'open',
+  Closed = 'closed',
+  Filled = 'filled',
+}
 
 export interface IJobPayload {
   id: string;
