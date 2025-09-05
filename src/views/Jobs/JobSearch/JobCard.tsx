@@ -15,7 +15,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
   // Hide any card that is not explicitly open
   if (canApply && job.status !== 'open') return null;
 
-  const statusText = (job.status ?? 'open').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const statusText = (job.status ?? 'open')
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+  const showAppliedBadge = Boolean(!canEdit && !canApply);
 
   return (
     <div className="job-card">
@@ -32,7 +35,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
 
           {/* Status pill */}
           {job.status && (
-            <span className={`job-status-pill job-status-${job.status}`} aria-label={`Job status: ${statusText}`}>
+            <span
+              className={`job-status-pill job-status-${job.status}`}
+              aria-label={`Job status: ${statusText}`}
+            >
               {statusText}
             </span>
           )}
@@ -42,7 +48,9 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
           <div className="job-info">
             {job.salary && <div className="salary-info">${job.salary.toLocaleString()}</div>}
             <div className="job-meta-info">
-              {job.createdDate && <div>Posted {new Date(job.createdDate).toLocaleDateString()}</div>}
+              {job.createdDate && (
+                <div>Posted {new Date(job.createdDate).toLocaleDateString()}</div>
+              )}
               {job.industry && <div>{job.industry}</div>}
               {job.applicationDeadline && (
                 <div>Apply by {new Date(job.applicationDeadline).toLocaleDateString()}</div>
@@ -58,6 +66,11 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
           <button className="action-btn primary job-card-action" onClick={() => onView(job)}>
             Edit Job
           </button>
+        )}
+        {showAppliedBadge && (
+          <span className="applied-badge job-card-action" aria-label="You have applied to this job" aria-disabled="true">
+            Applied
+          </span>
         )}
         {canApply && (
           <button className="action-btn primary job-card-action" onClick={() => onApply?.(job)}>

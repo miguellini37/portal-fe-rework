@@ -185,3 +185,13 @@
   font-weight: 600;
   background: #eef2ff;
 }
+.applied-badge {
+  background: #09d163af;    /* green background */
+  color: #ffffff;         /* white text */
+  border: 2px solid #04d160;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 16px;
+  cursor: default;
+  user-select: none;
+}
