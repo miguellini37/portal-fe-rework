@@ -23,6 +23,7 @@ export interface IJobPayload {
     industry?: string;
   };
   status?: JobStatus;
+  hasApplied?: boolean; // Indicates if the current user has applied to this job
 }
 
 export const getJobById = async (id: string, authHeader: string | null): Promise<IJobPayload> => {

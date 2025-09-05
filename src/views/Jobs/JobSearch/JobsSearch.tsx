@@ -92,7 +92,7 @@ export const JobSearch = ({
             job={job}
             onView={handleViewJob}
             canEdit={canEditJobs}
-            canApply={canApplyToJob}
+            canApply={!job.hasApplied && canApplyToJob}
             onApply={applyToJob}
           />
         ))}

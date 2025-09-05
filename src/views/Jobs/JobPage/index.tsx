@@ -53,7 +53,8 @@ const JobPage: FC = () => {
   const canEdit = Boolean(
     isCompany && user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
   );
-  const canApply = user?.permission === USER_PERMISSIONS.ATHLETE;
+  const canApply = user?.permission === USER_PERMISSIONS.ATHLETE 
+    && job?.status === JOB_STATUS_OPTIONS[0] && !job.hasApplied;
   const canViewApplications = Boolean(isCompany && canEdit);
 
   const rawStatus = normalizeStatus(myApplication?.status as string | undefined);
@@ -62,7 +63,7 @@ const JobPage: FC = () => {
     ['applied', 'under_review', 'interview_requested'].includes(rawStatus);
 
   const fetchJob = useCallback(async () => {
-    if (!id) return;
+    if (!id ) return;
     try {
       const jobData = await getJobById(id, authHeader);
       setJob(jobData);
