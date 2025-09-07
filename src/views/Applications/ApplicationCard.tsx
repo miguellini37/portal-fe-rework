@@ -68,21 +68,21 @@ export const ApplicationCard: FC<Props> = ({
 
   // Unified helper for status updates (Reject / Accept / Request Interview / Withdraw)
   const handleUpdate = useCallback(
-    async (status: string) => {
+    async (status: ApplicationStatus) => {
       if (!currentApp?.id) return;
       setLoading(true);
       try {
         let result: IApplicationPayload | undefined;
 
         if (onUpdateStatus) {
-          result = await onUpdateStatus(currentApp.id, status as ApplicationStatus);
+          result = await onUpdateStatus(currentApp.id, status);
         }
 
         if (result) {
           setCurrentApp(result);
         } else {
-          // If parent didn't return payload, optimistically update status
-          setCurrentApp((prev) => ({ ...(prev ?? {}), status: status as ApplicationStatus }));
+          // optimistic update
+          setCurrentApp((prev) => (prev ? { ...prev, status } : prev));
         }
       } catch {
         toast.error('Failed to update application');
@@ -176,31 +176,33 @@ export const ApplicationCard: FC<Props> = ({
                   className="action-btn primary"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleUpdate('accepted');
+                    handleUpdate(ApplicationStatus.Accepted);
                   }}
                   disabled={loading}
                   aria-label="Accept application"
                 >
                   Accept
                 </button>
+
                 <button
                   type="button"
                   className="action-btn secondary"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleUpdate('interview_requested');
+                    handleUpdate(ApplicationStatus.InterviewRequested);
                   }}
                   disabled={loading}
                   aria-label="Request interview"
                 >
                   Request Interview
                 </button>
+
                 <button
                   type="button"
                   className="action-btn danger"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleUpdate('rejected');
+                    handleUpdate(ApplicationStatus.Rejected);
                   }}
                   disabled={loading}
                   aria-label="Reject application"
@@ -222,7 +224,7 @@ export const ApplicationCard: FC<Props> = ({
                     className="action-btn danger"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleUpdate('withdrawn');
+                      handleUpdate(ApplicationStatus.Withdrawn);
                     }}
                     disabled={loading}
                     aria-label="Withdraw application"
