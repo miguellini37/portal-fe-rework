@@ -116,7 +116,13 @@ export const JobModal: React.FC<JobModalProps> = ({ job, onClose, onSuccess, com
                         ? new Date(jobData.applicationDeadline).toISOString().split('T')[0]
                         : ''
                     }
-                    onChange={(e) => handleChange('applicationDeadline', new Date(e.target.value))}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const date = new Date(value);
+                      if (value && !isNaN(date.getTime()) && value === date.toISOString().split('T')[0]) {
+                        handleChange('applicationDeadline', date);
+                      }
+                    }}
                   />
                 </div>
               </div>
