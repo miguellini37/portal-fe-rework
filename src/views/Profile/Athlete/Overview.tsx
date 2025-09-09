@@ -24,19 +24,19 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
   const [customSkill, setCustomSkill] = useState('');
   const [showAllSkills, setShowAllSkills] = useState(false);
 
-  const athleteSkills = athlete.skills || [];
+  const athleteSkills = athlete?.athletics?.skills || [];
   const allAvailableSkills = Array.from(new Set([...PREDEFINED_SKILLS, ...athleteSkills]));
 
   const handleSkillToggle = (skill: string) => {
     const newSkills = athleteSkills.includes(skill)
       ? athleteSkills.filter((s) => s !== skill)
       : [...athleteSkills, skill];
-    setAthlete((a) => ({ ...a, skills: newSkills }));
+    setAthlete((a) => ({ ...a, athletics: { ...a?.athletics, skills: newSkills } }));
   };
 
   const handleAddCustomSkill = () => {
     if (customSkill && !athleteSkills.includes(customSkill)) {
-      setAthlete((a) => ({ ...a, skills: [...(a.skills || []), customSkill] }));
+      setAthlete((a) => ({ ...a, athletics: { ...a?.athletics, skills: [...(a?.athletics?.skills || []), customSkill] } }));
       setCustomSkill('');
     }
   };
@@ -193,7 +193,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
           <ul className="completion-list">
             {renderProfileCompletion('🧍 Personal Info', {
               ...overViewInfo,
-              skills: athlete.skills,
+              athletics: { skills: athlete.athletics?.skills },
             })}
             {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
             {renderProfileCompletion('🏆 Athletic Info', { athletics })}

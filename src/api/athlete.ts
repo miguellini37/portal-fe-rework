@@ -21,6 +21,7 @@ export interface AthleticsPayload {
   leadershipRoles?: string;
   achievements?: string;
   statistics?: string;
+  skills?: string[];
 }
 
 export interface IUpdateAthletePayload {
@@ -30,7 +31,6 @@ export interface IUpdateAthletePayload {
   phone?: string;
   location?: string;
   bio?: string;
-  skills?: string[];
   academics?: AcademicsPayload;
   athletics?: AthleticsPayload;
   schoolRef?: ISchoolPaylod;
