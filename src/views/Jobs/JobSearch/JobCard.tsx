@@ -1,7 +1,6 @@
 import React from 'react';
 import './JobPostingsDashboard.css';
-import { IJobPayload } from '../../../api/job';
-import { useNavigate } from 'react-router';
+import { IJobPayload, JobStatus } from '../../../api/job';
 import { NavLink } from 'react-router-dom';
 
 export interface JobCardProps {
@@ -13,7 +12,13 @@ export interface JobCardProps {
 }
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
-  const navigate = useNavigate();
+  // Hide any card that is not explicitly open
+  if (job.status !== JobStatus.Open && !canEdit) return null;
+
+  const statusText = (job.status ?? JobStatus.Open)
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+  const showAppliedBadge = Boolean(!canEdit && !canApply);
 
   return (
     <div className="job-card">
@@ -27,6 +32,16 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
               <span className="job-experience-tag">{job.experience || 'Entry Level'}</span>
             </div>
           </div>
+
+          {/* Status pill */}
+          {job.status && (
+            <span
+              className={`job-status-pill job-status-${job.status.toString().toLowerCase()}`}
+              aria-label={`Job status: ${statusText}`}
+            >
+              {statusText}
+            </span>
+          )}
         </div>
 
         <div className="job-details">
@@ -45,18 +60,24 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
         </div>
       </div>
 
-      <div className="job-actions">
+      {/* Actions: centered, same size, same row */}
+      <div className="job-card-actions">
         {canEdit && (
-          <button className="action-btn primary" onClick={() => onView(job)}>
+          <button className="action-btn primary job-card-action" onClick={() => onView(job)}>
             Edit Job
           </button>
         )}
+        {showAppliedBadge && (
+          <span className="applied-badge job-card-action" aria-label="You have applied to this job" aria-disabled="true">
+            Applied
+          </span>
+        )}
         {canApply && (
-          <button className="action-btn primary" onClick={() => onApply?.(job)}>
+          <button className="action-btn primary job-card-action" onClick={() => onApply?.(job)}>
             Apply
           </button>
         )}
-        <NavLink className="action-btn secondary" to={`/job/${job.id}`}>
+        <NavLink className="action-btn secondary job-card-action" to={`/job/${job.id}`}>
           View Full Job Details
         </NavLink>
       </div>

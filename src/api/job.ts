@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { url } from '../config/url';
 
+export enum JobStatus {
+  Open = 'open',
+  Closed = 'closed',
+  Filled = 'filled',
+}
+
 export interface IJobPayload {
   id: string;
   position?: string;
@@ -20,6 +26,8 @@ export interface IJobPayload {
     companyName?: string;
     industry?: string;
   };
+  status?: JobStatus;
+  hasApplied?: boolean; // Indicates if the current user has applied to this job
 }
 
 export const getJobById = async (id: string, authHeader: string | null): Promise<IJobPayload> => {
@@ -64,6 +72,7 @@ export interface ICreateOrUpdateJobPayload {
   requirements?: string;
   location?: string;
   salary?: number;
+  status?: JobStatus;
 }
 
 export const createJob = async (

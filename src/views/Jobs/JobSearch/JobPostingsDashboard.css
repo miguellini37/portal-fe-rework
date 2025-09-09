@@ -581,6 +581,31 @@
   background: #e5e7eb;
 }
 
+/* Ensure JobCard actions align horizontally and don't get overridden */
+.job-card-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap; /* wrap nicely on small screens */
+  margin-top: 12px;
+}
+
+/* Keep buttons inline-sized (avoid 100% width anchors) */
+.job-card-actions .action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 0;
+  text-decoration: none; /* for NavLink look like button */
+}
+
+/* Optional: keep consistent padding if your global .action-btn differs for <a> */
+.job-card-actions a.action-btn {
+  padding: 10px 16px;
+}
+
 /* Empty State */
 .empty-state {
   text-align: center;
