@@ -23,7 +23,6 @@ import { Application } from './Applications';
 import { toTitleCase } from '../../../util/name';
 
 type TabKey = 'overview' | 'requirements' | 'applications' | 'performance';
-// Title-case helper for statuses like "under_review" -> "Under Review"
 
 export const JobPage: FC = () => {
   const authHeader = useAuthHeader();
