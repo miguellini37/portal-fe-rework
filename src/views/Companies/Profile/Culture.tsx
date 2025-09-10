@@ -99,7 +99,9 @@ export const CultureTab: React.FC<Props> = ({ company, setCompany, editMode }) =
       className="culture-grid card"
       contentEditable={false}
       onKeyDownCapture={(e) => {
-        if (editMode) e.stopPropagation();
+        if (editMode) {
+          e.stopPropagation();
+        }
       }}
     >
       <section className="card values-card">

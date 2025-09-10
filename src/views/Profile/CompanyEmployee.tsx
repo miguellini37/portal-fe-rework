@@ -30,7 +30,9 @@ export const CompanyEmployeeProfile = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     fetchCompany();
   }, [id]);
 

@@ -46,10 +46,12 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
     applicationId?: string,
     status?: ApplicationStatus
   ): Promise<IApplicationPayload> => {
-    if (!applicationId) throw new Error('Missing applicationId');
+    if (!applicationId) {
+      throw new Error('Missing applicationId');
+    }
 
     const updated = await updateApplicationStatus(authHeader, { id: applicationId, status });
-    setApplications(prev => prev.map(a => (a.id === updated.id ? updated : a)));
+    setApplications((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
 
     const s = String(updated.status ?? '').replace(/_/g, ' ');
     toast.success(`Application ${s || 'updated'}`);
@@ -102,12 +104,8 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
       </div>
 
       <div className="search-page-grid">
-        {filteredApplications.map(app => (
-          <ApplicationCard
-            key={app.id}
-            application={app}
-            onUpdateStatus={handleUpdateStatus}
-          />
+        {filteredApplications.map((app) => (
+          <ApplicationCard key={app.id} application={app} onUpdateStatus={handleUpdateStatus} />
         ))}
       </div>
 

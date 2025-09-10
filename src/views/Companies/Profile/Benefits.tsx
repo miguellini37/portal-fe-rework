@@ -203,7 +203,9 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
   const applyPreset = (i: number, id: string) =>
     upCats((cs) => {
       const p = byId[id];
-      if (!p) return cs;
+      if (!p) {
+        return cs;
+      }
       return cs.map((c, j) =>
         j === i ? { ...c, title: p.title, icon: p.icon, description: [...p.suggestions] } : c
       );
@@ -272,11 +274,12 @@ export const BenefitsTab: React.FC<Props> = ({ company, setCompany, editMode }) 
             onChange={onItems}
             onCreateOption={(v) => {
               const t = v.trim();
-              if (t)
+              if (t) {
                 updCat(i, (x) => ({
                   ...x,
                   description: Array.from(new Set([...(x.description ?? []), t])),
                 }));
+              }
             }}
             closeMenuOnSelect={false}
             styles={{

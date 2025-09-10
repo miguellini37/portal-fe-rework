@@ -34,7 +34,9 @@ export const CompanyProfile = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     fetchCompany();
   }, [id]);
 
@@ -57,7 +59,9 @@ export const CompanyProfile = () => {
   };
 
   const handleCancelClick = async () => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     try {
       const refreshedData = await getCompanyById(id as string, authHeader);
       setCompany(refreshedData);
@@ -92,9 +96,7 @@ export const CompanyProfile = () => {
     {
       key: 'overview',
       label: 'Overview',
-      component: (company: IUpdateCompanyEmployeePayload) => (
-        <OverviewTab company={company} editMode={editMode} setCompany={setCompany} />
-      ),
+      component: (company: IUpdateCompanyEmployeePayload) => <OverviewTab company={company} />,
     },
     {
       key: 'culture',

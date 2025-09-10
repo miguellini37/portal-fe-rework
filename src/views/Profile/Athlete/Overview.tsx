@@ -36,7 +36,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
 
   const handleAddCustomSkill = () => {
     if (customSkill && !athleteSkills.includes(customSkill)) {
-      setAthlete((a) => ({ ...a, athletics: { ...a?.athletics, skills: [...(a?.athletics?.skills || []), customSkill] } }));
+      setAthlete((a) => ({
+        ...a,
+        athletics: { ...a?.athletics, skills: [...(a?.athletics?.skills || []), customSkill] },
+      }));
       setCustomSkill('');
     }
   };
@@ -45,7 +48,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
 
   // Recursively count all fields and filled fields
   const countFields = (obj: any): { total: number; filled: number } => {
-    if (typeof obj !== 'object' || obj === null) return { total: 0, filled: 0 };
+    if (typeof obj !== 'object' || obj === null) {
+      return { total: 0, filled: 0 };
+    }
     let total = 0;
     let filled = 0;
     for (const key of Object.keys(obj)) {
@@ -56,7 +61,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
         filled += nested.filled;
       } else {
         total += 1;
-        if (!isNil(value) && value !== '') filled += 1;
+        if (!isNil(value) && value !== '') {
+          filled += 1;
+        }
       }
     }
     return { total, filled };

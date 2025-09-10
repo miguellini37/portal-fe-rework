@@ -13,7 +13,9 @@ export interface JobCardProps {
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
   // Hide any card that is not explicitly open
-  if (job.status !== JobStatus.Open && !canEdit) return null;
+  if (job.status !== JobStatus.Open && !canEdit) {
+    return null;
+  }
 
   const statusText = (job.status ?? JobStatus.Open)
     .replace(/_/g, ' ')
@@ -68,7 +70,11 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
           </button>
         )}
         {showAppliedBadge && (
-          <span className="applied-badge job-card-action" aria-label="You have applied to this job" aria-disabled="true">
+          <span
+            className="applied-badge job-card-action"
+            aria-label="You have applied to this job"
+            aria-disabled="true"
+          >
             Applied
           </span>
         )}

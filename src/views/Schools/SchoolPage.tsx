@@ -25,7 +25,9 @@ export const SchoolPage = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     fetchSchool();
   }, [id]);
 

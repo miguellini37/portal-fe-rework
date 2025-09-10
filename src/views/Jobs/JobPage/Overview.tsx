@@ -7,11 +7,15 @@ interface OverviewTabProps {
 
 export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
   const formatSalary = (salary: number | undefined) => {
-    if (!salary) return 'Not specified';
+    if (!salary) {
+      return 'Not specified';
+    }
     return `$${salary.toLocaleString()}`;
   };
   const formatDate = (date: Date | string | undefined) => {
-    if (!date) return 'N/A';
+    if (!date) {
+      return 'N/A';
+    }
     try {
       const dateObj = new Date(date);
       return dateObj.toLocaleDateString('en-US', {

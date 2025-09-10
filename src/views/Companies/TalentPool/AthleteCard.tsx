@@ -10,7 +10,7 @@ export interface AthleteCardProps {
 }
 
 export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
-  const { academics, athletics, schoolRef, email, phone, location, bio } = athlete;
+  const { academics, athletics, schoolRef, location } = athlete;
 
   return (
     <div className="athlete-card">

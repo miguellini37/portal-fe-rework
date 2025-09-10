@@ -25,7 +25,9 @@ export const AthleteProfile = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     getAthleteById(id as string, authHeader)
       .then((data) => {
         setAthlete(data);

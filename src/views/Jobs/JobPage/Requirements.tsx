@@ -8,7 +8,9 @@ interface Props {
 export const Requirements: FC<Props> = ({ job }) => {
   // Helper function to parse requirements from description or dedicated fields
   const parseRequirements = (text: string): string[] => {
-    if (!text) return [];
+    if (!text) {
+      return [];
+    }
 
     // Look for bullet points, numbered lists, or line breaks
     const lines = text.split(/\n|\r\n|\r/);

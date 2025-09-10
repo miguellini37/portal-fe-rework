@@ -76,9 +76,11 @@ export const updateApplicationStatus = async (
   authHeader: string | null,
   data: IApplicationRequest
 ): Promise<IApplicationPayload> => {
-  if (!authHeader) throw new Error('Not authenticated');
-  const resp = await axios.patch<IApplicationPayload>(`${url}/updateApplicationStatus`, data, {
+  if (!authHeader) {
+    throw new Error('Not authenticated');
+  }
+  const res = await axios.patch<IApplicationPayload>(`${url}/updateApplicationStatus`, data, {
     headers: { Authorization: authHeader },
   });
-  return resp.data;
+  return res.data;
 };

@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { createJob, IJobPayload, ICreateOrUpdateJobPayload, updateJob, JobStatus } from '../../api/job';
+import {
+  createJob,
+  IJobPayload,
+  ICreateOrUpdateJobPayload,
+  updateJob,
+  JobStatus,
+} from '../../api/job';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
@@ -119,7 +125,11 @@ export const JobModal: React.FC<JobModalProps> = ({ job, onClose, onSuccess, com
                     onChange={(e) => {
                       const value = e.target.value;
                       const date = new Date(value);
-                      if (value && !isNaN(date.getTime()) && value === date.toISOString().split('T')[0]) {
+                      if (
+                        value &&
+                        !isNaN(date.getTime()) &&
+                        value === date.toISOString().split('T')[0]
+                      ) {
                         handleChange('applicationDeadline', date);
                       }
                     }}

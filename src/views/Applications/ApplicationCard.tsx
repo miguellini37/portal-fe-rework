@@ -38,7 +38,9 @@ export const ApplicationCard: FC<Props> = ({
   }, [application]);
 
   const formatDate = (date: Date | string | undefined): string => {
-    if (!date) return 'N/A';
+    if (!date) {
+      return 'N/A';
+    }
     try {
       const d = new Date(date);
       return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -69,7 +71,9 @@ export const ApplicationCard: FC<Props> = ({
   // Unified helper for status updates (Reject / Accept / Request Interview / Withdraw)
   const handleUpdate = useCallback(
     async (status: ApplicationStatus) => {
-      if (!currentApp?.id) return;
+      if (!currentApp?.id) {
+        return;
+      }
       setLoading(true);
       try {
         let result: IApplicationPayload | undefined;
@@ -97,7 +101,9 @@ export const ApplicationCard: FC<Props> = ({
 
   const openJob = useCallback(() => {
     const jobId = currentApp?.job?.id;
-    if (!jobId) return;
+    if (!jobId) {
+      return;
+    }
     // navigate to JobPage route and include application id in location state (optional)
     navigate(`/job/${jobId}`);
   }, [currentApp?.job?.id, currentApp?.id, navigate]);

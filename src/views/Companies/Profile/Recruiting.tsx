@@ -19,7 +19,9 @@ const STRATEGY_PRESETS: RecruitingCategory[] = [
 ];
 
 const ensureRecruiting = (r?: IRecruitingPayload | null): Required<IRecruitingPayload> => {
-  if (r && r.strategy && r.processSteps && r.recruiterIds) return r as Required<IRecruitingPayload>;
+  if (r && r.strategy && r.processSteps && r.recruiterIds) {
+    return r as Required<IRecruitingPayload>;
+  }
   return {
     strategy: r?.strategy ?? [],
     processSteps: r?.processSteps ?? [],
@@ -49,7 +51,9 @@ export const RecruitingTab: FC<Props> = ({ company, editMode, setCompany }) => {
         const prevR = ensureRecruiting(prev.recruiting);
         const nextR = fn(prevR);
         // Bail if nothing changed
-        if (nextR === prevR) return prev;
+        if (nextR === prevR) {
+          return prev;
+        }
         return { ...prev, recruiting: nextR };
       }),
     [setCompany]

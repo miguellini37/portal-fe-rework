@@ -58,7 +58,9 @@ export const JobPage: FC = () => {
     ].includes(myApplication?.status ?? ApplicationStatus.Applied);
 
   const fetchJob = useCallback(async () => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     try {
       const jobData = await getJobById(id, authHeader);
       setJob(jobData);
@@ -68,7 +70,9 @@ export const JobPage: FC = () => {
   }, [id, authHeader]);
 
   const fetchMyApplication = useCallback(async () => {
-    if (!authHeader || !job?.id || isCompany) return;
+    if (!authHeader || !job?.id || isCompany) {
+      return;
+    }
     try {
       const apps = await getApplications(authHeader, job.id);
       if (apps?.length) {
@@ -90,11 +94,15 @@ export const JobPage: FC = () => {
   }, [fetchMyApplication]);
 
   useEffect(() => {
-    if (!canViewApplications && activeTab === 'applications') setActiveTab('overview');
+    if (!canViewApplications && activeTab === 'applications') {
+      setActiveTab('overview');
+    }
   }, [canViewApplications, activeTab]);
 
   const applyToJob = useCallback(async () => {
-    if (!job?.id) return;
+    if (!job?.id) {
+      return;
+    }
     try {
       await createApplication(authHeader, { jobId: job.id });
       toast.success('Successfully applied to job');
@@ -106,16 +114,18 @@ export const JobPage: FC = () => {
 
   const updateStatus = useCallback(
     async (applicationId?: string, status?: ApplicationStatus): Promise<IApplicationPayload> => {
-      if (!applicationId){
+      if (!applicationId) {
         toast.error('No application ID provided');
         return Promise.reject();
-      };
+      }
 
       try {
         const req: IApplicationRequest = { id: applicationId, status };
         const result = await updateApplicationStatus(authHeader, req);
         toast.success('Application status updated');
-        if (myApplication?.id === applicationId) setMyApplication(result);
+        if (myApplication?.id === applicationId) {
+          setMyApplication(result);
+        }
         return result;
       } catch (e) {
         toast.error('Failed to update application status');
@@ -126,7 +136,9 @@ export const JobPage: FC = () => {
   );
 
   const withdrawApplication = useCallback(async () => {
-    if (!authHeader || !myApplication?.id) return;
+    if (!authHeader || !myApplication?.id) {
+      return;
+    }
     setWithdrawing(true);
 
     const prev = myApplication;
@@ -189,7 +201,9 @@ export const JobPage: FC = () => {
 
   const handleChangeJobStatus = useCallback(
     async (newStatus: JobStatus) => {
-      if (!job?.id) return;
+      if (!job?.id) {
+        return;
+      }
       setUpdatingStatus(true);
       setStatusMenuOpen(false);
       const prevJob = job;
@@ -330,4 +344,3 @@ export const JobPage: FC = () => {
     </div>
   );
 };
-

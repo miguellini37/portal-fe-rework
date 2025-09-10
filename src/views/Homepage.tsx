@@ -1,8 +1,6 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const Homepage = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="Homepage min-h-screen h-screen bg-gradient-to-b from-blue-50 to-blue overflow-hidden flex flex-col justify-center items-center p-0 m-0">
       <div className="w-full flex flex-col items-center flex-1 p-0 m-0">

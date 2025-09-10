@@ -1,15 +1,13 @@
-import React, { JSX } from 'react';
+import React from 'react';
 
 import { ICompanyPaylod } from '../../../api/company';
 import { isNil } from 'lodash';
 
 interface OverviewTabProps {
   company: ICompanyPaylod;
-  editMode: boolean;
-  setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>;
 }
 
-export const OverviewTab: React.FC<OverviewTabProps> = ({ company, editMode, setCompany }) => {
+export const OverviewTab: React.FC<OverviewTabProps> = ({ company }) => {
   const skills = [
     'Leadership',
     'Team Collaboration',
@@ -23,7 +21,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ company, editMode, set
 
   // Recursively count all fields and filled fields
   const countFields = (obj: any): { total: number; filled: number } => {
-    if (typeof obj !== 'object' || obj === null) return { total: 0, filled: 0 };
+    if (typeof obj !== 'object' || obj === null) {
+      return { total: 0, filled: 0 };
+    }
     let total = 0;
     let filled = 0;
     for (const key of Object.keys(obj)) {
@@ -34,7 +34,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ company, editMode, set
         filled += nested.filled;
       } else {
         total += 1;
-        if (!isNil(value) && value !== '') filled += 1;
+        if (!isNil(value) && value !== '') {
+          filled += 1;
+        }
       }
     }
     return { total, filled };
@@ -55,22 +57,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ company, editMode, set
       return { colorClassName: 'warning', percentComplete };
     }
     return { colorClassName: 'incomplete', percentComplete };
-  };
-
-  const renderProfileCompletion = (
-    category: string,
-    fields: Partial<ICompanyPaylod>
-  ): JSX.Element => {
-    const { colorClassName, percentComplete } = getProfileCompletion(fields);
-
-    return (
-      <li className={`profile-completion ${colorClassName}`}>
-        <span>{category}</span>
-        <span className="progress-percent">
-          {percentComplete == 100 ? 'Complete' : `${percentComplete}%`}
-        </span>
-      </li>
-    );
   };
 
   const { percentComplete } = getProfileCompletion(company);

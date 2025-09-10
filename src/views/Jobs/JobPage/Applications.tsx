@@ -27,7 +27,9 @@ export const Application: FC<CompanyApplicationsProps> = ({
   const authHeader = useAuthHeader();
 
   const fetchApplications = async (): Promise<void> => {
-    if (!authHeader) return;
+    if (!authHeader) {
+      return;
+    }
     setLoading(true);
     try {
       const data = await getApplications(authHeader, jobId);
@@ -48,8 +50,12 @@ export const Application: FC<CompanyApplicationsProps> = ({
     const q = searchTerm.toLowerCase();
     const getCreatedAtMs = (app: IApplicationPayload): number => {
       const creationDate = app.creationDate;
-      if (!creationDate) return 0;
-      if (creationDate instanceof Date) return creationDate.getTime();
+      if (!creationDate) {
+        return 0;
+      }
+      if (creationDate instanceof Date) {
+        return creationDate.getTime();
+      }
       const ms = Date.parse(creationDate);
       return Number.isNaN(ms) ? 0 : ms;
     };

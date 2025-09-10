@@ -44,20 +44,36 @@ const ensure = (a?: AnalyticsNumbers | null): AnalyticsNumbers => ({
 const fmtPct = (n: number) => `${Number.isFinite(n) ? n.toFixed(n % 1 ? 1 : 0) : '0'}%`;
 const fmtDelta = (n: number, unit: '%' | 'd' = '%') => {
   const sign = n >= 0 ? '+' : '';
-  if (unit === '%') return `${sign}${fmtPct(n)}`;
+  if (unit === '%') {
+    return `${sign}${fmtPct(n)}`;
+  }
   return `${sign}${n.toFixed(0)}${unit}`;
 };
 const fmtMoneyShort = (usd: number) => {
-  if (!Number.isFinite(usd)) return '$0';
-  if (Math.abs(usd) >= 1_000_000) return `$${(usd / 1_000_000).toFixed(1)}M`;
-  if (Math.abs(usd) >= 1_000) return `$${(usd / 1_000).toFixed(0)}K`;
+  if (!Number.isFinite(usd)) {
+    return '$0';
+  }
+  if (Math.abs(usd) >= 1_000_000) {
+    return `$${(usd / 1_000_000).toFixed(1)}M`;
+  }
+  if (Math.abs(usd) >= 1_000) {
+    return `$${(usd / 1_000).toFixed(0)}K`;
+  }
   return `$${usd.toFixed(0)}`;
 };
 const formatCustomValue = (metric: CustomAnalytic) => {
-  if (!metric.id || !metric.value) return null;
-  if (metric.id.endsWith('_pct')) return fmtPct(metric.value);
-  if (metric.id.endsWith('_usd')) return fmtMoneyShort(metric.value);
-  if (metric.id.endsWith('_days')) return `${metric.value}d`;
+  if (!metric.id || !metric.value) {
+    return null;
+  }
+  if (metric.id.endsWith('_pct')) {
+    return fmtPct(metric.value);
+  }
+  if (metric.id.endsWith('_usd')) {
+    return fmtMoneyShort(metric.value);
+  }
+  if (metric.id.endsWith('_days')) {
+    return `${metric.value}d`;
+  }
   return metric.value;
 };
 
@@ -202,10 +218,14 @@ const AnalyticsEditor: FC<{
   );
 
   const handleAddCustom = (metricId: string) => {
-    if (!metricId) return;
+    if (!metricId) {
+      return;
+    }
 
     const newMetricFromBackend = AVAILABLE_CUSTOM_ANALYTICS.find((opt) => opt.id === metricId);
-    if (!newMetricFromBackend) return;
+    if (!newMetricFromBackend) {
+      return;
+    }
 
     const mockValue = MOCK_DATA.custom?.find((m) => m.id === newMetricFromBackend.id)?.value ?? 0;
     const newMetric = { ...newMetricFromBackend, value: mockValue };
