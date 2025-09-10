@@ -28,6 +28,9 @@ export interface IApplicationPayload {
     firstName?: string;
     lastName?: string;
   };
+  interview?: {
+    id?: string;
+  };
 }
 
 export interface IApplicationRequest {

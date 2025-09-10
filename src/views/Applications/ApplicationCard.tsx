@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IApplicationPayload, ApplicationStatus } from '../../api/application';
 import '../Companies/company.css';
 import './applications.css';
@@ -7,6 +7,7 @@ import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData, USER_PERMISSIONS } from '../../auth/store';
 import { getFullName, toTitleCase } from '../../util/name';
 import { toast } from 'react-toastify';
+import { InterviewModal } from './InterviewModal';
 
 interface Props {
   application: IApplicationPayload;
@@ -22,13 +23,17 @@ export const ApplicationCard: FC<Props> = ({
   onUpdateStatus,
   showJobPosition = true,
 }) => {
-  const navigate = useNavigate();
   const user = useAuthUser<IUserData>();
   const isCompanyPermission = user?.permission === USER_PERMISSIONS.COMPANY;
   const isAthletePermission = user?.permission === USER_PERMISSIONS.ATHLETE;
 
   const [loading, setLoading] = useState(false);
   const [currentApp, setCurrentApp] = useState<IApplicationPayload>(application);
+  const [interviewModalState, setInterviewModalState] = useState<{
+    isOpen: boolean;
+    interviewId?: string;
+    applicationId?: string;
+  }>();
 
   const myAppStatus = String(currentApp?.status ?? ApplicationStatus.Applied).toLowerCase();
   const statusText = toTitleCase(myAppStatus);
@@ -98,22 +103,10 @@ export const ApplicationCard: FC<Props> = ({
   );
 
   const statusColor = getStatusColor(currentApp?.status ?? ApplicationStatus.Applied);
-
-  const openJob = useCallback(() => {
-    const jobId = currentApp?.job?.id;
-    if (!jobId) {
-      return;
-    }
-    // navigate to JobPage route and include application id in location state (optional)
-    navigate(`/job/${jobId}`);
-  }, [currentApp?.job?.id, currentApp?.id, navigate]);
-
   return (
     <div
-      className="company-card clickable-card"
-      role="button"
+      className="company-card"
       tabIndex={0}
-      onClick={openJob}
       aria-label={`Open job ${currentApp?.job?.position ?? 'job'}`}
     >
       <div className="company-card-layout">
@@ -121,7 +114,11 @@ export const ApplicationCard: FC<Props> = ({
           <div className="company-header">
             <div className="company-title-section">
               <h3 className="company-title">
-                {showJobPosition && (currentApp?.job?.position || 'Position not specified')}
+                {showJobPosition && (
+                  <Link to={`/job/${currentApp.job?.id}`} className="company-link">
+                    {currentApp.job?.position}
+                  </Link>
+                )}
               </h3>
               {!isCompanyPermission && (
                 <div className="company-industry">
@@ -195,12 +192,16 @@ export const ApplicationCard: FC<Props> = ({
                   className="action-btn secondary"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleUpdate(ApplicationStatus.InterviewRequested);
+                    setInterviewModalState({
+                      isOpen: true,
+                      applicationId: application.id,
+                      interviewId: application.interview?.id,
+                    });
                   }}
                   disabled={loading}
-                  aria-label="Request interview"
+                  aria-label="Setup interview"
                 >
-                  Request Interview
+                  Schedule Interview
                 </button>
 
                 <button
@@ -243,6 +244,20 @@ export const ApplicationCard: FC<Props> = ({
           </div>
         </div>
       </div>
+      {interviewModalState && currentApp?.id ? (
+        <InterviewModal
+          isOpen={interviewModalState.isOpen}
+          applicationId={application.id as string}
+          interviewId={interviewModalState.interviewId}
+          onClose={() =>
+            setInterviewModalState({
+              isOpen: false,
+              applicationId: undefined,
+              interviewId: undefined,
+            })
+          }
+        />
+      ) : null}
     </div>
   );
 };

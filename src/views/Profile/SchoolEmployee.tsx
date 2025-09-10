@@ -79,13 +79,13 @@ export const SchoolEmployeeProfile = () => {
           />
         </div>
 
-        {/* Company Dropdown */}
+        {/* School Dropdown */}
         <div className="full-width">
-          <label htmlFor="company" className="form-label">
-            Company
+          <label htmlFor="School" className="form-label">
+            School
           </label>
           <SchoolDropdown
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, companyName: e?.value }))}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolName: e?.value }))}
             selected={schoolEmployee.schoolRef?.id}
             disabled
           />
