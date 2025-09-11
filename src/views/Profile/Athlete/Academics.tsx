@@ -35,7 +35,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
                 selected={athlete.schoolRef?.id}
               />
             ) : (
-              (athlete.schoolRef?.schoolName ?? <span className="academic-placeholder-mock" />)
+              <div className="readonly-display">{athlete.schoolRef?.schoolName || ''}</div>
             )}
           </div>
         </div>
@@ -53,7 +53,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              academics.major || <span className="academic-placeholder-mock" />
+              <div className="readonly-display">{academics.major || ''}</div>
             )}
           </div>
         </div>
@@ -71,7 +71,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              academics.minor || <span className="academic-placeholder-mock" />
+              <div className="readonly-display">{academics.minor || ''}</div>
             )}
           </div>
         </div>
@@ -95,7 +95,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              academics.gpa?.toString() || <span className="academic-placeholder-mock" />
+              <div className="readonly-display">{academics.gpa?.toString() || ''}</div>
             )}
           </div>
         </div>
@@ -115,7 +115,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              academics.graduationDate || <span className="academic-placeholder-mock" />
+              <div className="readonly-display">{academics.graduationDate || ''}</div>
             )}
           </div>
         </div>
@@ -139,12 +139,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
                 placeholder=" "
               />
             ) : (
-              <textarea
-                className="academic-textarea"
-                value={academics.awards || ''}
-                disabled
-                placeholder=" "
-              />
+              <div className="multiline-display">{academics.awards || ''}</div>
             )}
           </div>
         </div>
@@ -164,12 +159,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
                 placeholder=" "
               />
             ) : (
-              <textarea
-                className="academic-textarea"
-                value={academics.coursework || ''}
-                disabled
-                placeholder=" "
-              />
+              <div className="multiline-display">{academics.coursework || ''}</div>
             )}
           </div>
         </div>

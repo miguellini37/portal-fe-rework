@@ -25,6 +25,7 @@ export enum COLLEGE_MAJORS {
   ELECTRICAL_ENGINEERING = 'Electrical Engineering',
   ENGLISH = 'English',
   ENVIRONMENTAL_SCIENCE = 'Environmental Science',
+  ENTREPRENEURSHIP = 'Entrepreneurship',
   FILM_AND_MEDIA = 'Film & Media',
   FINANCE = 'Finance',
   FINE_ARTS = 'Fine Arts',
@@ -52,7 +53,9 @@ export enum COLLEGE_MAJORS {
   PUBLIC_HEALTH = 'Public Health',
   SOCIOLOGY = 'Sociology',
   SOFTWARE_ENGINEERING = 'Software Engineering',
+  SPORTS_LEADERSHIP_AND_MANAGEMENT = 'Sports Leadership & Management',
   STATISTICS = 'Statistics',
+  SUPPLY_CHAIN = 'Supply Chain',
   THEATER = 'Theater',
   THEOLOGY = 'Theology',
   URBAN_PLANNING = 'Urban Planning',
@@ -83,16 +86,7 @@ export const MajorDropdown = ({ id, onChange, disabled, selected, className }: D
   return (
     <Select<DropdownOption>
       id={id}
-      value={
-        selected
-          ? options.find(
-              (x) =>
-                x.value == selected ||
-                x.label == selected ||
-                options.find((x) => (x.value as any)?.id == selected)
-            )
-          : null
-      }
+      value={selected ? options.find((x) => x.value == selected || x.label == selected) : null}
       options={options}
       onChange={onChange}
       styles={customDropdownStyle}

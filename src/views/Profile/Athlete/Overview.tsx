@@ -2,6 +2,7 @@ import React, { JSX, useState } from 'react';
 
 import { IUpdateAthletePayload } from '../../../api/athlete';
 import { isNil } from 'lodash';
+import { formatPhone, normalizePhoneDigits } from '../../../util/phone';
 
 interface OverviewTabProps {
   athlete: IUpdateAthletePayload;
@@ -47,14 +48,15 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
   const initials = `${athlete.firstName?.[0] || ''}${athlete.lastName?.[0] || ''}`.toUpperCase();
 
   // Recursively count all fields and filled fields
-  const countFields = (obj: any): { total: number; filled: number } => {
+  const countFields = (obj: unknown): { total: number; filled: number } => {
     if (typeof obj !== 'object' || obj === null) {
       return { total: 0, filled: 0 };
     }
     let total = 0;
     let filled = 0;
-    for (const key of Object.keys(obj)) {
-      const value = obj[key];
+    const rec = obj as Record<string, unknown>;
+    for (const key of Object.keys(rec)) {
+      const value = rec[key];
       if (typeof value === 'object' && value !== null) {
         const nested = countFields(value);
         total += nested.total;
@@ -71,34 +73,41 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
 
   const getProfileCompletion = (
     fields: Partial<IUpdateAthletePayload>
-  ): { colorClassName: string; percentComplete: number } => {
+  ): { color: string; percentComplete: number } => {
     const { total, filled } = countFields(fields);
     if (total === 0) {
-      return { colorClassName: 'incomplete', percentComplete: 0 };
+      return { color: '#dc2626', percentComplete: 0 };
     }
     const percentComplete = Math.round((filled / total) * 100);
     if (percentComplete === 100) {
-      return { colorClassName: 'complete', percentComplete };
+      return { color: '#16a34a', percentComplete };
     }
     if (percentComplete >= 60) {
-      return { colorClassName: 'warning', percentComplete };
+      return { color: '#d97706', percentComplete };
     }
-    return { colorClassName: 'incomplete', percentComplete };
+    return { color: '#dc2626', percentComplete };
   };
 
   const renderProfileCompletion = (
     category: string,
     fields: Partial<IUpdateAthletePayload>
   ): JSX.Element => {
-    const { colorClassName, percentComplete } = getProfileCompletion(fields);
+    const { color, percentComplete } = getProfileCompletion(fields);
 
     return (
-      <li className={`profile-completion ${colorClassName}`}>
-        <span>{category}</span>
-        <span className="progress-percent">
-          {percentComplete == 100 ? 'Complete' : `${percentComplete}%`}
-        </span>
-      </li>
+      <div>
+        <div className="progress-header">
+          <span>{category}</span>
+          <span className="progress-percent">{percentComplete}%</span>
+        </div>
+
+        <div className="progress-bar">
+          <div
+            className="progress-bar-fill"
+            style={{ width: `${percentComplete}%`, backgroundColor: color }}
+          />
+        </div>
+      </div>
     );
   };
 
@@ -109,9 +118,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
     <div className="overview-grid overview-tab-container">
       {/* Personal Information */}
       <div className="personal-info card">
-        <h2 className="section-title">
-          <span className="icon">👤</span> Personal Information
-        </h2>
+        <h2 className="section-title">Personal Information</h2>
 
         <div className="info-row">
           <div className="avatar">{initials || '--'}</div>
@@ -120,64 +127,89 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
             <div className="two-column">
               <div className="field">
                 <label>First Name</label>
-                <input
-                  type="text"
-                  className="first-name"
-                  value={athlete.firstName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
+                {editMode ? (
+                  <input
+                    type="text"
+                    className="first-name"
+                    value={athlete.firstName || ''}
+                    readOnly
+                    tabIndex={-1}
+                  />
+                ) : (
+                  <div className="readonly-display">{athlete.firstName || ''}</div>
+                )}
               </div>
               <div className="field">
                 <label>Last Name</label>
-                <input
-                  type="text"
-                  className="last-name"
-                  value={athlete.lastName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
+                {editMode ? (
+                  <input
+                    type="text"
+                    className="last-name"
+                    value={athlete.lastName || ''}
+                    readOnly
+                    tabIndex={-1}
+                  />
+                ) : (
+                  <div className="readonly-display">{athlete.lastName || ''}</div>
+                )}
               </div>
               <div className="field">
                 <label>Email</label>
-                <input
-                  type="text"
-                  className="email"
-                  value={athlete.email || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
+                {editMode ? (
+                  <input
+                    type="text"
+                    className="email"
+                    value={athlete.email || ''}
+                    readOnly
+                    tabIndex={-1}
+                  />
+                ) : (
+                  <div className="readonly-display">{athlete.email || ''}</div>
+                )}
               </div>
               <div className="field">
                 <label>Phone</label>
-                <input
-                  type="text"
-                  value={athlete.phone || ''}
-                  readOnly={!editMode}
-                  onChange={(e) => setAthlete((a) => ({ ...a, phone: e.target.value }))}
-                />
+                {editMode ? (
+                  <input
+                    value={formatPhone(athlete.phone || '')}
+                    inputMode="tel"
+                    type="tel"
+                    onChange={(e) => {
+                      const digits = normalizePhoneDigits(e.target.value);
+                      setAthlete((a) => ({ ...a, phone: digits }));
+                    }}
+                  />
+                ) : (
+                  <div className="readonly-display">{formatPhone(athlete.phone || '')}</div>
+                )}
               </div>
             </div>
             <div className="field full-width">
               <label>Location</label>
-              <input
-                type="text"
-                value={athlete.location || ''}
-                readOnly={!editMode}
-                onChange={(e) => setAthlete((a) => ({ ...a, location: e.target.value }))}
-              />
+              {editMode ? (
+                <input
+                  type="text"
+                  value={athlete.location || ''}
+                  onChange={(e) => setAthlete((a) => ({ ...a, location: e.target.value }))}
+                />
+              ) : (
+                <div className="readonly-display">{athlete.location || ''}</div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="bio">
           <label>Professional Bio</label>
-          <textarea
-            rows={3}
-            readOnly={!editMode}
-            value={athlete.bio || ''}
-            onChange={(e) => setAthlete((a) => ({ ...a, bio: e.target.value }))}
-          />
+          {editMode ? (
+            <textarea
+              rows={3}
+              value={athlete.bio || ''}
+              onChange={(e) => setAthlete((a) => ({ ...a, bio: e.target.value }))}
+            />
+          ) : (
+            <div className="multiline-display">{athlete.bio || ''}</div>
+          )}
         </div>
       </div>
 
@@ -198,12 +230,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
           </div>
 
           <ul className="completion-list">
-            {renderProfileCompletion('🧍 Personal Info', {
+            {renderProfileCompletion('Personal Info', {
               ...overViewInfo,
               athletics: { skills: athlete.athletics?.skills },
             })}
-            {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
-            {renderProfileCompletion('🏆 Athletic Info', { athletics })}
+            {renderProfileCompletion('Academic Info', { academics, schoolRef })}
+            {renderProfileCompletion('Athletic Info', { athletics })}
             {/* <li className="warning">
             <span>📄 Resume</span>
             <span>Needs Update</span>

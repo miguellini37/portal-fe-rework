@@ -35,7 +35,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              athletics.sport || <span className="athletics-placeholder" />
+              <div className="readonly-display">{athletics.sport || ''}</div>
             )}
           </div>
         </div>
@@ -54,7 +54,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              athletics.position || <span className="athletics-placeholder" />
+              <div className="readonly-display">{athletics.position || ''}</div>
             )}
           </div>
         </div>
@@ -72,7 +72,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              athletics.division || <span className="athletics-placeholder" />
+              <div className="readonly-display">{athletics.division || ''}</div>
             )}
           </div>
         </div>
@@ -91,7 +91,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              athletics.conference || <span className="athletics-placeholder" />
+              <div className="readonly-display">{athletics.conference || ''}</div>
             )}
           </div>
         </div>
@@ -110,7 +110,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              athletics.yearsPlayed || <span className="athletics-placeholder" />
+              <div className="readonly-display">{athletics.yearsPlayed || ''}</div>
             )}
           </div>
         </div>
@@ -129,7 +129,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 }
               />
             ) : (
-              athletics.leadershipRoles || <span className="athletics-placeholder" />
+              <div className="readonly-display">{athletics.leadershipRoles || ''}</div>
             )}
           </div>
         </div>
@@ -150,13 +150,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 placeholder=" "
               />
             ) : (
-              <textarea
-                className="athletics-textarea"
-                value={athletics.achievements || ''}
-                disabled
-                rows={2}
-                placeholder=" "
-              />
+              <div className="multiline-display">{athletics.achievements || ''}</div>
             )}
           </div>
         </div>
@@ -177,13 +171,7 @@ export const AthleticsTab: React.FC<AthleticsTabProps> = ({ athlete, editMode, s
                 placeholder=" "
               />
             ) : (
-              <textarea
-                className="athletics-textarea"
-                value={athletics.statistics || ''}
-                disabled
-                rows={2}
-                placeholder=" "
-              />
+              <div className="multiline-display">{athletics.statistics || ''}</div>
             )}
           </div>
         </div>

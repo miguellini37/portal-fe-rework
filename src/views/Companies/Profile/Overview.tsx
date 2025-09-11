@@ -65,9 +65,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ company }) => {
     <div className="overview-grid overview-tab-container">
       {/* Personal Information */}
       <div className="personal-info card">
-        <h2 className="section-title">
-          <span className="icon">👤</span> Personal Information
-        </h2>
+        <h2 className="section-title">Company Information</h2>
 
         <div className="info-row">
           {/* <div className="avatar">{initials || '--'}</div>

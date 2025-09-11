@@ -105,6 +105,17 @@ input.email:disabled {
   border-radius: 0.375rem;
 }
 
+/* Make editable inputs obvious (white) while preserving gray for read-only */
+.field input:not([readonly]) {
+  background-color: #ffffff;
+  border-color: #cbd5e1; /* slate-300 */
+}
+
+.bio textarea:not([readonly]) {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+}
+
 .bio label {
   font-size: 0.875rem;
   color: #4b5563;
@@ -133,49 +144,19 @@ input.email:disabled {
   font-weight: 500;
 }
 
-.progress-bar {
-  height: 0.5rem;
-  background-color: #e5e7eb;
-  border-radius: 9999px;
-  margin-bottom: 1rem;
-}
-
 .progress-bar-fill {
   height: 100%;
   background-color: #2563eb;
   border-radius: 9999px;
 }
 
-.completion-list {
-  list-style: none;
-  padding: 0;
-  font-size: 0.875rem;
-}
-
-.completion-list li {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  align-items: center;
-}
-
-.completion-list li span:first-child {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap;
-}
-
-.completion-list li.complete {
-  color: #16a34a;
-}
-
-.completion-list li.warning {
-  color: #d97706;
-}
-
-.completion-list li.incomplete {
-  color: #dc2626;
+.progress-bar {
+  width: 100%;
+  height: 0.4rem;
+  margin: 0.125rem 0 0.5rem 0;
+  background-color: #e5e7eb; /* gray track for unfilled portion */
+  border-radius: 9999px;
+  overflow: hidden; /* ensure fill corners are clipped to track */
 }
 
 .skills-description {
@@ -286,7 +267,7 @@ input.email:disabled {
 .athletics-textarea {
   width: 100%;
   padding: 0.75rem;
-  background-color: #f3f4f6;
+  background-color: #ffffff; /* editable areas should be white */
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 0.875rem;
@@ -316,7 +297,7 @@ input.email:disabled {
 .athletics-input {
   width: 100%;
   padding: 0.5rem;
-  background-color: #f3f4f6;
+  background-color: #ffffff; /* editable areas should be white */
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 0.875rem;
@@ -329,5 +310,25 @@ input.email:disabled {
   width: 100%;
   background-color: #f3f4f6;
   border-radius: 0.375rem;
+}
+
+/* Display-only helpers (when editMode is false) */
+.readonly-display {
+  padding: 0.5rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  min-height: 2.375rem; /* align with input height */
+  display: flex;
+  align-items: center;
+}
+
+.multiline-display {
+  white-space: pre-wrap;
+  padding: 0.75rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  min-height: 5rem;
 }
 
