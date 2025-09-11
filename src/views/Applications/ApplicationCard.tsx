@@ -201,7 +201,7 @@ export const ApplicationCard: FC<Props> = ({
                   disabled={loading}
                   aria-label="Setup interview"
                 >
-                  Schedule Interview
+                  {`${application?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
                 </button>
 
                 <button

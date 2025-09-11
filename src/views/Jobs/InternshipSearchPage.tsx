@@ -5,7 +5,7 @@ export const InternshipSearchPage = () => {
     <JobSearch
       pageTitle="Search Internships"
       pageSubtitle="Search for internship opportunities and apply"
-      additionalFilters={{ type: 'internship' }}
+      additionalFilters={{ type: ['internship'] }}
       canApplyToJob
     />
   );

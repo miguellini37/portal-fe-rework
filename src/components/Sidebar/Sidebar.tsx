@@ -16,6 +16,7 @@ import {
   Building2,
   Users,
   Menu,
+  CalendarClock,
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
@@ -125,6 +126,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                       <FileText /> {!isCollapsed && <span>Applications</span>}
                     </DisabledNavLink>
                   </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/interviews" title="Interviews">
+                      <CalendarClock /> {!isCollapsed && <span>Interviews</span>}
+                    </DisabledNavLink>
+                  </li>
                 </>
               )}
               {permission === USER_PERMISSIONS.SCHOOL && (
@@ -161,6 +167,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <li className="mb-4">
                     <DisabledNavLink to="/applications" title="Applications">
                       <FileText /> {!isCollapsed && <span>Applications</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/interviews" title="Interviews">
+                      <CalendarClock /> {!isCollapsed && <span>Interviews</span>}
                     </DisabledNavLink>
                   </li>
                 </>

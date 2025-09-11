@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { url } from '../config/url';
+import { IJobPayload } from './job';
+import { ICompanyPaylod } from './company';
 
 // Status enum inferred; adjust values if backend differs
 export enum InterviewStatus {
@@ -16,6 +18,8 @@ export interface IInterviewPayload {
   interviewer?: string;
   preparationTips?: string;
   status?: InterviewStatus;
+  job?: IJobPayload;
+  company?: ICompanyPaylod;
 }
 
 export interface ICreateInterviewInput {
@@ -40,6 +44,10 @@ export interface IGetInterviewInput {
   applicationId?: string;
 }
 
+export interface IListInterviewsInput {
+  applicationId?: string;
+}
+
 export const createInterview = async (
   authHeader: string | null,
   data: ICreateInterviewInput
@@ -59,6 +67,20 @@ export const getInterview = async (
 ): Promise<IInterviewPayload | null> => {
   const response = await axios.get(`${url}/getInterview`, {
     params: input,
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+  return response.data;
+};
+
+export const getInterviews = async (
+  authHeader: string | null,
+  params?: IListInterviewsInput
+): Promise<IInterviewPayload[]> => {
+  const response = await axios.get(`${url}/getInterviews`, {
+    params,
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
