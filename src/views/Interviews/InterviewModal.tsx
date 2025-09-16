@@ -32,7 +32,7 @@ export const InterviewModal: FC<Props> = ({ interviewId, applicationId, isOpen, 
       setForm({
         applicationId,
         status: data?.status ?? InterviewStatus.Scheduled,
-        dateTime: data?.dateTime ?? '',
+        dateTime: data?.dateTime ?? new Date(),
         location: data?.location ?? '',
         interviewer: data?.interviewer ?? '',
         preparationTips: data?.preparationTips ?? '',
@@ -43,7 +43,8 @@ export const InterviewModal: FC<Props> = ({ interviewId, applicationId, isOpen, 
   const handleChange = useCallback(
     <K extends keyof ICreateInterviewInput>(k: K, v: ICreateInterviewInput[K]) => {
       setForm((prev) => {
-        const base: ICreateInterviewInput = prev ?? { applicationId, dateTime: '' };
+        // ensure dateTime defaults to a Date, not an empty string
+        const base: ICreateInterviewInput = prev ?? { applicationId, dateTime: new Date() };
         return { ...base, [k]: v };
       });
     },
@@ -83,7 +84,7 @@ export const InterviewModal: FC<Props> = ({ interviewId, applicationId, isOpen, 
                     value={isoToLocalInputValue(form?.dateTime)}
                     onChange={(e) => {
                       const iso = localInputValueToISO(e.target.value);
-                      handleChange('dateTime', iso);
+                      handleChange('dateTime', new Date(iso));
                     }}
                     required
                   />

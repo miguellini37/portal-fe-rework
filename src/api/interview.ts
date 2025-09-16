@@ -13,7 +13,7 @@ export enum InterviewStatus {
 export interface IInterviewPayload {
   id: string;
   applicationId: string;
-  dateTime: string; // ISO string
+  dateTime: Date; // ISO string
   location?: string;
   interviewer?: string;
   preparationTips?: string;
@@ -24,7 +24,7 @@ export interface IInterviewPayload {
 
 export interface ICreateInterviewInput {
   applicationId: string;
-  dateTime: string; // ISO string
+  dateTime: Date; // ISO string
   location?: string;
   interviewer?: string;
   preparationTips?: string;
@@ -34,7 +34,7 @@ export interface ICreateInterviewInput {
 export interface IUpdateInterviewInput {
   id: string;
   status: InterviewStatus;
-  dateTime: string; // ISO string
+  dateTime: Date; // ISO string
   location?: string;
   preparationTips?: string;
 }

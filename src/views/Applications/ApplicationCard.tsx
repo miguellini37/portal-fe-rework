@@ -7,7 +7,7 @@ import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { IUserData, USER_PERMISSIONS } from '../../auth/store';
 import { getFullName, toTitleCase } from '../../util/name';
 import { toast } from 'react-toastify';
-import { InterviewModal } from './InterviewModal';
+import { InterviewModal } from '../Interviews/InterviewModal';
 
 interface Props {
   application: IApplicationPayload;
@@ -174,35 +174,50 @@ export const ApplicationCard: FC<Props> = ({
           <div className="company-card-actions" style={{ marginTop: 12, display: 'flex', gap: 8 }}>
             {isCompanyPermission && (
               <>
-                <button
-                  type="button"
-                  className="action-btn primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUpdate(ApplicationStatus.Accepted);
+                {(
+                  <button
+                    type="button"
+                    className="action-btn primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpdate(ApplicationStatus.Accepted);
                   }}
                   disabled={loading}
                   aria-label="Accept application"
                 >
                   Accept
-                </button>
-
-                <button
-                  type="button"
-                  className="action-btn secondary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setInterviewModalState({
-                      isOpen: true,
-                      applicationId: application.id,
-                      interviewId: application.interview?.id,
-                    });
+                </button>)}
+                {currentApp?.status === ApplicationStatus.UnderReview && (
+                  <button
+                    type="button"
+                    className="action-btn secondary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setInterviewModalState({
+                        isOpen: true,
+                        applicationId: currentApp.id,
+                        interviewId: currentApp.interview?.id,
+                      });
+                    }}
+                    disabled={loading}
+                    aria-label="Setup interview"
+                  >
+                    {`${currentApp?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
+                  </button>
+                )}
+                {(currentApp?.status !== ApplicationStatus.Accepted) && (
+                  <button
+                    type="button"
+                    className="action-btn secondary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpdate(ApplicationStatus.UnderReview);
                   }}
                   disabled={loading}
-                  aria-label="Setup interview"
+                  aria-label="Under review"
                 >
-                  {`${application?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
-                </button>
+                  Under Review
+                </button>)}
 
                 <button
                   type="button"

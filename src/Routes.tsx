@@ -18,6 +18,7 @@ import { ApplicationSearch } from './views/Applications';
 import { JobPage } from './views/Jobs/JobPage';
 import { AthleteProfile } from './views/Profile/Athlete';
 import { InterviewSearch } from './views/Interviews';
+import { ActivityPage } from './views/Activity/ActivityPage';
 
 type PageRoute = {
   path: string;
@@ -30,6 +31,7 @@ export const AppRoutes = () => {
   const routes: PageRoute[] = [
     { path: '/login', element: <LoginPage />, withSidebar: false, noAuth: true },
     { path: '/register', element: <Register />, withSidebar: false, noAuth: true },
+    { path: '/activity', element: <ActivityPage />, withSidebar: true},
 
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
     { path: '/company/:id', element: <CompanyProfile />, withSidebar: true },

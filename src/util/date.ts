@@ -2,7 +2,7 @@
 // "datetime-local" expects a local time without timezone in the shape YYYY-MM-DDTHH:mm
 // Our app stores/transmits ISO strings (UTC). These helpers bridge the two.
 
-export const isoToLocalInputValue = (iso?: string): string => {
+export const isoToLocalInputValue = (iso?: Date): string => {
   if (!iso) {
     return '';
   }
@@ -38,4 +38,25 @@ export const localInputValueToISO = (local: string): string => {
   } catch {
     return '';
   }
+};
+
+/**
+ * Formats an ISO date string or Date object to a readable local date/time string.
+ * Example: "2025-09-15T14:30:00Z" => "Sep 15, 2025, 2:30 PM"
+ */
+export const formatDateTime = (iso?: Date | string): string => {
+  if (!iso) {
+    return '';
+  }
+  const date = typeof iso === 'string' ? new Date(iso) : iso;
+  if (isNaN(date.getTime())) {
+    return '';
+  }
+  return date.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 };
