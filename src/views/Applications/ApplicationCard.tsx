@@ -206,8 +206,7 @@ export const ApplicationCard: FC<Props> = ({
                     {`${currentApp?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
                   </button>
                 )}
-                {currentApp?.status !== ApplicationStatus.Accepted
-                && currentApp?.status !== ApplicationStatus.UnderReview && (
+                {currentApp?.status !== ApplicationStatus.UnderReview && (
                   <button
                     type="button"
                     className="action-btn secondary"
