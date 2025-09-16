@@ -174,19 +174,20 @@ export const ApplicationCard: FC<Props> = ({
           <div className="company-card-actions" style={{ marginTop: 12, display: 'flex', gap: 8 }}>
             {isCompanyPermission && (
               <>
-                {(
+                {
                   <button
                     type="button"
                     className="action-btn primary"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleUpdate(ApplicationStatus.Accepted);
-                  }}
-                  disabled={loading}
-                  aria-label="Accept application"
-                >
-                  Accept
-                </button>)}
+                    }}
+                    disabled={loading}
+                    aria-label="Accept application"
+                  >
+                    Accept
+                  </button>
+                }
                 {currentApp?.status === ApplicationStatus.UnderReview && (
                   <button
                     type="button"
@@ -205,19 +206,21 @@ export const ApplicationCard: FC<Props> = ({
                     {`${currentApp?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
                   </button>
                 )}
-                {(currentApp?.status !== ApplicationStatus.Accepted) && (
+                {currentApp?.status !== ApplicationStatus.Accepted
+                && currentApp?.status !== ApplicationStatus.UnderReview && (
                   <button
                     type="button"
                     className="action-btn secondary"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleUpdate(ApplicationStatus.UnderReview);
-                  }}
-                  disabled={loading}
-                  aria-label="Under review"
-                >
-                  Under Review
-                </button>)}
+                    }}
+                    disabled={loading}
+                    aria-label="Under review"
+                  >
+                    Under Review
+                  </button>
+                )}
 
                 <button
                   type="button"

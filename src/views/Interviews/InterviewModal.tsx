@@ -10,6 +10,7 @@ import {
   updateInterview,
 } from '../../api/interview';
 import { isoToLocalInputValue, localInputValueToISO } from '../../util/date';
+import { toast } from 'react-toastify';
 
 interface Props {
   applicationId: string;
@@ -58,6 +59,7 @@ export const InterviewModal: FC<Props> = ({ interviewId, applicationId, isOpen, 
     } else {
       await createInterview(authHeader, form as ICreateInterviewInput);
     }
+    toast.success(`Interview ${interviewId ? 'updated' : 'scheduled'} successfully`);
     onClose();
   };
 

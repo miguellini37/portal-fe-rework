@@ -1,22 +1,21 @@
 // src/views/ActivityPage.tsx
 import { FC, useEffect, useState, useCallback } from 'react';
-import { IActivity, getActivity } from '../../api/activity';
+import { ActivityType, IActivity, getActivity } from '../../api/activity';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { formatDateTime } from '../../util/date';
 import { useNavigate } from 'react-router-dom'; // added
-import {buildActivityPath} from './ActivityHelper';
+import { buildActivityPath } from './ActivityHelper';
 
 interface ActivityListItemProps {
   activity: IActivity;
   onClick: (a: IActivity) => void; // added
 }
 
-
 const ActivityListItem: FC<ActivityListItemProps> = ({ activity, onClick }) => {
   const activityTime = formatDateTime(activity.date);
 
   switch (activity.type) {
-    case 'application': {
+    case ActivityType.APPLICATION: {
       const job = activity.application?.job;
       return (
         <li
@@ -28,14 +27,17 @@ const ActivityListItem: FC<ActivityListItemProps> = ({ activity, onClick }) => {
             <span className="text-gray-400 text-xs">{activityTime}</span>
           </div>
           <div className="text-gray-800 text-base">
-            Applied to {job?.position ?? 'Unknown position'} at {job?.company?.companyName ?? 'Unknown company'}
+            Applied to {job?.position ?? 'Unknown position'} at{' '}
+            {job?.company?.companyName ?? 'Unknown company'}
           </div>
           {activity.message && <div className="text-gray-500 text-sm">{activity.message}</div>}
         </li>
       );
     }
-    case 'interview': {
-      const when = activity.interview?.dateTime ? formatDateTime(activity.interview.dateTime) : 'TBD';
+    case ActivityType.INTERVIEW: {
+      const when = activity.interview?.dateTime
+        ? formatDateTime(activity.interview.dateTime)
+        : 'TBD';
       return (
         <li
           className="activity-clickable flex flex-col gap-1 border-b last:border-b-0 border-gray-100 py-4 px-2"
@@ -50,7 +52,7 @@ const ActivityListItem: FC<ActivityListItemProps> = ({ activity, onClick }) => {
         </li>
       );
     }
-    case 'other': {
+    case ActivityType.OTHER: {
       return (
         <li
           className="activity-clickable flex flex-col gap-1 border-b last:border-b-0 border-gray-100 py-4 px-2"
@@ -75,7 +77,6 @@ export const ActivityPage: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const authHeader = useAuthHeader();
   const navigate = useNavigate(); // added
-
 
   const handleClick = useCallback(
     (a: IActivity) => {
@@ -109,7 +110,9 @@ export const ActivityPage: FC = () => {
 
         {!loading && !error && (
           <ul className="activity-list">
-            {all.length === 0 && <li className="text-gray-400 text-center py-8">No activity found.</li>}
+            {all.length === 0 && (
+              <li className="text-gray-400 text-center py-8">No activity found.</li>
+            )}
             {all.map((a) => (
               <ActivityListItem key={a.activityId} activity={a} onClick={handleClick} />
             ))}

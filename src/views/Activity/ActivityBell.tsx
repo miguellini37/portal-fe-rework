@@ -6,7 +6,7 @@ import { Bell, X } from 'lucide-react';
 import Modal from 'react-modal';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 import { formatDateTime } from '../../util/date';
-import {buildActivityPath} from './ActivityHelper';
+import { buildActivityPath } from './ActivityHelper';
 import './ActivityPage.css';
 
 interface ActivityBellProps {
@@ -27,47 +27,57 @@ export const ActivityBell: FC<ActivityBellProps> = ({ isCollapsed, className }) 
       .catch(() => setRecent([]));
   }, [isOpen, authHeader]);
 
-  // Build a compact label for accessibility/tooltips
+  // Accessibility label uses activity timestamp
   const renderLabel = (a: IActivity): string => {
-    const when =
-      a.type === ActivityType.INTERVIEW
-        ? formatDateTime(a.interview?.dateTime ?? a.date)
-        : formatDateTime(a.date);
+    const when = formatDateTime(a.date);
     return `${a.message} • ${when}`;
   };
 
-  // Compute primary/secondary text and right-side date
-  const buildDisplay = (a: IActivity): {
+  // Build display parts for each row
+  const buildDisplay = (
+    a: IActivity
+  ): {
     primary: string;
-    company?: string;
-    dateText: string;
+    secondary?: string;
+    dateText?: string;
     dateISO?: Date;
   } => {
-    const dateISO =
-      (a.type === ActivityType.INTERVIEW ? a.interview?.dateTime : a.date) ?? undefined;
+    // Right-side meta shows the activity time for all types
+    const dateISO = a.date;
+    const dateText = formatDateTime(a.date);
 
-    const dateText =
-      a.type === ActivityType.INTERVIEW
-        ? formatDateTime(a.interview?.dateTime ?? a.date)
-        : formatDateTime(a.date);
+    if (a.type === ActivityType.INTERVIEW) {
+      const interviewDt = a.interview?.dateTime;
+      const secondary = [
+        'Scheduled for ' + (interviewDt ? formatDateTime(interviewDt) : undefined),
+        a.interview?.interviewer,
+        a.interview?.location,
+      ]
+        .filter(Boolean)
+        .join(' - ');
+      return { primary: a.message, secondary, dateText, dateISO };
+    }
 
-    // message on first line
+    // Applications and others
     const primary = a.message;
-
-    // company on second line when we know it (applications)
-    const company =
+    const secondary =
       a.type === ActivityType.APPLICATION
-        ? a.application?.job?.company?.companyName + ' - ' + a.application?.job?.position
+        ? [a.application?.job?.company?.companyName, a.application?.job?.position]
+            .filter(Boolean)
+            .join(' - ')
         : undefined;
 
-    return { primary, company, dateText, dateISO };
+    return { primary, secondary, dateText, dateISO };
   };
 
-  const handleItemActivate = useCallback((a: IActivity) => {
-    const to = buildActivityPath(a);
-    setIsOpen(false);
-    navigate(to);
-  }, [navigate]);
+  const handleItemActivate = useCallback(
+    (a: IActivity) => {
+      const to = buildActivityPath(a);
+      setIsOpen(false);
+      navigate(to);
+    },
+    [navigate]
+  );
 
   return (
     <>
@@ -111,9 +121,10 @@ export const ActivityBell: FC<ActivityBellProps> = ({ isCollapsed, className }) 
           {recent.length === 0 ? (
             <li className="activity-empty">No recent activity.</li>
           ) : (
-            recent.map(a => {
-              const { primary, company, dateText, dateISO } = buildDisplay(a);
+            recent.map((a) => {
+              const { primary, secondary, dateText, dateISO } = buildDisplay(a);
               const label = renderLabel(a);
+              const dateAttr = dateISO ? new Date(dateISO).toISOString() : undefined;
               return (
                 <li
                   key={a.activityId}
@@ -127,13 +138,13 @@ export const ActivityBell: FC<ActivityBellProps> = ({ isCollapsed, className }) 
                   <div className="activity-content" title={label}>
                     <div className="activity-text">
                       <div className="activity-primary">{primary}</div>
-                      {company && (
-                        <div className="activity-secondary">{company}</div>
-                      )}
+                      {secondary && <div className="activity-secondary">{secondary}</div>}
                     </div>
-                    <time className="activity-meta" dateTime={formatDateTime(dateISO)}>
-                      {dateText}
-                    </time>
+                    {dateText && (
+                      <time className="activity-meta" dateTime={dateAttr}>
+                        {dateText}
+                      </time>
+                    )}
                   </div>
                 </li>
               );

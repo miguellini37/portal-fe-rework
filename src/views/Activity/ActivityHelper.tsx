@@ -1,13 +1,12 @@
-import { IActivity } from '../../api/activity';
+import { IActivity,ActivityType } from '../../api/activity';
 
 export const buildActivityPath = (a: IActivity): string => {
-  if (a.type === 'application') {
+  if (a.type === ActivityType.APPLICATION) {
     const jobId = a.application?.job?.id;
     return jobId ? `/job/${jobId}` : '/applications';
   }
-  if (a.type === 'interview') {
-    const id = a.interview?.id;
-    return id ? `/interviews/${id}` : '/interviews';
+  if (a.type === ActivityType.INTERVIEW) {
+    return `/interviews`;
   }
   return '/activity';
 };
