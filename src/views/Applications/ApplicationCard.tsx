@@ -54,18 +54,9 @@ export const ApplicationCard: FC<Props> = ({
     }
   };
 
-  const showInterviewButton = (): boolean => {
-    if (!isCompanyPermission) {
-      return false;
-    }
-    if (
-      currentApp?.status === ApplicationStatus.UnderReview ||
-      currentApp?.status === ApplicationStatus.InterviewRequested
-    ) {
-      return true;
-    }
-    return false;
-  };
+  const showInterviewButton =
+    currentApp?.status === ApplicationStatus.UnderReview ||
+    currentApp?.status === ApplicationStatus.InterviewRequested;
 
   const getStatusColor = (status: ApplicationStatus | undefined): string => {
     switch (status) {
@@ -201,7 +192,7 @@ export const ApplicationCard: FC<Props> = ({
                     Accept
                   </button>
                 }
-                {showInterviewButton() && (
+                {showInterviewButton && (
                   <button
                     type="button"
                     className="action-btn secondary"
@@ -219,7 +210,7 @@ export const ApplicationCard: FC<Props> = ({
                     {`${currentApp?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
                   </button>
                 )}
-                {!showInterviewButton() && (
+                {!showInterviewButton && (
                   <button
                     type="button"
                     className="action-btn secondary"
