@@ -70,21 +70,26 @@
 
 /* --- Modal container --- */
 .activity-modal {
+  position: static !important;      /* remove absolute positioning */
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  inset: auto !important;
+  width: auto !important;           /* allow intrinsic width */
+  max-width: 560px;                 /* adjust as desired */
   background: #ffffff;
-  color: #1f2937;
-  width: 100%;
-  max-width: 640px;
-  padding: 24px 28px 24px;
-  border-radius: 12px;
-  outline: none;
   border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 24px 28px 20px;
   box-shadow: 0 8px 32px -6px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.04);
-  max-height: 78vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  overflow: visible;
+  max-height: 78vh;
+  overflow: hidden;
 }
+
 
 /* --- Header --- */
 .activity-modal-header {
@@ -248,10 +253,10 @@
 /* New layout for activity items */
 .activity-content {
   box-sizing: border-box;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto; /* message area + date */
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;          /* tighter gap */
   flex: 1;
   min-width: 0;
 }
@@ -280,12 +285,17 @@
 }
 
 .activity-meta {
-  flex: 0 0 auto;
-  margin-left: 8px;
+  margin-left: 0;     /* no extra unused space */
+  padding-left: 4px;
   font-size: 12px;
   color: #9ca3af;
   white-space: nowrap;
   user-select: none;
+}
+
+/* Optional: keep timeline content from stretching wider than modal inner width */
+.activity-timeline {
+  padding: 6px 16px 0 6px; /* right gutter for scrollbar + breathing room */
 }
 
 /* Removed unused grouped/badge styles:
