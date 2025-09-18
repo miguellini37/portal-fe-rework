@@ -1,0 +1,295 @@
+.activity-page {
+  max-width: 600px;
+  margin: 32px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.activity-title {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-list-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 0;
+}
+
+.activity-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.activity-type {
+  font-weight: 500;
+  color: #2563eb;
+  font-size: 0.95rem;
+}
+
+.activity-date {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.activity-message {
+  color: #222;
+  font-size: 1rem;
+}
+
+.activity-empty,
+.activity-loading,
+.activity-error {
+  color: #888;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.activity-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 12px;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* --- Modal container --- */
+.activity-modal {
+  background: #ffffff;
+  color: #1f2937;
+  width: 100%;
+  max-width: 640px;
+  padding: 24px 28px 24px;
+  border-radius: 12px;
+  outline: none;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 8px 32px -6px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.04);
+  max-height: 78vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* --- Header --- */
+.activity-modal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0 14px;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 40px;
+}
+
+.activity-modal-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .25px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.activity-modal-title-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#2563eb 0%,#3b82f6 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+.activity-close-btn {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  background: transparent;
+  border: none;
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  line-height: 0;
+  color: #374151;
+  transition: background .15s, color .15s;
+}
+
+.activity-close-btn:hover,
+.activity-close-btn:focus {
+  background: #f3f4f6;
+  color: #111827;
+  outline: none;
+}
+
+/* --- Timeline --- */
+.activity-timeline {
+  list-style: none;
+  margin: 0;
+  /* add right padding to create space between date and the modal edge/scrollbar */
+  padding: 6px 12px 0 6px; /* was: 6px 0 0 6px */
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  /* keep a stable gutter when scrollbar appears (supported browsers) */
+  scrollbar-gutter: stable;
+}
+
+.activity-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 18px;
+  color: #1f2937;
+}
+
+.activity-item::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 18px;
+  bottom: -6px;
+  width: 1px;
+  background: #e5e7eb;
+}
+
+.activity-item:last-of-type::after {
+  display: none;
+}
+
+.activity-node {
+  position: relative;
+  width: 16px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.activity-node::before {
+  content: '';
+  position: relative;
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #2563eb;
+  background: #ffffff;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+/* Footer */
+.activity-footer {
+  margin-top: 14px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.activity-see-all {
+  font-size: 13px;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #f3f4f6;
+  transition: background .15s;
+}
+
+.activity-see-all:hover,
+.activity-see-all:focus {
+  background: #e5e7eb;
+  text-decoration: none;
+  outline: none;
+}
+
+/* Clickable list rows */
+.activity-clickable {
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color .15s ease, box-shadow .15s ease;
+}
+
+.activity-clickable:hover,
+.activity-clickable:focus-within {
+  background: #f9fafb;
+}
+
+.activity-clickable:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* New layout for activity items */
+.activity-content {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-text {
+  min-width: 0;
+}
+
+.activity-primary {
+  font-size: 14px;
+  line-height: 1.3;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-secondary {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-meta {
+  flex: 0 0 auto;
+  margin-left: 8px;
+  font-size: 12px;
+  color: #9ca3af;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Removed unused grouped/badge styles:
+  .activity-groups, .activity-group, .group-header, .group-header-text,
+  .group-title, .group-subtitle, .activity-sublist, .subitem, .subitem-node,
+  .badge*, .subitem-text, .subitem-time
+*/

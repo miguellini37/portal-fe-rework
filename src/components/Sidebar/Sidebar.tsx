@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
+import { ActivityBell } from '../../views/Activity/ActivityBell';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -179,47 +180,60 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             </ul>
           </nav>
         </div>
-
-        <div className="mb-4">
-          {!isLoggedIn ? (
+        <div>
+          <div className="mb-4">
             <ul>
-              <li className="mb-4">
-                <NavLink to="/login" className="text-blue-400 hover:text-blue-300" title="Login">
-                  <LogIn /> {!isCollapsed && <span>Login</span>}
-                </NavLink>
-              </li>
-              <li className="mb-4">
-                <NavLink
-                  to="/register"
-                  className="text-blue-400 hover:text-blue-300"
-                  title="Register"
-                >
-                  <UserPlus /> {!isCollapsed && <span>Register</span>}
-                </NavLink>
-              </li>
+              {!isLoggedIn ? (
+                <>
+                  <li className="mb-4">
+                    <NavLink
+                      to="/login"
+                      className="text-blue-400 hover:text-blue-300"
+                      title="Login"
+                    >
+                      <LogIn /> {!isCollapsed && <span>Login</span>}
+                    </NavLink>
+                  </li>
+                  <li className="mb-4">
+                    <NavLink
+                      to="/register"
+                      className="text-blue-400 hover:text-blue-300"
+                      title="Register"
+                    >
+                      <UserPlus /> {!isCollapsed && <span>Register</span>}
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="mb-4">
+                   <li className="mb-4">
+                    <ActivityBell
+                      isCollapsed={isCollapsed}
+                      className="text-blue-400 hover:text-blue-300 focus:outline-none"
+                    />
+                  </li>
+                    <NavLink
+                      to="/profile"
+                      className="text-blue-400 hover:text-blue-300"
+                      title="Profile"
+                    >
+                      <User /> {!isCollapsed && <span>Profile</span>}
+                    </NavLink>
+                  </li>
+                  <li className="mb-4">
+                    <button
+                      onClick={handleLogout}
+                      className="text-red-400 hover:text-red-300 focus:outline-none"
+                      title="Logout"
+                    >
+                      <LogOut /> {!isCollapsed && <span>Logout</span>}
+                    </button>
+                  </li>
+                </>
+              )}
             </ul>
-          ) : (
-            <ul>
-              <li className="mb-4">
-                <NavLink
-                  to="/profile"
-                  className="text-blue-400 hover:text-blue-300"
-                  title="Profile"
-                >
-                  <User /> {!isCollapsed && <span>Profile</span>}
-                </NavLink>
-              </li>
-              <li className="mb-4">
-                <button
-                  onClick={handleLogout}
-                  className="text-red-400 hover:text-red-300 focus:outline-none"
-                  title="Logout"
-                >
-                  <LogOut /> {!isCollapsed && <span>Logout</span>}
-                </button>
-              </li>
-            </ul>
-          )}
+          </div>
         </div>
       </div>
 
