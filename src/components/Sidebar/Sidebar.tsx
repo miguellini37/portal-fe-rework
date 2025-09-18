@@ -183,18 +183,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         <div>
           <div className="mb-4">
             <ul>
-              <li className="mb-4">
-                {permission != null && (
-                  <ActivityBell
-                    isCollapsed={isCollapsed}
-                    className="text-blue-400 hover:text-blue-300 focus:outline-none"
-                  />
-                )}
-              </li>
               {!isLoggedIn ? (
                 <>
                   <li className="mb-4">
-                    <NavLink to="/login" className="text-blue-400 hover:text-blue-300" title="Login">
+                    <NavLink
+                      to="/login"
+                      className="text-blue-400 hover:text-blue-300"
+                      title="Login"
+                    >
                       <LogIn /> {!isCollapsed && <span>Login</span>}
                     </NavLink>
                   </li>
@@ -211,6 +207,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               ) : (
                 <>
                   <li className="mb-4">
+                   <li className="mb-4">
+                    <ActivityBell
+                      isCollapsed={isCollapsed}
+                      className="text-blue-400 hover:text-blue-300 focus:outline-none"
+                    />
+                  </li>
                     <NavLink
                       to="/profile"
                       className="text-blue-400 hover:text-blue-300"

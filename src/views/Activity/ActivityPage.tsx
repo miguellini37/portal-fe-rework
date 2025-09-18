@@ -72,7 +72,7 @@ const ActivityListItem: FC<ActivityListItemProps> = ({ activity, onClick }) => {
 };
 
 export const ActivityPage: FC = () => {
-  const [all, setAll] = useState<IActivity[]>([]);
+  const [activities, setActivities] = useState<IActivity[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const authHeader = useAuthHeader();
@@ -85,18 +85,18 @@ export const ActivityPage: FC = () => {
     [navigate, buildActivityPath]
   );
 
-  const load = useCallback(() => {
+  const fetchActivities = useCallback(() => {
     setLoading(true);
     setError(null);
     getActivity(authHeader ?? '')
-      .then(setAll)
+      .then(setActivities)
       .catch(() => setError('Failed to load activity.'))
       .finally(() => setLoading(false));
   }, [authHeader]);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    fetchActivities();
+  }, [fetchActivities]);
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-8">
@@ -110,10 +110,10 @@ export const ActivityPage: FC = () => {
 
         {!loading && !error && (
           <ul className="activity-list">
-            {all.length === 0 && (
+            {activities.length === 0 && (
               <li className="text-gray-400 text-center py-8">No activity found.</li>
             )}
-            {all.map((a) => (
+            {activities.map((a) => (
               <ActivityListItem key={a.activityId} activity={a} onClick={handleClick} />
             ))}
           </ul>

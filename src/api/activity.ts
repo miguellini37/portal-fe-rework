@@ -12,35 +12,21 @@ export enum ActivityType {
   OTHER = 'other',
 }
 
-interface BaseActivity {
+export interface IActivity {
   activityId: string;
   date: Date; // ISO string
+  type: ActivityType;
   message: string;
+  application?: IApplicationPayload;
+  interview?: IInterviewPayload;
 }
-export interface IActivityPayload {
+export interface IGetActivitiesInput {
   limit: number;
 }
 
-export interface ApplicationActivity extends BaseActivity {
-  type: ActivityType.APPLICATION;
-  application: IApplicationPayload;
-}
-
-export interface InterviewActivity extends BaseActivity {
-  type: ActivityType.INTERVIEW;
-  interview: IInterviewPayload;
-}
-
-export interface OtherActivity extends BaseActivity {
-  type: ActivityType.OTHER;
-  message: string;
-}
-
-export type IActivity = ApplicationActivity | InterviewActivity | OtherActivity;
-
 export async function getActivity(
   authHeader: string | null,
-  payload?: IActivityPayload
+  payload?: IGetActivitiesInput
 ): Promise<IActivity[]> {
   const response = await axios.get(`${url}/activity`, {
     params: payload,
