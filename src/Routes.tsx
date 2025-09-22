@@ -19,7 +19,7 @@ import { JobPage } from './views/Jobs/JobPage';
 import { AthleteProfile } from './views/Profile/Athlete';
 import { InterviewSearch } from './views/Interviews';
 import { ActivityPage } from './views/Activity/ActivityPage';
-import { CurrentStudents } from './views/Schools/CurrentStudents';
+import { StaffDirectory, CurrentStudents } from './views/Schools/StaffDirectory';
 
 type PageRoute = {
   path: string;
@@ -51,6 +51,7 @@ export const AppRoutes = () => {
     { path: '/company/jobs', element: <CompanyJobsPage />, withSidebar: true },
 
     // School Pages
+    { path: '/staff-directory', element: <StaffDirectory />, withSidebar: true },
     { path: '/current-students', element: <CurrentStudents />, withSidebar: true },
 
     { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
