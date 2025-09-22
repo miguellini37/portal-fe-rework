@@ -190,7 +190,10 @@ export const StaffDirectory: FC = () => {
     <div className="staff-directory">
       <div className="staff-directory-header">
         <h1>Staff Directory</h1>
-        <p>Meet the dedicated team supporting our student-athletes across academics, athletics, and career development.</p>
+        <p>
+          Meet the dedicated team supporting our student-athletes across academics, athletics, and
+          career development.
+        </p>
       </div>
 
       {/* Statistics Overview */}
@@ -210,7 +213,9 @@ export const StaffDirectory: FC = () => {
           <div className="stat-content">
             <div className="stat-number">{MOCK_STATS.departments}</div>
             <div className="stat-label">Departments</div>
-            <div className="stat-change positive">+{MOCK_STATS.departmentsChange} this semester</div>
+            <div className="stat-change positive">
+              +{MOCK_STATS.departmentsChange} this semester
+            </div>
             <div className="stat-description">Service departments</div>
           </div>
         </div>
@@ -220,7 +225,9 @@ export const StaffDirectory: FC = () => {
           <div className="stat-content">
             <div className="stat-number">{MOCK_STATS.sportsCovered}</div>
             <div className="stat-label">Sports Covered</div>
-            <div className="stat-change neutral">{MOCK_STATS.sportsCoveredChange} this semester</div>
+            <div className="stat-change neutral">
+              {MOCK_STATS.sportsCoveredChange} this semester
+            </div>
             <div className="stat-description">Athletic programs</div>
           </div>
         </div>
@@ -230,7 +237,9 @@ export const StaffDirectory: FC = () => {
           <div className="stat-content">
             <div className="stat-number">{MOCK_STATS.studentAthletes}</div>
             <div className="stat-label">Student-Athletes Served</div>
-            <div className="stat-change positive">+{MOCK_STATS.studentAthletesChange} this semester</div>
+            <div className="stat-change positive">
+              +{MOCK_STATS.studentAthletesChange} this semester
+            </div>
             <div className="stat-description">Active student-athletes</div>
           </div>
         </div>
@@ -244,7 +253,7 @@ export const StaffDirectory: FC = () => {
             Search & Filter Staff
           </h2>
         </div>
-        
+
         <div className="search-filter-controls">
           <div className="search-bar">
             <Search className="search-icon" size={16} />
@@ -310,7 +319,10 @@ export const StaffDirectory: FC = () => {
             <div key={staff.id} className="staff-card">
               <div className="staff-card-header">
                 <div className="staff-avatar">
-                  {staff.name.split(' ').map(n => n[0]).join('')}
+                  {staff.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')}
                 </div>
                 <div className="staff-basic-info">
                   <h3 className="staff-name">{staff.name}</h3>
@@ -348,7 +360,9 @@ export const StaffDirectory: FC = () => {
                 <p className="section-label">Teams Responsible For:</p>
                 <div className="tags">
                   {staff.teamsResponsibleFor.map((team) => (
-                    <span key={team} className="tag team-tag">{team}</span>
+                    <span key={team} className="tag team-tag">
+                      {team}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -357,7 +371,9 @@ export const StaffDirectory: FC = () => {
                 <p className="section-label">Specialties:</p>
                 <div className="tags">
                   {staff.specialties.map((specialty) => (
-                    <span key={specialty} className="tag specialty-tag">{specialty}</span>
+                    <span key={specialty} className="tag specialty-tag">
+                      {specialty}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -367,12 +383,8 @@ export const StaffDirectory: FC = () => {
               </div>
 
               <div className="staff-actions">
-                <button className="action-btn primary">
-                  📧 Email
-                </button>
-                <button className="action-btn secondary">
-                  📅 Schedule
-                </button>
+                <button className="action-btn primary">📧 Email</button>
+                <button className="action-btn secondary">📅 Schedule</button>
               </div>
             </div>
           ))}
