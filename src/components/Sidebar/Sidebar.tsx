@@ -207,12 +207,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               ) : (
                 <>
                   <li className="mb-4">
-                   <li className="mb-4">
-                    <ActivityBell
-                      isCollapsed={isCollapsed}
-                      className="text-blue-400 hover:text-blue-300 focus:outline-none"
-                    />
-                  </li>
+                    <li className="mb-4">
+                      <ActivityBell
+                        isCollapsed={isCollapsed}
+                        className="text-blue-400 hover:text-blue-300 focus:outline-none"
+                      />
+                    </li>
                     <NavLink
                       to="/profile"
                       className="text-blue-400 hover:text-blue-300"

@@ -31,7 +31,7 @@ export const AppRoutes = () => {
   const routes: PageRoute[] = [
     { path: '/login', element: <LoginPage />, withSidebar: false, noAuth: true },
     { path: '/register', element: <Register />, withSidebar: false, noAuth: true },
-    { path: '/activity', element: <ActivityPage />, withSidebar: true},
+    { path: '/activity', element: <ActivityPage />, withSidebar: true },
 
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
     { path: '/company/:id', element: <CompanyProfile />, withSidebar: true },
