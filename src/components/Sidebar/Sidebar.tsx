@@ -17,6 +17,7 @@ import {
   Users,
   Menu,
   CalendarClock,
+  BarChart3,
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
@@ -137,6 +138,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.SCHOOL && (
                 <>
                   <li className="mb-4">
+                    <DisabledNavLink to="/school/dashboard" title="Dashboard">
+                      <BarChart3 /> {!isCollapsed && <span>Dashboard</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
                     <DisabledNavLink to={`/school/${user?.schoolRefId}`} title="School Profile">
                       <Building /> {!isCollapsed && <span>School Profile</span>}
                     </DisabledNavLink>
@@ -207,12 +213,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               ) : (
                 <>
                   <li className="mb-4">
-                   <li className="mb-4">
-                    <ActivityBell
-                      isCollapsed={isCollapsed}
-                      className="text-blue-400 hover:text-blue-300 focus:outline-none"
-                    />
-                  </li>
+                    <li className="mb-4">
+                      <ActivityBell
+                        isCollapsed={isCollapsed}
+                        className="text-blue-400 hover:text-blue-300 focus:outline-none"
+                      />
+                    </li>
                     <NavLink
                       to="/profile"
                       className="text-blue-400 hover:text-blue-300"
