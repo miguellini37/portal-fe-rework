@@ -15,6 +15,9 @@ Portal Frontend is a React 19 + TypeScript job portal application for connecting
 - **Prettier** for code formatting
 - **Husky** for git hooks
 
+### Libraries
+- Never introduce new libraries to the repo unless specifically instructed. If there is a library you think is necessary or would be helpful, bring it up and ask if we want to use it.
+
 ## Working Effectively
 
 ### Bootstrap and Setup (First Time)
@@ -282,5 +285,10 @@ const [loading, setLoading] = useState(false);
 - **Don't**: Use `any` type, add unnecessary wrappers, or break existing behavior
 - **Don't**: Introduce new libraries without explicit instruction
 - **Don't**: Use inline styles or skip manual validation
+
+## Special Notes
+- If a visual bug is reported (e.g., input border cutoff), check for container padding/overflow and input box-sizing.
+- If a new field is needed in a form, add it to the relevant TypeScript interface.
+- Try to not use emojis. Instead use lucide-react icons or similar for visual elements.
 
 Remember: ALWAYS validate your changes by running the application and testing the affected functionality manually.
