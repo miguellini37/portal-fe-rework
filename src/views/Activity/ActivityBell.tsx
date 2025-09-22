@@ -21,7 +21,9 @@ export const ActivityBell: FC<ActivityBellProps> = ({ isCollapsed, className }) 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      return;
+    }
     getActivity(authHeader ?? '', { limit: 10 })
       .then(setRecent)
       .catch(() => setRecent([]));

@@ -1,4 +1,4 @@
-import { IActivity,ActivityType } from '../../api/activity';
+import { IActivity, ActivityType } from '../../api/activity';
 
 export const buildActivityPath = (a: IActivity): string => {
   if (a.type === ActivityType.APPLICATION) {
