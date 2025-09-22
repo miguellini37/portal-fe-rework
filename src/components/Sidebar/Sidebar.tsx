@@ -142,8 +142,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     <DisabledNavLink to="/school/dashboard" title="Dashboard">
                       <BarChart3 /> {!isCollapsed && <span>Dashboard</span>}
                     </DisabledNavLink>
-                    <DisabledNavLink to="/staff-directory" title="Staff Directory">
-                      <BarChart3 /> {!isCollapsed && <span>Staff Directory</span>}
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/current-students" title="Current Students">
+                      <GraduationCap /> {!isCollapsed && <span>Current Students</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
