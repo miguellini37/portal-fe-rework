@@ -17,6 +17,7 @@ import {
   Users,
   Menu,
   CalendarClock,
+  GraduationCap,
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
@@ -142,6 +143,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
+                    <DisabledNavLink to="/current-students" title="Current Students">
+                      <GraduationCap /> {!isCollapsed && <span>Current Students</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
                     <DisabledNavLink to="/jobs" title="Jobs">
                       <Briefcase /> {!isCollapsed && <span>Jobs</span>}
                     </DisabledNavLink>
@@ -207,12 +213,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               ) : (
                 <>
                   <li className="mb-4">
-                   <li className="mb-4">
-                    <ActivityBell
-                      isCollapsed={isCollapsed}
-                      className="text-blue-400 hover:text-blue-300 focus:outline-none"
-                    />
-                  </li>
+                    <li className="mb-4">
+                      <ActivityBell
+                        isCollapsed={isCollapsed}
+                        className="text-blue-400 hover:text-blue-300 focus:outline-none"
+                      />
+                    </li>
                     <NavLink
                       to="/profile"
                       className="text-blue-400 hover:text-blue-300"
