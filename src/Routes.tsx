@@ -6,6 +6,7 @@ import { JSX } from 'react';
 import { LoginPage } from './views/Login/Login';
 import { ProfileEdit } from './views/Profile';
 import { SchoolPage } from './views/Schools/SchoolPage';
+import { SchoolDashboard } from './views/Schools/SchoolDashboard';
 import 'react-toastify/dist/ReactToastify.css';
 import { JobSearchPage } from './views/Jobs/JobSearchPage';
 import { Register } from './views/Login/Register';
@@ -37,6 +38,7 @@ export const AppRoutes = () => {
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
     { path: '/company/:id', element: <CompanyProfile />, withSidebar: true },
     { path: '/school/:id', element: <SchoolPage />, withSidebar: true },
+    { path: '/school/dashboard', element: <SchoolDashboard />, withSidebar: true },
     { path: '/athlete/:id', element: <AthleteProfile />, withSidebar: true },
     { path: '/job/:id', element: <JobPage />, withSidebar: true },
 

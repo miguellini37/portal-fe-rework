@@ -139,6 +139,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.SCHOOL && (
                 <>
                   <li className="mb-4">
+                    <DisabledNavLink to="/school/dashboard" title="Dashboard">
+                      <BarChart3 /> {!isCollapsed && <span>Dashboard</span>}
                     <DisabledNavLink to="/staff-directory" title="Staff Directory">
                       <BarChart3 /> {!isCollapsed && <span>Staff Directory</span>}
                     </DisabledNavLink>
