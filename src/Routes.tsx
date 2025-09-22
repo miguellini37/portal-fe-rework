@@ -20,7 +20,8 @@ import { JobPage } from './views/Jobs/JobPage';
 import { AthleteProfile } from './views/Profile/Athlete';
 import { InterviewSearch } from './views/Interviews';
 import { ActivityPage } from './views/Activity/ActivityPage';
-import { StaffDirectory, CurrentStudents } from './views/Schools/StaffDirectory';
+import { StaffDirectory } from './views/Schools/StaffDirectory';
+import { CurrentStudents } from './views/Schools/CurrentStudents';
 
 type PageRoute = {
   path: string;
