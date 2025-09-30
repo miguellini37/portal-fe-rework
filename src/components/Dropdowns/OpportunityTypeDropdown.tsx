@@ -41,11 +41,7 @@ export const OpportunityTypeDropdown = ({
   return (
     <Select<DropdownOption>
       id={id}
-      value={
-        selected
-          ? options.find((x) => x.value === selected || x.label === selected)
-          : null
-      }
+      value={selected ? options.find((x) => x.value === selected || x.label === selected) : null}
       options={options}
       onChange={onChange}
       styles={customDropdownStyle}
