@@ -717,3 +717,25 @@
     font-size: 1.5rem;
   }
 }
+
+/* NIL-specific styles */
+.nil-tag {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff) !important;
+  border: 1px solid #c4b5fd !important;
+  color: #7c3aed !important;
+}
+
+.compensation-warning {
+  color: #f59e0b;
+  display: inline-flex;
+  align-items: center;
+}
+
+.warning-message {
+  font-size: 12px;
+  color: #f59e0b;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

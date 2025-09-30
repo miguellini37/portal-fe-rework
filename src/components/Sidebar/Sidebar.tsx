@@ -20,6 +20,7 @@ import {
   BarChart3,
   GraduationCap,
   BookUser,
+  Star,
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
@@ -116,6 +117,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
+                    <DisabledNavLink to="/nil/search" title="NIL Opportunities">
+                      <Star /> {!isCollapsed && <span>NIL Opportunities</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
                     <DisabledNavLink to="/internships/search" title="Internships">
                       <School /> {!isCollapsed && <span>Internships</span>}
                     </DisabledNavLink>
@@ -181,6 +187,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <li className="mb-4">
                     <DisabledNavLink to="/company/jobs" title="Jobs">
                       <Briefcase /> {!isCollapsed && <span>Jobs</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/company/nil" title="NIL Opportunities">
+                      <Star /> {!isCollapsed && <span>NIL Opportunities</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
