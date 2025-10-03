@@ -22,6 +22,8 @@ import { InterviewSearch } from './views/Interviews';
 import { ActivityPage } from './views/Activity/ActivityPage';
 import { StaffDirectory } from './views/Schools/StaffDirectory';
 import { CurrentStudents } from './views/Schools/CurrentStudents';
+import { NILSearchPage } from './views/Jobs/NILSearchPage';
+import { CompanyNILPage } from './views/Jobs/CompanyNILPage';
 
 type PageRoute = {
   path: string;
@@ -44,6 +46,7 @@ export const AppRoutes = () => {
     { path: '/job/:id', element: <JobPage />, withSidebar: true },
 
     { path: '/jobs', element: <JobSearchPage />, withSidebar: true },
+    { path: '/nil/search', element: <NILSearchPage />, withSidebar: true },
     { path: '/internships/search', element: <InternshipSearchPage />, withSidebar: true },
     { path: '/company/search', element: <CompanySearch />, withSidebar: true },
     { path: '/applications', element: <ApplicationSearch />, withSidebar: true },
@@ -52,6 +55,7 @@ export const AppRoutes = () => {
     // Company Pages
     { path: '/talent-pool', element: <TalentPool />, withSidebar: true },
     { path: '/company/jobs', element: <CompanyJobsPage />, withSidebar: true },
+    { path: '/company/nil', element: <CompanyNILPage />, withSidebar: true },
 
     // School Pages
     { path: '/staff-directory', element: <StaffDirectory />, withSidebar: true },
