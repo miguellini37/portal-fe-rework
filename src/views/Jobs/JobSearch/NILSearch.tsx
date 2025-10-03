@@ -31,7 +31,7 @@ export const NILSearch = ({
   const fetchNILOpportunities = async () => {
     try {
       // Filter for NIL type jobs
-      const nilFilter: IJobsFilter = { type: 'nil' };
+      const nilFilter: IJobsFilter = { type: ['nil'] };
       const jobs = await getAllJobs(authHeader, nilFilter);
       setNilOpportunities(jobs);
     } catch {
