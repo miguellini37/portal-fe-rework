@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { url } from '../config/url';
-import { IUserData } from '../auth/store';
+import { IUserData } from '../auth/hooks';
 
 export interface IUpdateCompanyEmployeePayload {
   bio?: string;
-  companyRefId?: string;
+  companyId?: string;
   email?: string;
   firstName?: string;
   lastName?: string;

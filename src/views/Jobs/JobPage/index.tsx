@@ -1,7 +1,7 @@
 import './job.css';
 import { FC, useEffect, useMemo, useState, useCallback } from 'react';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { useAuthHeader } from '../../../auth/hooks';
+import { useAuthUser } from '../../../auth/hooks';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ import {
   getApplications,
   IApplicationPayload,
 } from '../../../api/application';
-import { IUserData, USER_PERMISSIONS } from '../../../auth/store';
+import { USER_PERMISSIONS } from '../../../auth/hooks';
 
 import { Overview } from './Overview';
 import { Requirements } from './Requirements';
@@ -26,7 +26,7 @@ type TabKey = 'overview' | 'requirements' | 'applications' | 'performance';
 
 export const JobPage: FC = () => {
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const { id } = useParams<{ id: string }>();
 
   const [job, setJob] = useState<IJobPayload>();
@@ -41,7 +41,7 @@ export const JobPage: FC = () => {
 
   const isCompany = user?.permission === USER_PERMISSIONS.COMPANY;
   const canEdit = Boolean(
-    isCompany && user?.companyRefId && job?.company?.id && user.companyRefId === job.company.id
+    isCompany && user?.companyId && job?.company?.id && user.companyId === job.company.id
   );
   const canApply =
     user?.permission === USER_PERMISSIONS.ATHLETE &&

@@ -1,7 +1,7 @@
 import { ActionMeta, SingleValue } from 'react-select';
 import Select from 'react-select';
 import { useEffect } from 'react';
-import { USER_PERMISSIONS } from '../../auth/store';
+import { USER_PERMISSIONS } from '../../auth/hooks';
 import { customDropdownStyle } from './DropdownStyle';
 
 interface Option {
@@ -22,10 +22,12 @@ export const ProfileTypeDropdown = ({
   disabled,
   selected,
 }: ProfileTypeDropdownProps) => {
-  const options: Option[] = Object.values(USER_PERMISSIONS).map((value) => ({
-    value,
-    label: value.charAt(0).toUpperCase() + value.slice(1),
-  }));
+  const options: Option[] = Object.values(USER_PERMISSIONS)
+    .filter((value) => value !== USER_PERMISSIONS.ADMIN)
+    .map((value) => ({
+      value,
+      label: value.charAt(0).toUpperCase() + value.slice(1),
+    }));
 
   // Ensure default selection on mount
   useEffect(() => {

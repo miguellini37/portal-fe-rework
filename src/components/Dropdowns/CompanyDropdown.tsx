@@ -1,8 +1,9 @@
 import { ActionMeta, SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useEffect, useState } from 'react';
-import { getCompanies } from '../../api/company';
+import { getCompaniesForDropdown } from '../../api/company';
 import { customDropdownStyle } from './DropdownStyle';
+import { useAuthHeader } from '../../auth/hooks';
 
 interface CompanyOption {
   readonly value: string;
@@ -21,8 +22,10 @@ interface CompanyDropdownProps {
 export const CompanyDropdown = ({ id, onChange, disabled, selected }: CompanyDropdownProps) => {
   const [options, setOptions] = useState<CompanyOption[]>([]);
 
+  const authHeader = useAuthHeader();
+
   const fetchCompanies = async (): Promise<void> => {
-    const companies = await getCompanies();
+    const companies = await getCompaniesForDropdown(authHeader);
     setOptions(
       companies.map((c) => ({
         value: c.id as string,

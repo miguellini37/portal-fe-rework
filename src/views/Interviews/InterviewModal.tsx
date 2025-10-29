@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthHeader } from '../../auth/hooks';
 import {
   createInterview,
   getInterview,

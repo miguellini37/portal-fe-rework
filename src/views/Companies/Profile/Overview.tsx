@@ -150,7 +150,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ company }) => {
 
         <ul className="completion-list">
           {/* {renderProfileCompletion('🧍 Personal Info', overViewInfo)}
-          {renderProfileCompletion('🎓 Academic Info', { academics, schoolRef })}
+          {renderProfileCompletion('🎓 Academic Info', { academics, school })}
           {renderProfileCompletion('🏆 Athletic Info', { athletics })} */}
           {/* <li className="warning">
             <span>📄 Resume</span>

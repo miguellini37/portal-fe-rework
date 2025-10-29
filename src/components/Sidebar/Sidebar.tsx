@@ -1,8 +1,6 @@
 import { NavLink, NavLinkProps, useNavigate } from 'react-router-dom';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
-import useSignOut from 'react-auth-kit/hooks/useSignOut';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData, USER_PERMISSIONS } from '../../auth/store';
+import { useIsAuthenticated, useAuthUser, useAuth } from '../../auth/hooks';
+import { USER_PERMISSIONS } from '../../auth/hooks';
 import {
   Home,
   Briefcase,
@@ -21,6 +19,7 @@ import {
   GraduationCap,
   BookUser,
   Star,
+  Shield,
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
@@ -32,16 +31,11 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const isLoggedIn = useIsAuthenticated();
-  const signOut = useSignOut();
+  const { logout, register, login } = useAuth();
   const navigate = useNavigate();
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const permission = user?.permission;
   const [isCollapsed, setIsCollapsed] = useState(false);
-
-  const handleLogout = () => {
-    signOut();
-    navigate('/login');
-  };
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -156,7 +150,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
-                    <DisabledNavLink to={`/school/${user?.schoolRefId}`} title="School Profile">
+                    <DisabledNavLink to={`/school/${user?.schoolId}`} title="School Profile">
                       <Building /> {!isCollapsed && <span>School Profile</span>}
                     </DisabledNavLink>
                   </li>
@@ -175,7 +169,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {permission === USER_PERMISSIONS.COMPANY && (
                 <>
                   <li className="mb-4">
-                    <DisabledNavLink to={`/company/${user?.companyRefId}`} title="Company Profile">
+                    <DisabledNavLink to={`/company/${user?.companyId}`} title="Company Profile">
                       <Building /> {!isCollapsed && <span>Company Profile</span>}
                     </DisabledNavLink>
                   </li>
@@ -206,6 +200,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                 </>
               )}
+              {permission === USER_PERMISSIONS.ADMIN && (
+                <>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/admin/users" title="User Management">
+                      <Shield /> {!isCollapsed && <span>User Management</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/admin/schools" title="School Management">
+                      <GraduationCap /> {!isCollapsed && <span>School Management</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/admin/companies" title="Company Management">
+                      <Building2 /> {!isCollapsed && <span>Company Management</span>}
+                    </DisabledNavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </nav>
         </div>
@@ -215,44 +228,56 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {!isLoggedIn ? (
                 <>
                   <li className="mb-4">
-                    <NavLink
-                      to="/login"
+                    <button
                       className="text-blue-400 hover:text-blue-300"
                       title="Login"
+                      onClick={() => {
+                        login();
+                      }}
                     >
                       <LogIn /> {!isCollapsed && <span>Login</span>}
-                    </NavLink>
+                    </button>
                   </li>
                   <li className="mb-4">
-                    <NavLink
-                      to="/register"
+                    <button
                       className="text-blue-400 hover:text-blue-300"
                       title="Register"
+                      onClick={() => {
+                        register();
+                      }}
                     >
                       <UserPlus /> {!isCollapsed && <span>Register</span>}
-                    </NavLink>
+                    </button>
                   </li>
                 </>
               ) : (
                 <>
-                  <li className="mb-4">
+                  {permission != USER_PERMISSIONS.ADMIN && (
                     <li className="mb-4">
                       <ActivityBell
                         isCollapsed={isCollapsed}
                         className="text-blue-400 hover:text-blue-300 focus:outline-none"
                       />
                     </li>
-                    <NavLink
-                      to="/profile"
-                      className="text-blue-400 hover:text-blue-300"
-                      title="Profile"
-                    >
-                      <User /> {!isCollapsed && <span>Profile</span>}
-                    </NavLink>
-                  </li>
+                  )}
+                  {permission != USER_PERMISSIONS.ADMIN && (
+                    <li className="mb-4">
+                      <NavLink
+                        to="/profile"
+                        className="text-blue-400 hover:text-blue-300"
+                        title="Profile"
+                      >
+                        <User /> {!isCollapsed && <span>Profile</span>}
+                      </NavLink>
+                    </li>
+                  )}
+
                   <li className="mb-4">
                     <button
-                      onClick={handleLogout}
+                      onClick={() => {
+                        logout();
+                        navigate('/');
+                      }}
                       className="text-red-400 hover:text-red-300 focus:outline-none"
                       title="Logout"
                     >

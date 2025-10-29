@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { IApplicationPayload, ApplicationStatus } from '../../api/application';
 import '../Companies/company.css';
 import './applications.css';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData, USER_PERMISSIONS } from '../../auth/store';
+import { useAuthUser } from '../../auth/hooks';
+import { USER_PERMISSIONS } from '../../auth/hooks';
 import { getFullName, toTitleCase } from '../../util/name';
 import { toast } from 'react-toastify';
 import { InterviewModal } from '../Interviews/InterviewModal';
@@ -23,7 +23,7 @@ export const ApplicationCard: FC<Props> = ({
   onUpdateStatus,
   showJobPosition = true,
 }) => {
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const isCompanyPermission = user?.permission === USER_PERMISSIONS.COMPANY;
   const isAthletePermission = user?.permission === USER_PERMISSIONS.ATHLETE;
 

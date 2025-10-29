@@ -6,7 +6,7 @@ import {
   updateJob,
   JobStatus,
 } from '../../api/job';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthHeader } from '../../auth/hooks';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { IndustryDropdown } from '../../components/Dropdowns/IndustryDropdown';

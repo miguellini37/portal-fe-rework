@@ -73,7 +73,7 @@ export interface IRecruitingPayload {
 export interface ICompanyPaylod {
   id?: string;
   companyName?: string;
-  ownerRefId?: string;
+  ownerId?: string;
   industry?: string;
   jobs?: IJobPayload[];
   culture?: CulturePayload;
@@ -111,10 +111,28 @@ export const updateCompany = async (
   return response.data;
 };
 
-export const getCompanies = async (): Promise<ICompanyPaylod[]> => {
+export const getCompanies = async (authHeader: string | null): Promise<ICompanyPaylod[]> => {
   const response = await axios.get(`${url}/getCompanies`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};
+
+export interface ICompanyPayloadLite {
+  id?: string;
+  companyName?: string;
+}
+export const getCompaniesForDropdown = async (
+  authHeader: string | null
+): Promise<ICompanyPayloadLite[]> => {
+  const response = await axios.get(`${url}/getCompaniesForDropdown`, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
     },
   });
 

@@ -4,7 +4,7 @@ import { IActivity, getActivity, ActivityType } from '../../api/activity';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bell, X } from 'lucide-react';
 import Modal from 'react-modal';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthHeader } from '../../auth/hooks';
 import { formatDateTime } from '../../util/date';
 import { buildActivityPath } from './ActivityHelper';
 import './ActivityPage.css';

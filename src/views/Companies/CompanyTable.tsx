@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getCompanies, ICompanyPaylod } from '../../api/company';
 import { CompanyCard } from './CompanyCard';
+import { useAuthHeader } from '../../auth/hooks';
 
 interface CompanySearchProps {
   pageTitle?: string;
@@ -12,12 +13,13 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
   pageTitle = 'Search Companies',
   pageSubtitle = 'Discover companies and explore their opportunities',
 }) => {
+  const authHeader = useAuthHeader();
   const [companies, setCompanies] = useState<ICompanyPaylod[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchCompanies = async () => {
     try {
-      const data = await getCompanies();
+      const data = await getCompanies(authHeader);
       setCompanies(data);
     } catch {
       toast.error('Failed to fetch companies');

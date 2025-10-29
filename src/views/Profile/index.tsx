@@ -1,11 +1,14 @@
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData, USER_PERMISSIONS } from '../../auth/store';
-import { AthleteProfile } from './Athlete/';
-import { SchoolEmployeeProfile } from './SchoolEmployee';
+import { useAuthUser, USER_PERMISSIONS } from '../../auth/hooks';
+import { AthleteProfile } from './Athlete';
 import { CompanyEmployeeProfile } from './CompanyEmployee';
+import { SchoolEmployeeProfile } from './SchoolEmployee';
+import { SetupProfile } from './SetupProfile';
 
 export const ProfileEdit = () => {
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
+  if (!user || !user.permission) {
+    return <SetupProfile />;
+  }
   const permission = user?.permission;
 
   if (permission == USER_PERMISSIONS.ATHLETE) {
@@ -19,6 +22,4 @@ export const ProfileEdit = () => {
   if (permission == USER_PERMISSIONS.COMPANY) {
     return <CompanyEmployeeProfile />;
   }
-
-  return <div>Logged in user doesn't have correct permission</div>;
 };

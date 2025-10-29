@@ -1,16 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getSchoolById, ISchoolPaylod, updateSchool } from '../../api/school';
 import { useNavigate, useParams } from 'react-router-dom';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../../auth/store';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthUser } from '../../auth/hooks';
+import { useAuthHeader } from '../../auth/hooks';
 import { toast } from 'react-toastify';
 import './SchoolPage.css';
 
 export const SchoolPage = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const { id } = useParams<{ id: string }>();
 
   const [school, setSchool] = useState<ISchoolPaylod>({});
@@ -32,7 +31,7 @@ export const SchoolPage = () => {
   }, [id]);
 
   const canEditPage = useMemo(() => {
-    return user?.id === school.ownerRefId;
+    return user?.id === school.ownerId;
   }, [user, school]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

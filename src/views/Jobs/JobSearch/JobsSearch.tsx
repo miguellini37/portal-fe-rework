@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthHeader } from '../../../auth/hooks';
 import { toast } from 'react-toastify';
 import { getAllJobs, IJobPayload, IJobsFilter } from '../../../api/job';
 import { JobModal } from '../JobModal';

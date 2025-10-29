@@ -33,7 +33,14 @@ cp sample.envrc .envrc
 # cp sample.envrc .env
 ```
 
-Edit the file as needed for your environment.
+Edit the file as needed for your environment. You'll need to configure:
+- **Backend API URL**: `REACT_APP_BACKEND_URL`
+- **Keycloak Configuration**: 
+  - `REACT_APP_KEYCLOAK_URL` - Your Keycloak server URL
+  - `REACT_APP_KEYCLOAK_REALM` - Your Keycloak realm name
+  - `REACT_APP_KEYCLOAK_CLIENT_ID` - Your Keycloak client ID
+
+For detailed Keycloak setup instructions, see [KEYCLOAK_INTEGRATION.md](./KEYCLOAK_INTEGRATION.md).
 
 ### 4. Start the App
 If using .envrc, run this command to set environment variables

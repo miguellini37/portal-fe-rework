@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { OverviewTab } from './Overview';
 import './company.css'; // Ensure styles are applied globally
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { useAuthHeader } from '../../../auth/hooks';
+import { useAuthUser } from '../../../auth/hooks';
 import { toast } from 'react-toastify';
-import { IUserData } from '../../../auth/store';
 import { useParams } from 'react-router-dom';
 import { ICompanyPaylod, getCompanyById, updateCompany } from '../../../api/company';
 import { IUpdateCompanyEmployeePayload } from '../../../api/companyEmployee';
@@ -16,7 +15,7 @@ import { CompanyEmployeeTab } from './Employees';
 
 export const CompanyProfile = () => {
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const { id } = useParams<{ id: string }>();
 
   const [company, setCompany] = useState<ICompanyPaylod>({});
@@ -41,7 +40,7 @@ export const CompanyProfile = () => {
   }, [id]);
 
   const canEditPage = useMemo(() => {
-    return user?.id === company.ownerRefId;
+    return user?.id === company.ownerId;
   }, [user, company]);
 
   const handleEditClick = () => setEditMode(true);

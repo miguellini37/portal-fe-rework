@@ -3,6 +3,7 @@ import React from 'react';
 import { IUpdateAthletePayload } from '../../../api/athlete';
 import { SchoolDropdown } from '../../../components/Dropdowns/SchoolDropdown';
 import { MajorDropdown } from '../../../components/Dropdowns/MajorDropdown';
+import { useAuthUser } from '../../../auth/hooks';
 
 interface AcademicsTabProps {
   athlete: IUpdateAthletePayload;
@@ -11,6 +12,9 @@ interface AcademicsTabProps {
 }
 
 export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, setAthlete }) => {
+  const user = useAuthUser();
+
+  console.log(user);
   const academics = athlete.academics || {};
   return (
     <div className="academic-tab-container card">
@@ -24,19 +28,16 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
         <div className="academic-field">
           <div className="academic-label">University</div>
           <div className="academic-value">
-            {editMode ? (
-              <SchoolDropdown
-                onChange={(e) =>
-                  setAthlete((a) => ({
-                    ...a,
-                    schoolId: e?.value,
-                  }))
-                }
-                selected={athlete.schoolRef?.id}
-              />
-            ) : (
-              <div className="readonly-display">{athlete.schoolRef?.schoolName || ''}</div>
-            )}
+            <SchoolDropdown
+              onChange={(e) =>
+                setAthlete((a) => ({
+                  ...a,
+                  schoolId: e?.value,
+                }))
+              }
+              selected={user?.schoolId}
+              disabled
+            />
           </div>
         </div>
         <div className="academic-field">

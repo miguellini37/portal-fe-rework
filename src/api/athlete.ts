@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { url } from '../config/url';
-import { IUserData } from '../auth/store';
+import { IUserData } from '../auth/hooks';
 import { ISchoolPaylod } from './school';
 
 export interface AcademicsPayload {
@@ -33,7 +33,7 @@ export interface IUpdateAthletePayload {
   bio?: string;
   academics?: AcademicsPayload;
   athletics?: AthleticsPayload;
-  schoolRef?: ISchoolPaylod;
+  school?: ISchoolPaylod;
   schoolId?: string;
 }
 
@@ -79,7 +79,7 @@ export type GetAthletesResponse = {
   bio?: string;
   academics?: AcademicsPayload;
   athletics?: AthleticsPayload;
-  schoolRef?: ISchoolPaylod;
+  school?: ISchoolPaylod;
   schoolId?: string;
 };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthHeader } from '../../../auth/hooks';
 import { getAthletes, GetAthletesFilter, GetAthletesResponse } from '../../../api/athlete';
 import { AthleteCard } from './AthleteCard';
 

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ActionMeta, SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { getSchools } from '../../api/school';
 import { customDropdownStyle } from './DropdownStyle';
+import { useAuthHeader } from '../../auth/hooks';
+import { getSchoolsForDropdown } from '../../api/school';
 
 export interface SchoolOption {
   readonly value: string;
@@ -27,9 +28,10 @@ export const SchoolDropdown = ({
   className,
 }: SchoolDropdownProps) => {
   const [options, setOptions] = useState<SchoolOption[]>([]);
+  const authHeader = useAuthHeader();
 
   const fetchSchools = async (): Promise<void> => {
-    const schools = await getSchools();
+    const schools = await getSchoolsForDropdown(authHeader);
     setOptions(
       schools.map((school) => ({
         value: school.id as string,

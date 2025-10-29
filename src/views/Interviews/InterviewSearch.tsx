@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthHeader } from '../../auth/hooks';
 import { toast } from 'react-toastify';
 import { getInterviews, IInterviewPayload } from '../../api/interview';
 import { InterviewCard } from './InterviewCard';

@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../../auth/store';
+import { useAuthHeader } from '../../auth/hooks';
+import { useAuthUser } from '../../auth/hooks';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -15,7 +14,7 @@ import './Profiles.css';
 export const SchoolEmployeeProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const id = user?.id;
 
   const [schoolEmployee, setSchoolEmployee] = useState<IUpdateSchoolEmployeePayload>({});
@@ -86,7 +85,7 @@ export const SchoolEmployeeProfile = () => {
           </label>
           <SchoolDropdown
             onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolName: e?.value }))}
-            selected={schoolEmployee.schoolRef?.id}
+            selected={schoolEmployee.school?.id}
             disabled
           />
         </div>

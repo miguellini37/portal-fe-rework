@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
-import AuthProvider from 'react-auth-kit';
-import { authStore, IUserData } from './auth/store';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from './config/keycloak';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AppRoutes } from './Routes';
@@ -9,6 +9,13 @@ import Modal from 'react-modal';
 export const App = () => {
   // Set the app element for accessibility (only needs to be set once)
   Modal.setAppElement('#root');
+
+  // Keycloak initialization config
+  const keycloakInitOptions = {
+    onLoad: 'check-sso',
+    checkLoginIframe: false,
+    redirectUri: window.location.origin + '/profile',
+  };
 
   return (
     <>
@@ -20,11 +27,11 @@ export const App = () => {
         pauseOnHover
       />
       <div style={{ height: '100vh' }}>
-        <AuthProvider<IUserData> store={authStore}>
+        <ReactKeycloakProvider authClient={keycloak} initOptions={keycloakInitOptions}>
           <BrowserRouter>
             <AppRoutes />
           </BrowserRouter>
-        </AuthProvider>
+        </ReactKeycloakProvider>
       </div>
     </>
   );

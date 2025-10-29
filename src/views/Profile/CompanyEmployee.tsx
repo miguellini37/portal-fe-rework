@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { IUserData } from '../../auth/store';
+import { useAuthHeader } from '../../auth/hooks';
+import { useAuthUser } from '../../auth/hooks';
 import { toast } from 'react-toastify';
 import { CompanyDropdown } from '../../components/Dropdowns/CompanyDropdown';
 import {
@@ -15,7 +14,7 @@ import './Profiles.css';
 export const CompanyEmployeeProfile = () => {
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const id = user?.id;
 
   const [companyEmployee, setCompanyEmployee] = useState<IUpdateCompanyEmployeePayload>({});

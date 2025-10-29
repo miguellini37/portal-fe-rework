@@ -1,7 +1,7 @@
 // src/views/ActivityPage.tsx
 import { FC, useEffect, useState, useCallback } from 'react';
 import { ActivityType, IActivity, getActivity } from '../../api/activity';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAuthHeader } from '../../auth/hooks';
 import { formatDateTime } from '../../util/date';
 import { useNavigate } from 'react-router-dom'; // added
 import { buildActivityPath } from './ActivityHelper';

@@ -3,16 +3,15 @@ import { OverviewTab } from './Overview';
 import { AcademicsTab } from './Academics';
 import { AthleticsTab } from './AthleticsTab';
 import './athlete.css';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { useAuthHeader } from '../../../auth/hooks';
+import { useAuthUser } from '../../../auth/hooks';
 import { toast } from 'react-toastify';
 import { IUpdateAthletePayload, getAthleteById, updateAthlete } from '../../../api/athlete';
-import { IUserData } from '../../../auth/store';
 import { useParams } from 'react-router-dom';
 
 export const AthleteProfile = () => {
   const authHeader = useAuthHeader();
-  const user = useAuthUser<IUserData>();
+  const user = useAuthUser();
   const userId = user?.id;
   const params = useParams<{ id: string }>();
 

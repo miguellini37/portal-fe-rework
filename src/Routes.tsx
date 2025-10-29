@@ -1,15 +1,13 @@
 import { Homepage } from './views/Homepage';
 import { Route, Routes } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar/Sidebar';
-import RequireAuth from '@auth-kit/react-router/RequireAuth';
+import { RequireAuth } from './auth/RequireAuth';
 import { JSX } from 'react';
-import { LoginPage } from './views/Login/Login';
 import { ProfileEdit } from './views/Profile';
 import { SchoolPage } from './views/Schools/SchoolPage';
 import { SchoolDashboard } from './views/Schools/SchoolDashboard';
 import 'react-toastify/dist/ReactToastify.css';
 import { JobSearchPage } from './views/Jobs/JobSearchPage';
-import { Register } from './views/Login/Register';
 import { CompanySearch } from './views/Companies/CompanyTable';
 import { InternshipSearchPage } from './views/Jobs/InternshipSearchPage';
 import { CompanyProfile } from './views/Companies/Profile';
@@ -24,6 +22,9 @@ import { StaffDirectory } from './views/Schools/StaffDirectory';
 import { CurrentStudents } from './views/Schools/CurrentStudents';
 import { NILSearchPage } from './views/Jobs/NILSearchPage';
 import { CompanyNILPage } from './views/Jobs/CompanyNILPage';
+import { AdminUsers } from './views/Admin/AdminUsers';
+import { AdminSchools } from './views/Admin/AdminSchools';
+import { AdminCompanies } from './views/Admin/AdminCompanies';
 
 type PageRoute = {
   path: string;
@@ -34,8 +35,6 @@ type PageRoute = {
 
 export const AppRoutes = () => {
   const routes: PageRoute[] = [
-    { path: '/login', element: <LoginPage />, withSidebar: false, noAuth: true },
-    { path: '/register', element: <Register />, withSidebar: false, noAuth: true },
     { path: '/activity', element: <ActivityPage />, withSidebar: true },
 
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
@@ -61,6 +60,11 @@ export const AppRoutes = () => {
     { path: '/staff-directory', element: <StaffDirectory />, withSidebar: true },
     { path: '/current-students', element: <CurrentStudents />, withSidebar: true },
 
+    // Admin Pages
+    { path: '/admin/users', element: <AdminUsers />, withSidebar: true },
+    { path: '/admin/schools', element: <AdminSchools />, withSidebar: true },
+    { path: '/admin/companies', element: <AdminCompanies />, withSidebar: true },
+
     { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
     { path: '*', element: <Homepage />, withSidebar: true, noAuth: true },
   ];
@@ -75,7 +79,7 @@ export const AppRoutes = () => {
         }
 
         if (!noAuth) {
-          content = <RequireAuth fallbackPath={'/login'}>{content}</RequireAuth>;
+          content = <RequireAuth fallbackPath={'/'}>{content}</RequireAuth>;
         }
 
         return <Route key={path} path={path} element={content} />;

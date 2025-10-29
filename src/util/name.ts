@@ -1,10 +1,10 @@
-import { IUserData } from '../auth/store';
+import { IUserData } from '../auth/hooks';
 
-export const getFullName = (user: IUserData): string => {
+export const getFullName = (user: Pick<IUserData, 'firstName' | 'lastName'>): string => {
   return `${user.firstName} ${user.lastName}`;
 };
 
-export const getInitials = (user: IUserData): string => {
+export const getInitials = (user: Pick<IUserData, 'firstName' | 'lastName'>): string => {
   return user.firstName?.at(0) + (user.lastName?.at(0) ?? '');
 };
 

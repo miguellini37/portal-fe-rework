@@ -10,7 +10,7 @@ export interface AthleteCardProps {
 }
 
 export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
-  const { academics, athletics, schoolRef, location } = athlete;
+  const { academics, athletics, school, location } = athlete;
 
   return (
     <div className="athlete-card">
@@ -26,7 +26,7 @@ export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
       </div>
       <div className="athlete-card-body">
         <div className="athlete-info-row">
-          <span className="athlete-info-label">🏫</span> {schoolRef?.schoolName}
+          <span className="athlete-info-label">🏫</span> {school?.schoolName}
         </div>
         <div className="athlete-info-row">
           <span className="athlete-info-label">📍</span> {location}
