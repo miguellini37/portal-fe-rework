@@ -8,6 +8,7 @@ import { useAuthUser } from '../../../auth/hooks';
 import { toast } from 'react-toastify';
 import { IUpdateAthletePayload, getAthleteById, updateAthlete } from '../../../api/athlete';
 import { useParams } from 'react-router-dom';
+import { AccountDeniedBanner } from '../../../components/AccountDeniedBanner';
 
 export const AthleteProfile = () => {
   const authHeader = useAuthHeader();
@@ -111,6 +112,8 @@ export const AthleteProfile = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-6 relative">
+      <AccountDeniedBanner />
+
       {/* Tabs + Edit/Save Button */}
       <div className="relative border-b border-gray-300 pb-0 mb-0">
         {canEdit && <EditSaveButton />}

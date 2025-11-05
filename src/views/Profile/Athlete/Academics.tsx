@@ -14,7 +14,6 @@ interface AcademicsTabProps {
 export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, setAthlete }) => {
   const user = useAuthUser();
 
-  console.log(user);
   const academics = athlete.academics || {};
   return (
     <div className="academic-tab-container card">

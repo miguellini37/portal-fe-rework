@@ -12,6 +12,7 @@ import { BenefitsTab } from './Benefits';
 import { RecruitingTab } from './Recruiting';
 import { AnalyticsTab } from './Analytics';
 import { CompanyEmployeeTab } from './Employees';
+import { OrgAdminTab } from '../../Profile/OrgAdminTab';
 
 export const CompanyProfile = () => {
   const authHeader = useAuthHeader();
@@ -132,6 +133,15 @@ export const CompanyProfile = () => {
         <CompanyEmployeeTab company={company} editMode={editMode} setCompany={setCompany} />
       ),
     },
+    ...(canEditPage
+      ? [
+          {
+            key: 'admin',
+            label: 'Admin',
+            component: () => <OrgAdminTab />,
+          },
+        ]
+      : []),
   ];
 
   const currentTab = TABS.find((tab) => tab.key === activeTab);

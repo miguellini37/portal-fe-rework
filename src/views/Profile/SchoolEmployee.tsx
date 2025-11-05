@@ -10,6 +10,7 @@ import {
 } from '../../api/schoolEmployee';
 import { SchoolDropdown } from '../../components/Dropdowns/SchoolDropdown';
 import './Profiles.css';
+import { AccountDeniedBanner } from '../../components/AccountDeniedBanner';
 
 export const SchoolEmployeeProfile = () => {
   const navigate = useNavigate();
@@ -48,6 +49,8 @@ export const SchoolEmployeeProfile = () => {
 
   return (
     <div className="profile-container">
+      <AccountDeniedBanner />
+
       <h2 className="profile-title">Edit Your Profile</h2>
       <form onSubmit={onSubmit} className="profile-form">
         {/* First Name */}

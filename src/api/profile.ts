@@ -22,3 +22,56 @@ export const createProfile = async (
 
   return response.data;
 };
+
+export interface IGetAllOrgUsersInput {
+  name?: string;
+  email?: string;
+  isVerified?: boolean;
+}
+
+export interface IOrgUserResponse {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  isVerified: boolean;
+}
+
+export interface IAllOrgUsersResponse {
+  students: IOrgUserResponse[];
+  employees: IOrgUserResponse[];
+}
+
+export const getAllOrgUsers = async (
+  authHeader: string | null,
+  data: IGetAllOrgUsersInput
+): Promise<IAllOrgUsersResponse> => {
+  const response = await axios.post(`${url}/getAllOrgUsers`, data, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};
+
+export interface IWhiteListUserInput {
+  email: string;
+  orgId: string;
+  isActive: boolean;
+}
+
+export const whiteListUser = async (
+  authHeader: string | null,
+  data: IWhiteListUserInput
+): Promise<boolean> => {
+  const response = await axios.post(`${url}/whiteListUser`, data, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};

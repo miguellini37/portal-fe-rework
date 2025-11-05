@@ -15,6 +15,7 @@ export interface IUserData {
   lastName?: string;
   companyId?: string;
   schoolId?: string;
+  isOrgVerified?: boolean;
 }
 
 /**
@@ -67,6 +68,7 @@ export const useAuthUser = (): IUserData | null => {
     permission: tokenParsed.permission as USER_PERMISSIONS,
     companyId: tokenParsed.companyId,
     schoolId: tokenParsed.schoolId,
+    isOrgVerified: tokenParsed.isOrgVerified,
   };
 };
 

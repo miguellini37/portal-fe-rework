@@ -22,8 +22,8 @@ import {
   Shield,
 } from 'lucide-react';
 import { useState } from 'react';
-import './Sidebar.css';
 import { ActivityBell } from '../../views/Activity/ActivityBell';
+import './Sidebar.css';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const { logout, register, login } = useAuth();
   const navigate = useNavigate();
   const user = useAuthUser();
-  const permission = user?.permission;
+  const { permission, isOrgVerified } = user || {};
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -96,14 +96,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           )}
           <nav>
             <ul>
-              {!permission && (
+              {!isOrgVerified && (
                 <li className="mb-4">
                   <NavLink to="/" title="Home">
                     <Home /> {!isCollapsed && <span>Home</span>}
                   </NavLink>
                 </li>
               )}
-              {permission === USER_PERMISSIONS.ATHLETE && (
+              {isOrgVerified && permission === USER_PERMISSIONS.ATHLETE && (
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to="/jobs/" title="Jobs">
@@ -137,7 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                 </>
               )}
-              {permission === USER_PERMISSIONS.SCHOOL && (
+              {isOrgVerified && permission === USER_PERMISSIONS.SCHOOL && (
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to="/school/dashboard" title="Dashboard">
@@ -166,7 +166,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                 </>
               )}
-              {permission === USER_PERMISSIONS.COMPANY && (
+              {isOrgVerified && permission === USER_PERMISSIONS.COMPANY && (
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to={`/company/${user?.companyId}`} title="Company Profile">
@@ -252,7 +252,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 </>
               ) : (
                 <>
-                  {permission != USER_PERMISSIONS.ADMIN && (
+                  {permission != USER_PERMISSIONS.ADMIN && isOrgVerified && (
                     <li className="mb-4">
                       <ActivityBell
                         isCollapsed={isCollapsed}
