@@ -26,7 +26,7 @@ export const createProfile = async (
 export interface IGetAllOrgUsersInput {
   name?: string;
   email?: string;
-  isVerified?: boolean;
+  isVerified?: boolean | null;
 }
 
 export interface IOrgUserResponse {

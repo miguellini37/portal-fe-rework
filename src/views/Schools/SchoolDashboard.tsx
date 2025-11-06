@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { TrendingUp, TrendingDown, Shield, Users, GraduationCap, Plus, Clock } from 'lucide-react';
 import {
-  TrendingUp,
-  TrendingDown,
-  Shield,
-  Users,
-  GraduationCap,
-  Plus,
-  Search,
-  FileText,
-  Calendar,
-  Clock,
-} from 'lucide-react';
+  getSchoolDashboardMetrics,
+  getSchoolActivity,
+  SchoolDashboardMetrics,
+  SchoolActivity,
+} from '../../api/school';
 import './SchoolDashboard.css';
+import { useAuthHeader, useAuthUser } from '../../auth/hooks';
 
 interface MetricCardProps {
   title: string;
@@ -103,68 +99,92 @@ const QuickAction: React.FC<QuickActionProps> = ({ title, icon, onClick }) => {
 };
 
 export const SchoolDashboard: React.FC = () => {
-  // Mock data - API not equipped to return this information yet
-  const mockMetrics = [
+  const [metrics, setMetrics] = useState<SchoolDashboardMetrics>({});
+  const [activity, setActivity] = useState<SchoolActivity[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const authHeader = useAuthHeader();
+  const user = useAuthUser();
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        const schoolId = user?.schoolId;
+
+        if (schoolId) {
+          const [metricsData, activityData] = await Promise.all([
+            getSchoolDashboardMetrics(schoolId, authHeader),
+            getSchoolActivity(schoolId, authHeader),
+          ]);
+
+          setMetrics(metricsData);
+          setActivity(activityData);
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  // Build metrics array from API data
+  const displayMetrics = [
     {
       title: 'Placed Graduates',
-      value: '120',
-      change: '+12%',
-      changeDirection: 'up' as const,
+      value: metrics.placedGraduates?.toString() || '0',
+      change: metrics.placedGraduatesChange
+        ? `${metrics.placedGraduatesChange > 0 ? '+' : ''}${metrics.placedGraduatesChange}%`
+        : '0%',
+      changeDirection:
+        (metrics.placedGraduatesChange || 0) >= 0 ? ('up' as const) : ('down' as const),
       description: 'Student-athletes placed in careers',
       icon: <GraduationCap className="w-6 h-6" />,
     },
     {
       title: 'NIL Compliance Rate',
-      value: '85%',
-      change: '+5%',
-      changeDirection: 'up' as const,
+      value: metrics.nilComplianceRate ? `${metrics.nilComplianceRate}%` : '0%',
+      change: metrics.nilComplianceRateChange
+        ? `${metrics.nilComplianceRateChange > 0 ? '+' : ''}${metrics.nilComplianceRateChange}%`
+        : '0%',
+      changeDirection:
+        (metrics.nilComplianceRateChange || 0) >= 0 ? ('up' as const) : ('down' as const),
       description: 'Compliance with NIL regulations',
       icon: <Shield className="w-6 h-6" />,
     },
     {
       title: 'Active Sponsors',
-      value: '230',
-      change: '+18',
-      changeDirection: 'up' as const,
+      value: metrics.activeSponsors?.toString() || '0',
+      change: metrics.activeSponsorsChange
+        ? `${metrics.activeSponsorsChange > 0 ? '+' : ''}${metrics.activeSponsorsChange}`
+        : '0',
+      changeDirection:
+        (metrics.activeSponsorsChange || 0) >= 0 ? ('up' as const) : ('down' as const),
       description: 'Current sponsorship partnerships',
       icon: <Users className="w-6 h-6" />,
     },
     {
       title: 'Community Members',
-      value: '1,247',
-      change: '+89',
-      changeDirection: 'up' as const,
+      value: metrics.communityMembers?.toLocaleString() || '0',
+      change: metrics.communityMembersChange
+        ? `${metrics.communityMembersChange > 0 ? '+' : ''}${metrics.communityMembersChange}`
+        : '0',
+      changeDirection:
+        (metrics.communityMembersChange || 0) >= 0 ? ('up' as const) : ('down' as const),
       description: 'Active alumni and students',
       icon: <Users className="w-6 h-6" />,
     },
   ];
 
-  const mockRecentActivity: ActivityItem[] = [
-    {
-      id: '1',
-      title: 'New NIL deal approved',
-      timestamp: '2 hours ago',
-      type: 'approved',
-    },
-    {
-      id: '2',
-      title: 'Career placement recorded',
-      timestamp: '4 hours ago',
-      type: 'info',
-    },
-    {
-      id: '3',
-      title: 'Compliance review completed',
-      timestamp: '1 day ago',
-      type: 'compliance',
-    },
-    {
-      id: '4',
-      title: 'New employer partnership',
-      timestamp: '2 days ago',
-      type: 'partnership',
-    },
-  ];
+  // Map activity data from API
+  const recentActivity: ActivityItem[] = activity.map((item) => ({
+    id: item.id || '',
+    title: item.title || 'Activity',
+    timestamp: item.timestamp || 'Unknown',
+    type: (item.type || 'info') as ActivityItem['type'],
+  }));
 
   const quickActions = [
     {
@@ -175,31 +195,44 @@ export const SchoolDashboard: React.FC = () => {
         console.log('Opening student profile creation form...');
       },
     },
-    {
-      title: 'Review NIL Deal',
-      icon: <Search className="w-5 h-5" />,
-      onClick: () => {
-        // Mock action - opens NIL Oversight module
-        console.log('Opening NIL Oversight module...');
-      },
-    },
-    {
-      title: 'Generate Report',
-      icon: <FileText className="w-5 h-5" />,
-      onClick: () => {
-        // Mock action - launches reporting tool
-        console.log('Launching reporting tool...');
-      },
-    },
-    {
-      title: 'Schedule Meeting',
-      icon: <Calendar className="w-5 h-5" />,
-      onClick: () => {
-        // Mock action - opens calendar integration
-        console.log('Opening calendar integration...');
-      },
-    },
+    // {
+    //   title: 'Review NIL Deal',
+    //   icon: <Search className="w-5 h-5" />,
+    //   onClick: () => {
+    //     // Mock action - opens NIL Oversight module
+    //     console.log('Opening NIL Oversight module...');
+    //   },
+    // },
+    // {
+    //   title: 'Generate Report',
+    //   icon: <FileText className="w-5 h-5" />,
+    //   onClick: () => {
+    //     // Mock action - launches reporting tool
+    //     console.log('Launching reporting tool...');
+    //   },
+    // },
+    // {
+    //   title: 'Schedule Meeting',
+    //   icon: <Calendar className="w-5 h-5" />,
+    //   onClick: () => {
+    //     // Mock action - opens calendar integration
+    //     console.log('Opening calendar integration...');
+    //   },
+    // },
   ];
+
+  if (loading) {
+    return (
+      <div className="school-dashboard">
+        <div className="dashboard-container">
+          <div className="dashboard-header">
+            <h1 className="dashboard-title">University Overview</h1>
+            <p className="dashboard-subtitle">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="school-dashboard">
@@ -214,7 +247,7 @@ export const SchoolDashboard: React.FC = () => {
         {/* Overview Metrics */}
         <div className="overview-section">
           <div className="metrics-grid">
-            {mockMetrics.map((metric, index) => (
+            {displayMetrics.map((metric, index) => (
               <MetricCard key={index} {...metric} />
             ))}
           </div>
@@ -225,9 +258,13 @@ export const SchoolDashboard: React.FC = () => {
           <div className="activity-section">
             <h2 className="section-title">Recent Activity</h2>
             <div className="activity-list">
-              {mockRecentActivity.map((item) => (
-                <ActivityItem key={item.id} item={item} />
-              ))}
+              {recentActivity.length > 0 ? (
+                recentActivity.map((item) => <ActivityItem key={item.id} item={item} />)
+              ) : (
+                <p style={{ padding: '20px', color: 'var(--muted-foreground)' }}>
+                  No recent activity
+                </p>
+              )}
             </div>
           </div>
 

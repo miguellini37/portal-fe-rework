@@ -67,6 +67,7 @@ export const getAthleteById = async (
 
 export class GetAthletesFilter {
   wildcardTerm?: string;
+  schoolId?: string;
 }
 
 export type GetAthletesResponse = {

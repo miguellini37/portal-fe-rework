@@ -9,13 +9,18 @@ import {
 import { useAuthHeader, useAuthUser } from '../../auth/hooks';
 import '../../components/Table/Table.css';
 
-export const OrgAdminTab: FC = () => {
+interface OrgAdminTabProps {
+  showAthletes?: boolean;
+}
+
+export const OrgAdminTab: FC<OrgAdminTabProps> = ({ showAthletes = false }) => {
   const [orgUsers, setOrgUsers] = useState<IAllOrgUsersResponse>({ students: [], employees: [] });
   const [loading, setLoading] = useState(true);
   const [whitelistingEmail, setWhitelistingEmail] = useState<string | null>(null);
   const [nameFilter, setNameFilter] = useState('');
   const [emailFilter, setEmailFilter] = useState('');
-  const [isVerifiedFilter, setIsVerifiedFilter] = useState<boolean | undefined>(undefined);
+  const [isVerifiedFilter, setIsVerifiedFilter] = useState<boolean | null | undefined>(undefined);
+  const [showStudents, setShowStudents] = useState(showAthletes);
   const authHeader = useAuthHeader();
   const currentUser = useAuthUser();
 
@@ -65,10 +70,9 @@ export const OrgAdminTab: FC = () => {
     }
   };
 
-  const allUsers: (IOrgUserResponse & { type: string })[] = [
-    ...orgUsers.employees.map((user) => ({ ...user, type: 'Employee' })),
-    ...orgUsers.students.map((user) => ({ ...user, type: 'Student' })),
-  ];
+  const allUsers: (IOrgUserResponse & { type: string })[] = showStudents
+    ? orgUsers.students.map((user) => ({ ...user, type: 'Student' }))
+    : orgUsers.employees.map((user) => ({ ...user, type: 'Employee' }));
 
   return (
     <div className="search-page-root">
@@ -80,6 +84,17 @@ export const OrgAdminTab: FC = () => {
 
       {/* Filter Section */}
       <div className="search-page-searchbar-row">
+        {showAthletes && (
+          <select
+            className="search-page-searchbar"
+            value={showStudents ? 'students' : 'employees'}
+            onChange={(e) => setShowStudents(e.target.value === 'students')}
+            style={{ flex: 0.5, marginRight: '10px' }}
+          >
+            <option value="students">Athletes</option>
+            <option value="employees">Employees</option>
+          </select>
+        )}
         <input
           className="search-page-searchbar"
           type="text"
@@ -98,22 +113,36 @@ export const OrgAdminTab: FC = () => {
         />
         <select
           className="search-page-searchbar"
-          value={isVerifiedFilter === undefined ? '' : isVerifiedFilter ? 'true' : 'false'}
+          value={
+            isVerifiedFilter === undefined
+              ? ''
+              : isVerifiedFilter === null
+                ? 'null'
+                : isVerifiedFilter
+                  ? 'true'
+                  : 'false'
+          }
           onChange={(e) =>
-            setIsVerifiedFilter(e.target.value === '' ? undefined : e.target.value === 'true')
+            setIsVerifiedFilter(
+              e.target.value === ''
+                ? undefined
+                : e.target.value === 'null'
+                  ? null
+                  : e.target.value === 'true'
+            )
           }
           style={{ flex: 0.5 }}
         >
           <option value="">All Verification Status</option>
           <option value="true">Verified</option>
-          <option value="false">Not Verified</option>
+          <option value="false">Denied</option>
+          <option value="null">Needs Verification</option>
         </select>
       </div>
 
       <div className="search-page-results-count">
-        {allUsers.length} user{allUsers.length !== 1 ? 's' : ''}{' '}
-        {!currentUser?.companyId &&
-          `(${orgUsers.employees.length} employee${orgUsers.employees.length !== 1 ? 's' : ''}, ${orgUsers.students.length} student${orgUsers.students.length !== 1 ? 's' : ''})`}
+        {allUsers.length} {showStudents ? 'student' : 'employee'}
+        {allUsers.length !== 1 ? 's' : ''}
       </div>
 
       {/* Table */}

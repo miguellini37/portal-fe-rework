@@ -36,3 +36,31 @@ export const getSchoolEmployeeById = async (
 
   return response.data;
 };
+
+export interface GetSchoolEmployeesFilter {
+  schoolId?: string;
+}
+
+export interface GetSchoolEmployeesResponse {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  schoolRef?: ISchoolPaylod;
+}
+
+export const getSchoolEmployees = async (
+  filter: GetSchoolEmployeesFilter,
+  authHeader: string | null
+): Promise<GetSchoolEmployeesResponse[]> => {
+  const response = await axios.get(`${url}/getSchoolEmployees`, {
+    params: filter,
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};

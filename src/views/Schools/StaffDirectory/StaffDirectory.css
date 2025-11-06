@@ -252,8 +252,21 @@
 /* Staff Grid */
 .staff-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 24px;
+}
+
+/* Limit to 3 columns max */
+@media (min-width: 1280px) {
+  .staff-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .staff-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .staff-card {

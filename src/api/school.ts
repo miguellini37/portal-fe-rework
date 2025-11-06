@@ -45,6 +45,52 @@ export const getSchools = async (): Promise<ISchoolPaylod[]> => {
   return response.data;
 };
 
+export interface SchoolDashboardMetrics {
+  placedGraduates?: number;
+  placedGraduatesChange?: number;
+  nilComplianceRate?: number;
+  nilComplianceRateChange?: number;
+  activeSponsors?: number;
+  activeSponsorsChange?: number;
+  communityMembers?: number;
+  communityMembersChange?: number;
+}
+
+export const getSchoolDashboardMetrics = async (
+  schoolId: string,
+  authHeader: string | null
+): Promise<SchoolDashboardMetrics> => {
+  const response = await axios.get(`${url}/getSchoolDashboardMetrics/${schoolId}`, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};
+
+export interface SchoolActivity {
+  id?: string;
+  title?: string;
+  timestamp?: string;
+  type?: 'approved' | 'info' | 'compliance' | 'partnership';
+}
+
+export const getSchoolActivity = async (
+  schoolId: string,
+  authHeader: string | null
+): Promise<SchoolActivity[]> => {
+  const response = await axios.get(`${url}/getSchoolActivity/${schoolId}`, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: authHeader,
+    },
+  });
+
+  return response.data;
+};
+
 export interface ISchoolPaylodLite {
   id?: string;
   schoolName?: string;

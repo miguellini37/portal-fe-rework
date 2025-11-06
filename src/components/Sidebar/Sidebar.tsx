@@ -15,7 +15,6 @@ import {
   Users,
   Menu,
   CalendarClock,
-  BarChart3,
   GraduationCap,
   BookUser,
   Star,
@@ -139,9 +138,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               )}
               {isOrgVerified && permission === USER_PERMISSIONS.SCHOOL && (
                 <>
-                  <li className="mb-4">
+                  {/* <li className="mb-4">
                     <DisabledNavLink to="/school/dashboard" title="Dashboard">
                       <BarChart3 /> {!isCollapsed && <span>Dashboard</span>}
+                    </DisabledNavLink>
+                  </li> */}
+                  <li className="mb-4">
+                    <DisabledNavLink to={`/school/${user?.schoolId}`} title="School Profile">
+                      <Building /> {!isCollapsed && <span>School Profile</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">
@@ -149,11 +153,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                       <BookUser /> {!isCollapsed && <span>Staff Directory</span>}
                     </DisabledNavLink>
                   </li>
-                  <li className="mb-4">
-                    <DisabledNavLink to={`/school/${user?.schoolId}`} title="School Profile">
-                      <Building /> {!isCollapsed && <span>School Profile</span>}
-                    </DisabledNavLink>
-                  </li>
+
                   <li className="mb-4">
                     <DisabledNavLink to="/current-students" title="Current Students">
                       <GraduationCap /> {!isCollapsed && <span>Current Students</span>}
