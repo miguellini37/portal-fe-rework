@@ -1,7 +1,13 @@
 import React from 'react';
-import './JobPostingsDashboard.css';
 import { IJobPayload, JobStatus } from '../../../api/job';
 import { NavLink } from 'react-router-dom';
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  FormattedCardBody,
+  CardButton,
+} from '../../../components/Card';
 
 export interface JobCardProps {
   job: IJobPayload;
@@ -12,7 +18,6 @@ export interface JobCardProps {
 }
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
-  // Hide any card that is not explicitly open
   if (job.status !== JobStatus.Open && !canEdit) {
     return null;
   }
@@ -20,73 +25,132 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
   const statusText = (job.status ?? JobStatus.Open)
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
-  const showAppliedBadge = Boolean(!canEdit && !canApply);
+
+  const rows = [];
+
+  if (job.salary) {
+    rows.push({
+      label: 'Salary:',
+      value: (
+        <span
+          style={{
+            fontWeight: 700,
+            color: '#059669',
+            background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
+            padding: '0.25rem 0.5rem',
+            borderRadius: '0.5rem',
+            border: '1px solid #a7f3d0',
+          }}
+        >
+          ${job.salary.toLocaleString()}
+        </span>
+      ),
+    });
+  }
+
+  if (job.type) {
+    rows.push({ label: 'Type:', value: job.type });
+  }
+
+  if (job.location) {
+    rows.push({ label: 'Location:', value: job.location });
+  }
+
+  if (job.experience) {
+    rows.push({ label: 'Experience:', value: job.experience });
+  }
+
+  if (job.createdDate) {
+    rows.push({
+      label: 'Posted:',
+      value: new Date(job.createdDate).toLocaleDateString(),
+    });
+  }
+
+  if (job.industry) {
+    rows.push({ label: 'Industry:', value: job.industry });
+  }
+
+  if (job.applicationDeadline) {
+    rows.push({
+      label: 'Apply by:',
+      value: new Date(job.applicationDeadline).toLocaleDateString(),
+    });
+  }
 
   return (
-    <div className="job-card">
-      <div className="job-content">
-        <div className="job-header">
-          <div className="job-title-section">
-            <h3 className="job-title">{job.position || 'Associate'}</h3>
-            <div className="job-tags">
-              <span className="job-type-tag">{job.type || 'full-time'}</span>
-              <span className="job-location-tag">{job.location || 'Chicago'}</span>
-              <span className="job-experience-tag">{job.experience || 'Entry Level'}</span>
+    <Card variant="orange">
+      <CardHeader>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: '1rem',
+            width: '100%',
+          }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                color: '#111827',
+                margin: '0 0 0.625rem 0',
+                lineHeight: 1.3,
+                letterSpacing: '-0.025em',
+              }}
+            >
+              {job.position || 'Associate'}
             </div>
           </div>
-
-          {/* Status pill */}
           {job.status && (
             <span
-              className={`job-status-pill job-status-${job.status.toString().toLowerCase()}`}
+              style={{
+                padding: '0.25rem 0.75rem',
+                borderRadius: '9999px',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                flexShrink: 0,
+                background:
+                  job.status === JobStatus.Open
+                    ? '#d1fae5'
+                    : job.status === JobStatus.Closed
+                      ? '#fee2e2'
+                      : '#fef3c7',
+                color:
+                  job.status === JobStatus.Open
+                    ? '#065f46'
+                    : job.status === JobStatus.Closed
+                      ? '#991b1b'
+                      : '#92400e',
+              }}
               aria-label={`Job status: ${statusText}`}
             >
               {statusText}
             </span>
           )}
         </div>
-
-        <div className="job-details">
-          <div className="job-info">
-            {job.salary && <div className="salary-info">${job.salary.toLocaleString()}</div>}
-            <div className="job-meta-info">
-              {job.createdDate && (
-                <div>Posted {new Date(job.createdDate).toLocaleDateString()}</div>
-              )}
-              {job.industry && <div>{job.industry}</div>}
-              {job.applicationDeadline && (
-                <div>Apply by {new Date(job.applicationDeadline).toLocaleDateString()}</div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Actions: centered, same size, same row */}
-      <div className="job-card-actions">
+      </CardHeader>
+      <FormattedCardBody rows={rows} />
+      <CardActions>
         {canEdit && (
-          <button className="action-btn primary job-card-action" onClick={() => onView(job)}>
+          <CardButton variant="primary" onClick={() => onView(job)}>
             Edit Job
-          </button>
+          </CardButton>
         )}
-        {showAppliedBadge && (
-          <span
-            className="applied-badge job-card-action"
-            aria-label="You have applied to this job"
-            aria-disabled="true"
-          >
-            Applied
-          </span>
-        )}
-        {canApply && (
-          <button className="action-btn primary job-card-action" onClick={() => onApply?.(job)}>
+        {!canEdit && (
+          <CardButton variant="primary" disabled={!canApply} onClick={() => onApply?.(job)}>
             Apply
-          </button>
+          </CardButton>
         )}
-        <NavLink className="action-btn secondary job-card-action" to={`/job/${job.id}`}>
-          View Full Job Details
-        </NavLink>
-      </div>
-    </div>
+        <CardButton variant="secondary">
+          <NavLink to={`/job/${job.id}`}>View Job</NavLink>
+        </CardButton>
+      </CardActions>
+    </Card>
   );
 };

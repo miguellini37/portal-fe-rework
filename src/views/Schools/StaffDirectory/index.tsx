@@ -6,6 +6,7 @@ import {
   GetSchoolEmployeesResponse,
 } from '../../../api/schoolEmployee';
 import { EmployeeCard } from '../../../components/EmployeeCard';
+import { CardTable } from '../../../components/CardTable';
 import './StaffDirectory.css';
 import { useAuthHeader, useAuthUser } from '../../../auth/hooks';
 
@@ -103,11 +104,11 @@ export const StaffDirectory: FC = () => {
           <h3>Staff Members ({filteredStaff.length})</h3>
         </div>
 
-        <div className="staff-grid">
+        <CardTable maxColumns={3} minCardWidth={320}>
           {filteredStaff.map((employee) => (
             <EmployeeCard key={employee.id} employee={employee} />
           ))}
-        </div>
+        </CardTable>
       </div>
     </div>
   );

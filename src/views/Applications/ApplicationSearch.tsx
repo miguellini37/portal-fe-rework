@@ -8,6 +8,7 @@ import {
   ApplicationStatus,
 } from '../../api/application';
 import { ApplicationCard } from './ApplicationCard';
+import { CardTable } from '../../components/CardTable';
 import '../Companies/company.css';
 import './applications.css';
 
@@ -103,11 +104,11 @@ export const ApplicationSearch: React.FC<ApplicationSearchProps> = ({
         </div>
       </div>
 
-      <div className="search-page-grid">
+      <CardTable minCardWidth={350}>
         {filteredApplications.map((app) => (
           <ApplicationCard key={app.id} application={app} onUpdateStatus={handleUpdateStatus} />
         ))}
-      </div>
+      </CardTable>
 
       {filteredApplications.length === 0 && (
         <div className="empty-state">

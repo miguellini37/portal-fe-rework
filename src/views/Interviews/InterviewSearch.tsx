@@ -3,6 +3,7 @@ import { useAuthHeader } from '../../auth/hooks';
 import { toast } from 'react-toastify';
 import { getInterviews, IInterviewPayload } from '../../api/interview';
 import { InterviewCard } from './InterviewCard';
+import { CardTable } from '../../components/CardTable';
 import '../Companies/company.css';
 import '../Applications/applications.css';
 
@@ -88,11 +89,11 @@ export const InterviewSearch: FC<Props> = ({
         </div>
       </div>
 
-      <div className="search-page-grid">
+      <CardTable minCardWidth={350}>
         {filtered.map((i) => (
           <InterviewCard key={i.id} interview={i} />
         ))}
-      </div>
+      </CardTable>
 
       {filtered.length === 0 && (
         <div className="empty-state">

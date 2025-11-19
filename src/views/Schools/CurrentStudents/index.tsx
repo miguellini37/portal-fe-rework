@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StudentAthlete } from './types';
 import { StudentAthleteCard } from './StudentAthleteCard';
+import { CardTable } from '../../../components/CardTable';
 import { getAthletes, GetAthletesFilter, GetAthletesResponse } from '../../../api/athlete';
 import './CurrentStudents.css';
 import { useAuthHeader, useAuthUser } from '../../../auth/hooks';
@@ -136,11 +137,11 @@ export const CurrentStudents = () => {
         />
       </div>
 
-      <div className="current-students-grid">
+      <CardTable minCardWidth={350}>
         {filteredStudents.map((student) => (
           <StudentAthleteCard key={student.id} student={student} />
         ))}
-      </div>
+      </CardTable>
 
       {filteredStudents.length === 0 && searchTerm && (
         <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted-foreground)' }}>

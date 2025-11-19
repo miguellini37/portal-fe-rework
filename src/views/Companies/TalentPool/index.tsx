@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuthHeader } from '../../../auth/hooks';
 import { getAthletes, GetAthletesFilter, GetAthletesResponse } from '../../../api/athlete';
 import { AthleteCard } from './AthleteCard';
+import { CardTable } from '../../../components/CardTable';
 
 export const TalentPool = () => {
   const authHeader = useAuthHeader();
@@ -35,11 +36,11 @@ export const TalentPool = () => {
         {/* <button className="search-page-filters-btn">Filters</button> */}
         <div className="search-page-results-count">{athletes.length} results</div>
       </div>
-      <div className="search-page-grid">
+      <CardTable minCardWidth={350}>
         {athletes.map((athlete, i) => (
           <AthleteCard key={i} athlete={athlete} />
         ))}
-      </div>
+      </CardTable>
     </div>
   );
 };

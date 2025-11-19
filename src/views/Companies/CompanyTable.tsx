@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getCompanies, ICompanyPaylod } from '../../api/company';
 import { CompanyCard } from './CompanyCard';
+import { CardTable } from '../../components/CardTable';
 import { useAuthHeader } from '../../auth/hooks';
 
 interface CompanySearchProps {
@@ -59,11 +60,11 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
         </div>
       </div>
 
-      <div className="search-page-grid">
+      <CardTable minCardWidth={350}>
         {filteredCompanies.map((company) => (
           <CompanyCard key={company.id} company={company} />
         ))}
-      </div>
+      </CardTable>
 
       {filteredCompanies.length === 0 && (
         <div className="empty-state">

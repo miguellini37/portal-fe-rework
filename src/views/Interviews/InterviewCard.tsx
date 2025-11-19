@@ -1,6 +1,5 @@
 import { FC, useMemo } from 'react';
-import '../Companies/company.css';
-import '../Applications/applications.css';
+import { Card, CardHeader, FormattedCardBody } from '../../components/Card';
 import { IInterviewPayload, InterviewStatus } from '../../api/interview';
 
 interface Props {
@@ -28,48 +27,45 @@ export const InterviewCard: FC<Props> = ({ interview }) => {
 
   const status = interview?.status ?? InterviewStatus.Scheduled;
 
-  return (
-    <div className="company-card" tabIndex={0} aria-label="Interview card">
-      <div className="company-card-layout">
-        <div className="company-content">
-          <div className="company-header">
-            <div className="company-title-section">
-              <h3 className="company-title">{interview.job?.position}</h3>
-              <div className="company-industry">{interview?.company?.companyName}</div>
-              <div className="company-industry">{interview?.location || 'Location TBD'}</div>
-            </div>
-          </div>
+  const rows = [{ label: 'Date & Time:', value: dateLabel }];
 
-          <div className="company-details">
-            <div className="application-info">
-              <div className="info-row">
-                <span className="info-label">Date & Time:</span>
-                <span className="info-value">{dateLabel}</span>
-              </div>
-              {interview?.interviewer && (
-                <div className="info-row">
-                  <span className="info-label">Interviewer:</span>
-                  <span className="info-value">{interview.interviewer}</span>
-                </div>
-              )}
-              {interview?.status && (
-                <div className="info-row">
-                  <span className="info-label">Status:</span>
-                  <span className="info-value" style={{ textTransform: 'capitalize' }}>
-                    {String(status).replace(/_/g, ' ')}
-                  </span>
-                </div>
-              )}
-              {interview?.preparationTips && (
-                <div className="info-row">
-                  <span className="info-label">Preparation:</span>
-                  <span className="info-value">{interview.preparationTips}</span>
-                </div>
-              )}
-            </div>
-          </div>
+  if (interview?.interviewer) {
+    rows.push({ label: 'Interviewer:', value: interview.interviewer });
+  }
+
+  if (interview?.status) {
+    rows.push({
+      label: 'Status:',
+      value: String(status).replace(/_/g, ' '),
+    });
+  }
+
+  if (interview?.preparationTips) {
+    rows.push({ label: 'Preparation:', value: interview.preparationTips });
+  }
+
+  return (
+    <Card variant="blue" ariaLabel="Interview card">
+      <CardHeader>
+        <div
+          style={{
+            fontSize: '1.25rem',
+            fontWeight: 700,
+            color: '#111827',
+            margin: 0,
+            lineHeight: 1.3,
+          }}
+        >
+          {interview.job?.position}
         </div>
-      </div>
-    </div>
+        <div style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+          {interview?.company?.companyName}
+        </div>
+        <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+          {interview?.location || 'Location TBD'}
+        </div>
+      </CardHeader>
+      <FormattedCardBody rows={rows} />
+    </Card>
   );
 };

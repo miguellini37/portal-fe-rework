@@ -1,9 +1,14 @@
 import React from 'react';
 import { StudentAthlete } from './types';
 import { getInitials } from '../../../util/name';
-import { Eye } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import './CurrentStudents.css';
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  FormattedCardBody,
+  CardButton,
+} from '../../../components/Card';
 
 export interface StudentAthleteCardProps {
   student: StudentAthlete;
@@ -14,59 +19,69 @@ const getStudentInitials = (student: StudentAthlete): string => {
 };
 
 export const StudentAthleteCard: React.FC<StudentAthleteCardProps> = ({ student }) => {
+  const rows = [
+    { label: 'Class Year:', value: student.classYear },
+    { label: 'Major:', value: student.major },
+    { label: 'GPA:', value: student.gpa.toFixed(1) },
+    { label: 'Expected Graduation:', value: student.expectedGraduation },
+  ];
+
+  if (student.location) {
+    rows.push({ label: 'Location:', value: student.location });
+  }
+
   return (
-    <div className="student-card">
-      <div className="student-card-header">
-        <div className="student-avatar">{getStudentInitials(student)}</div>
-        <div>
-          <div className="student-name">
-            {student.firstName} {student.lastName}
+    <Card variant="blue">
+      <CardHeader>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              background: 'var(--primary, #3b82f6)',
+              color: 'var(--primary-foreground, white)',
+              fontSize: '1rem',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(99,102,241,0.10)',
+              flexShrink: 0,
+            }}
+          >
+            {getStudentInitials(student)}
           </div>
-          <div className="student-sport">
-            {student.sport}
-            {student.position ? ` • ${student.position}` : ''}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: '1.15rem',
+                fontWeight: 700,
+                color: 'var(--foreground, #111827)',
+                margin: 0,
+              }}
+            >
+              {student.firstName} {student.lastName}
+            </div>
+            <div
+              style={{
+                color: 'var(--primary, #3b82f6)',
+                fontSize: '1rem',
+                fontWeight: 500,
+              }}
+            >
+              {student.sport}
+              {student.position ? ` • ${student.position}` : ''}
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="student-card-body">
-        {/* Core Info */}
-        <div className="student-section">
-          <div className="student-section-title">Academic Info</div>
-          <div className="student-info-grid">
-            <div className="student-info-row">
-              <span className="student-info-label">Class Year:</span>
-              <span>{student.classYear}</span>
-            </div>
-            <div className="student-info-row">
-              <span className="student-info-label">Major:</span>
-              <span>{student.major}</span>
-            </div>
-            <div className="student-info-row">
-              <span className="student-info-label">GPA:</span>
-              <span>{student.gpa.toFixed(1)}</span>
-            </div>
-            <div className="student-info-row">
-              <span className="student-info-label">Expected Graduation:</span>
-              <span>{student.expectedGraduation}</span>
-            </div>
-            {student.location && (
-              <div className="student-info-row">
-                <span className="student-info-label">Location:</span>
-                <span>{student.location}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="student-card-actions">
-        <NavLink to={`/athlete/${student.id}`} className="student-action-btn primary">
-          <Eye size={16} />
-          View Profile
-        </NavLink>
-      </div>
-    </div>
+      </CardHeader>
+      <FormattedCardBody rows={rows} />
+      <CardActions>
+        <CardButton variant="primary">
+          <NavLink to={`/athlete/${student.id}`}>View Profile</NavLink>
+        </CardButton>
+      </CardActions>
+    </Card>
   );
 };

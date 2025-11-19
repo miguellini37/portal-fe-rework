@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { getAllJobs, IJobPayload, IJobsFilter } from '../../../api/job';
 import { JobModal } from '../JobModal';
 import { JobCard } from './JobCard';
+import { CardTable } from '../../../components/CardTable';
 import './JobPostingsDashboard.css';
 import '../../../styles/searchPage.css';
 import { createApplication } from '../../../api/application';
@@ -85,7 +86,7 @@ export const JobSearch = ({
       </div>
 
       {/* Job Cards */}
-      <div className="search-page-grid">
+      <CardTable minCardWidth={320}>
         {jobs.map((job) => (
           <JobCard
             key={job.id}
@@ -96,7 +97,7 @@ export const JobSearch = ({
             onApply={applyToJob}
           />
         ))}
-      </div>
+      </CardTable>
 
       {jobs.length === 0 && (
         <div className="empty-state">

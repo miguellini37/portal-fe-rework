@@ -1,8 +1,14 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IApplicationPayload, ApplicationStatus } from '../../api/application';
-import '../Companies/company.css';
-import './applications.css';
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  FormattedCardBody,
+  FormattedCardRow,
+  CardButton,
+} from '../../components/Card';
 import { useAuthUser } from '../../auth/hooks';
 import { USER_PERMISSIONS } from '../../auth/hooks';
 import { getFullName, toTitleCase } from '../../util/name';
@@ -77,7 +83,6 @@ export const ApplicationCard: FC<Props> = ({
     }
   };
 
-  // Unified helper for status updates (Reject / Accept / Request Interview / Withdraw)
   const handleUpdate = useCallback(
     async (status: ApplicationStatus) => {
       if (!currentApp?.id) {
@@ -94,7 +99,6 @@ export const ApplicationCard: FC<Props> = ({
         if (result) {
           setCurrentApp(result);
         } else {
-          // optimistic update
           setCurrentApp((prev) => (prev ? { ...prev, status } : prev));
         }
       } catch {
@@ -107,164 +111,135 @@ export const ApplicationCard: FC<Props> = ({
   );
 
   const statusColor = getStatusColor(currentApp?.status ?? ApplicationStatus.Applied);
+
+  // Build the rows for FormattedCardBody
+  const rows: FormattedCardRow[] = [
+    {
+      label: 'Applied Date:',
+      value: formatDate(currentApp?.creationDate),
+    },
+    {
+      label: 'Status:',
+      value: (
+        <span
+          style={{
+            backgroundColor: statusColor,
+            color: '#fff',
+            padding: '4px 8px',
+            borderRadius: 999,
+            fontSize: 12,
+            textTransform: 'capitalize',
+            display: 'inline-block',
+          }}
+          aria-label={`Status: ${statusText}`}
+        >
+          {statusText}
+        </span>
+      ),
+    },
+  ];
+
+  if (isCompanyPermission) {
+    rows.push({
+      label: 'Applicant:',
+      value: `${getFullName(currentApp?.athlete ?? {}) || 'Name not specified'}`,
+    });
+  }
+
   return (
-    <div
-      className="company-card"
-      tabIndex={0}
-      aria-label={`Open job ${currentApp?.job?.position ?? 'job'}`}
-    >
-      <div className="company-card-layout">
-        <div className="company-content">
-          <div className="company-header">
-            <div className="company-title-section">
-              <h3 className="company-title">
-                {showJobPosition && (
-                  <Link to={`/job/${currentApp.job?.id}`} className="company-link">
-                    {currentApp.job?.position}
-                  </Link>
-                )}
-              </h3>
-              {!isCompanyPermission && (
-                <div className="company-industry">
-                  {currentApp?.job?.company?.companyName || 'Company not specified'}
-                </div>
-              )}
+    <>
+      <Card variant="blue" ariaLabel={`Open job ${currentApp?.job?.position ?? 'job'}`}>
+        <CardHeader>
+          {showJobPosition && currentApp.job?.position && (
+            <Link
+              to={`/job/${currentApp.job?.id}`}
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                color: '#111827',
+                textDecoration: 'none',
+                margin: 0,
+                lineHeight: 1.3,
+              }}
+            >
+              {currentApp.job.position}
+            </Link>
+          )}
+          {!isCompanyPermission && (
+            <div style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+              {currentApp?.job?.company?.companyName || 'Company not specified'}
             </div>
-          </div>
-
-          <div className="company-details">
-            <div className="application-info">
-              <div className="info-row">
-                <span className="info-label">Applied Date:</span>
-                <span className="info-value">{formatDate(currentApp?.creationDate)}</span>
-              </div>
-
-              <div className="info-row" style={{ alignItems: 'center', gap: 8 }}>
-                <span className="info-label">Status:</span>
-                <span
-                  className="info-value"
-                  style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-                >
-                  <span
-                    className="status-pill"
-                    style={{
-                      backgroundColor: statusColor,
-                      color: '#fff',
-                      padding: '4px 8px',
-                      borderRadius: 999,
-                      fontSize: 12,
-                      textTransform: 'capitalize',
-                      display: 'inline-block',
-                    }}
-                    aria-label={`Status: ${statusText}`}
-                  >
-                    {statusText}
-                  </span>
-                </span>
-              </div>
-
-              {isCompanyPermission && (
-                <div className="info-row">
-                  <span className="info-label">Applicant:</span>
-                  <span className="info-value">
-                    {`${getFullName(currentApp?.athlete ?? {}) || 'Name not specified'}`}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="company-card-actions" style={{ marginTop: 12, display: 'flex', gap: 8 }}>
-            {isCompanyPermission && (
-              <>
-                {
-                  <button
-                    type="button"
-                    className="action-btn primary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleUpdate(ApplicationStatus.Accepted);
-                    }}
-                    disabled={loading}
-                    aria-label="Accept application"
-                  >
-                    Accept
-                  </button>
-                }
-                {showInterviewButton && (
-                  <button
-                    type="button"
-                    className="action-btn secondary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setInterviewModalState({
-                        isOpen: true,
-                        applicationId: currentApp.id,
-                        interviewId: currentApp.interview?.id,
-                      });
-                    }}
-                    disabled={loading}
-                    aria-label="Setup interview"
-                  >
-                    {`${currentApp?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
-                  </button>
-                )}
-                {!showInterviewButton && (
-                  <button
-                    type="button"
-                    className="action-btn secondary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleUpdate(ApplicationStatus.UnderReview);
-                    }}
-                    disabled={loading}
-                    aria-label="Under review"
-                  >
-                    Under Review
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  className="action-btn danger"
+          )}
+        </CardHeader>
+        <FormattedCardBody rows={rows} />
+        <CardActions>
+          {isCompanyPermission && (
+            <>
+              <CardButton
+                variant="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleUpdate(ApplicationStatus.Accepted);
+                }}
+                disabled={loading}
+                aria-label="Accept application"
+              >
+                Accept
+              </CardButton>
+              {showInterviewButton && (
+                <CardButton
+                  variant="secondary"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleUpdate(ApplicationStatus.Rejected);
+                    setInterviewModalState({
+                      isOpen: true,
+                      applicationId: currentApp.id,
+                      interviewId: currentApp.interview?.id,
+                    });
                   }}
                   disabled={loading}
-                  aria-label="Reject application"
+                  aria-label="Setup interview"
                 >
-                  Reject
-                </button>
-              </>
-            )}
+                  {currentApp?.interview?.id ? 'Edit' : 'Schedule'}
+                </CardButton>
+              )}
+              <CardButton
+                variant="danger"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleUpdate(ApplicationStatus.Rejected);
+                }}
+                disabled={loading}
+                aria-label="Reject application"
+              >
+                Reject
+              </CardButton>
+            </>
+          )}
 
-            {isAthletePermission && (
-              <>
-                {[
-                  ApplicationStatus.Applied,
-                  ApplicationStatus.UnderReview,
-                  ApplicationStatus.InterviewRequested,
-                ].includes(currentApp?.status ?? ApplicationStatus.Applied) ? (
-                  <button
-                    type="button"
-                    className="action-btn danger"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleUpdate(ApplicationStatus.Withdrawn);
-                    }}
-                    disabled={loading}
-                    aria-label="Withdraw application"
-                  >
-                    Withdraw
-                  </button>
-                ) : null}
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+          {isAthletePermission && (
+            <>
+              {[
+                ApplicationStatus.Applied,
+                ApplicationStatus.UnderReview,
+                ApplicationStatus.InterviewRequested,
+              ].includes(currentApp?.status ?? ApplicationStatus.Applied) ? (
+                <CardButton
+                  variant="danger"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUpdate(ApplicationStatus.Withdrawn);
+                  }}
+                  disabled={loading}
+                  aria-label="Withdraw application"
+                >
+                  Withdraw
+                </CardButton>
+              ) : null}
+            </>
+          )}
+        </CardActions>
+      </Card>
       {interviewModalState && currentApp?.id ? (
         <InterviewModal
           isOpen={interviewModalState.isOpen}
@@ -279,6 +254,6 @@ export const ApplicationCard: FC<Props> = ({
           }
         />
       ) : null}
-    </div>
+    </>
   );
 };

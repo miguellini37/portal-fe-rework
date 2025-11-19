@@ -90,6 +90,20 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
+/* --- Link Styles --- */
+
+/* Global link styles (excludes links inside buttons) */
+a:not(button a, .btn a, button > a, .btn > a) {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s, text-decoration 0.2s;
+}
+
+a:not(button a, .btn a, button > a, .btn > a):hover {
+  color: hsl(221, 83%, 43%);
+  text-decoration: underline;
+}
+
 /* --- Component Styles --- */
 
 .card-hover {

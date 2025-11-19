@@ -1,9 +1,14 @@
 import React from 'react';
-import './talentPool.css';
 import { GetAthletesResponse } from '../../../api/athlete';
 import { getFullName, getInitials } from '../../../util/name';
-import { Eye } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  FormattedCardBody,
+  CardButton,
+} from '../../../components/Card';
 
 export interface AthleteCardProps {
   athlete: GetAthletesResponse;
@@ -12,57 +17,88 @@ export interface AthleteCardProps {
 export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
   const { academics, athletics, school, location } = athlete;
 
+  const rows = [
+    { label: 'School:', value: school?.schoolName || 'N/A' },
+    { label: 'Location:', value: location || 'N/A' },
+    {
+      label: 'GPA:',
+      value: (
+        <span>
+          {academics?.gpa || 'N/A'}
+          {athletics?.division && (
+            <span
+              style={{
+                background: 'var(--muted, #f3f4f6)',
+                color: 'var(--primary, #3b82f6)',
+                fontSize: '0.85em',
+                fontWeight: 600,
+                borderRadius: '6px',
+                padding: '2px 8px',
+                marginLeft: '8px',
+              }}
+            >
+              {athletics.division}
+            </span>
+          )}
+        </span>
+      ),
+    },
+    { label: 'Major:', value: academics?.major || 'N/A' },
+    { label: 'Graduation:', value: academics?.graduationDate || 'N/A' },
+  ];
+
   return (
-    <div className="athlete-card">
-      <div className="athlete-card-header">
-        <div className="athlete-avatar">{getInitials(athlete)}</div>
-        <div>
-          <div className="athlete-name">{getFullName(athlete)}</div>
-          <div className="athlete-sport">
-            {athletics?.sport}
-            {athletics?.position ? ` • ${athletics?.position}` : ''}
+    <Card variant="blue">
+      <CardHeader>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              background: 'var(--primary, #3b82f6)',
+              color: 'var(--primary-foreground, white)',
+              fontSize: '1rem',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(99,102,241,0.10)',
+              flexShrink: 0,
+            }}
+          >
+            {getInitials(athlete)}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: '1.15rem',
+                fontWeight: 700,
+                color: 'var(--foreground, #111827)',
+                margin: 0,
+              }}
+            >
+              {getFullName(athlete)}
+            </div>
+            <div
+              style={{
+                color: 'var(--primary, #3b82f6)',
+                fontSize: '1rem',
+                fontWeight: 500,
+              }}
+            >
+              {athletics?.sport}
+              {athletics?.position ? ` • ${athletics?.position}` : ''}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="athlete-card-body">
-        <div className="athlete-info-row">
-          <span className="athlete-info-label">🏫</span> {school?.schoolName}
-        </div>
-        <div className="athlete-info-row">
-          <span className="athlete-info-label">📍</span> {location}
-        </div>
-        <div className="athlete-info-row">
-          <span className="athlete-info-label">🎓 GPA:</span> {academics?.gpa}
-          {athletics?.division && <span className="athlete-division">{athletics?.division}</span>}
-        </div>
-        <div className="athlete-info-row">
-          <b>Major:</b> {academics?.major}
-        </div>
-        <div className="athlete-info-row">
-          <b>Graduation:</b> {academics?.graduationDate}
-        </div>
-        {/* <div className="athlete-info-row">
-          <b>Industry Interest:</b> {industryInterest}
-        </div> */}
-        <div className="athlete-skills">
-          {/* {skills.slice(0, 3).map((skill, i) => (
-            <span className="athlete-skill" key={i}>
-              {skill}
-            </span>
-          ))} */}
-          {/* {skills.length > 3 && <span className="athlete-skill">+{skills.length - 3} more</span>} */}
-        </div>
-      </div>
-      <div className="athlete-card-actions">
-        <NavLink className="action-btn primary" to={`/athlete/${athlete.id}`}>
-          <Eye size={18} style={{ marginRight: 6, marginBottom: -2 }} />
-          View Profile
-        </NavLink>
-        {/* <button className="athlete-contact" onClick={() => {}}>
-          <MessageCircle size={18} style={{ marginRight: 6, marginBottom: -2 }} />
-          Contact
-        </button> */}
-      </div>
-    </div>
+      </CardHeader>
+      <FormattedCardBody rows={rows} />
+      <CardActions>
+        <CardButton variant="primary">
+          <NavLink to={`/athlete/${athlete.id}`}>View Profile</NavLink>
+        </CardButton>
+      </CardActions>
+    </Card>
   );
 };

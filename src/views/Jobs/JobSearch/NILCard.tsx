@@ -1,8 +1,14 @@
 import React from 'react';
-import './JobPostingsDashboard.css';
 import { IJobPayload, JobStatus } from '../../../api/job';
 import { NavLink } from 'react-router-dom';
 import { AlertTriangle } from 'lucide-react';
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  FormattedCardBody,
+  CardButton,
+} from '../../../components/Card';
 
 export interface NILCardProps {
   nil: IJobPayload;
@@ -13,7 +19,6 @@ export interface NILCardProps {
 }
 
 export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply, onApply }) => {
-  // Hide any card that is not explicitly open
   if (nil.status !== JobStatus.Open && !canEdit) {
     return null;
   }
@@ -22,88 +27,152 @@ export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
   const showAppliedBadge = Boolean(!canEdit && !canApply);
-
-  // Check if compensation is over $600 for warning
   const showWarning = nil.salary && nil.salary > 600;
 
-  return (
-    <div className="job-card">
-      <div className="job-content">
-        <div className="job-header">
-          <div className="job-title-section">
-            <h3 className="job-title">{nil.position || 'NIL Opportunity'}</h3>
-            <div className="job-tags">
-              <span className="job-type-tag nil-tag">NIL</span>
-              <span className="job-location-tag">{nil.location || 'Remote'}</span>
-              <span className="job-experience-tag">{nil.experience || 'Opportunity Type'}</span>
-            </div>
-          </div>
+  const rows = [];
 
-          {/* Status pill */}
+  if (nil.salary) {
+    rows.push({
+      label: 'Compensation:',
+      value: (
+        <span
+          style={{
+            fontWeight: 700,
+            color: '#059669',
+            background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
+            padding: '0.25rem 0.5rem',
+            borderRadius: '0.5rem',
+            border: '1px solid #a7f3d0',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          ${nil.salary.toLocaleString()}
+          {showWarning && <AlertTriangle size={16} color="#f59e0b" />}
+        </span>
+      ),
+    });
+  }
+
+  if (nil.location) {
+    rows.push({ label: 'Location:', value: nil.location });
+  }
+
+  if (nil.experience) {
+    rows.push({ label: 'Type:', value: nil.experience });
+  }
+
+  if (nil.createdDate) {
+    rows.push({
+      label: 'Posted:',
+      value: new Date(nil.createdDate).toLocaleDateString(),
+    });
+  }
+
+  if (nil.industry) {
+    rows.push({ label: 'Industry:', value: nil.industry });
+  }
+
+  if (nil.applicationDeadline) {
+    rows.push({
+      label: 'Apply by:',
+      value: new Date(nil.applicationDeadline).toLocaleDateString(),
+    });
+  }
+
+  return (
+    <Card variant="purple">
+      <CardHeader>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: '1rem',
+            width: '100%',
+          }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                color: '#111827',
+                margin: '0 0 0.625rem 0',
+                lineHeight: 1.3,
+                letterSpacing: '-0.025em',
+              }}
+            >
+              {nil.position || 'NIL Opportunity'}
+            </div>
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #f3e8ff, #e9d5ff)',
+                border: '1px solid #c4b5fd',
+                color: '#7c3aed',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '1rem',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                letterSpacing: '0.025em',
+              }}
+            >
+              NIL
+            </span>
+          </div>
           {nil.status && (
             <span
-              className={`job-status-pill job-status-${nil.status.toString().toLowerCase()}`}
+              style={{
+                padding: '0.25rem 0.75rem',
+                borderRadius: '9999px',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                flexShrink: 0,
+                background:
+                  nil.status === JobStatus.Open
+                    ? '#d1fae5'
+                    : nil.status === JobStatus.Closed
+                      ? '#fee2e2'
+                      : '#fef3c7',
+                color:
+                  nil.status === JobStatus.Open
+                    ? '#065f46'
+                    : nil.status === JobStatus.Closed
+                      ? '#991b1b'
+                      : '#92400e',
+              }}
               aria-label={`NIL status: ${statusText}`}
             >
               {statusText}
             </span>
           )}
         </div>
-
-        <div className="job-details">
-          <div className="job-info">
-            {nil.salary && (
-              <div className="salary-info">
-                ${nil.salary.toLocaleString()}
-                {showWarning && (
-                  <span
-                    className="compensation-warning"
-                    title="Warning: anything over $600 has to be reported to NIL GO"
-                    style={{ marginLeft: '8px', color: '#f59e0b' }}
-                  >
-                    <AlertTriangle size={16} />
-                  </span>
-                )}
-              </div>
-            )}
-            <div className="job-meta-info">
-              {nil.createdDate && (
-                <div>Posted {new Date(nil.createdDate).toLocaleDateString()}</div>
-              )}
-              {nil.industry && <div>{nil.industry}</div>}
-              {nil.applicationDeadline && (
-                <div>Apply by {new Date(nil.applicationDeadline).toLocaleDateString()}</div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Actions: centered, same size, same row */}
-      <div className="job-card-actions">
+      </CardHeader>
+      <FormattedCardBody rows={rows} />
+      <CardActions>
         {canEdit && (
-          <button className="action-btn primary job-card-action" onClick={() => onView(nil)}>
-            Edit NIL Opportunity
-          </button>
+          <CardButton variant="primary" onClick={() => onView(nil)}>
+            Edit NIL
+          </CardButton>
         )}
         {showAppliedBadge && (
-          <span
-            className="applied-badge job-card-action"
-            aria-label="You have applied to this NIL opportunity"
-            aria-disabled="true"
-          >
+          <CardButton variant="primary" disabled>
             Applied
-          </span>
+          </CardButton>
         )}
         {canApply && (
-          <button className="action-btn primary job-card-action" onClick={() => onApply?.(nil)}>
+          <CardButton variant="primary" onClick={() => onApply?.(nil)}>
             Apply
-          </button>
+          </CardButton>
         )}
-        <NavLink className="action-btn secondary job-card-action" to={`/job/${nil.id}`}>
-          View Full NIL Details
-        </NavLink>
-      </div>
-    </div>
+        <CardButton variant="secondary">
+          <NavLink to={`/job/${nil.id}`}>View Details</NavLink>
+        </CardButton>
+      </CardActions>
+    </Card>
   );
 };
