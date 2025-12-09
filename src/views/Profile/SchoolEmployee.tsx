@@ -87,9 +87,9 @@ export const SchoolEmployeeProfile = () => {
             School
           </label>
           <SchoolDropdown
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolName: e?.value }))}
+            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolId: e?.value }))}
             selected={schoolEmployee.school?.id}
-            disabled
+            disabled={user?.isOrgVerified}
           />
         </div>
 

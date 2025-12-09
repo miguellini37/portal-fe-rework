@@ -83,8 +83,9 @@ export const CompanyEmployeeProfile = () => {
             Company
           </label>
           <CompanyDropdown
-            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, companyName: e?.value }))}
+            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, companyId: e?.value }))}
             selected={companyEmployee.companyName}
+            disabled={user?.isOrgVerified}
           />
         </div>
 
