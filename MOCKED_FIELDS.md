@@ -41,7 +41,7 @@ The StaffDirectory component now uses the `getSchoolEmployees()` API to fetch st
    - **Backend Field Needed:** Job title field
 
 2. **`department`** (string)
-   - **Current Mock Value:** `'Unknown'`
+   - **Current Mock Value:** `'-'`
    - **Expected Values:** 'Career Services', 'NIL Oversight', 'Academic Support', etc.
    - **Usage:** Used for filtering and organizing staff
    - **Backend Field Needed:** Department/division field

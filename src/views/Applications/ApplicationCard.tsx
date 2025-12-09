@@ -50,7 +50,7 @@ export const ApplicationCard: FC<Props> = ({
 
   const formatDate = (date: Date | string | undefined): string => {
     if (!date) {
-      return 'N/A';
+      return '-';
     }
     try {
       const d = new Date(date);

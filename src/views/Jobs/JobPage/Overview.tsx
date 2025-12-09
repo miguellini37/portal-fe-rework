@@ -14,7 +14,7 @@ export const Overview: React.FC<OverviewTabProps> = ({ job }) => {
   };
   const formatDate = (date: Date | string | undefined) => {
     if (!date) {
-      return 'N/A';
+      return '-';
     }
     try {
       const dateObj = new Date(date);

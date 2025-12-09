@@ -1,7 +1,7 @@
 import React from 'react';
 import { GetAthletesResponse } from '../../../api/athlete';
 import { getFullName, getInitials } from '../../../util/name';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Card,
   CardHeader,
@@ -18,13 +18,13 @@ export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
   const { academics, athletics, school, location } = athlete;
 
   const rows = [
-    { label: 'School:', value: school?.schoolName || 'N/A' },
-    { label: 'Location:', value: location || 'N/A' },
+    { label: 'School:', value: school?.schoolName || '-' },
+    { label: 'Location:', value: location || '-' },
     {
       label: 'GPA:',
       value: (
         <span>
-          {academics?.gpa || 'N/A'}
+          {academics?.gpa || '-'}
           {athletics?.division && (
             <span
               style={{
@@ -43,8 +43,8 @@ export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
         </span>
       ),
     },
-    { label: 'Major:', value: academics?.major || 'N/A' },
-    { label: 'Graduation:', value: academics?.graduationDate || 'N/A' },
+    { label: 'Major:', value: academics?.major || '-' },
+    { label: 'Graduation:', value: academics?.graduationDate || '-' },
   ];
 
   return (
@@ -96,7 +96,8 @@ export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
       <FormattedCardBody rows={rows} />
       <CardActions>
         <CardButton variant="primary">
-          <NavLink to={`/athlete/${athlete.id}`}>View Profile</NavLink>
+          {/* <NavLink to={`/athlete/${athlete.id}`}>View Profile</NavLink> */}
+          <Link to={`/athlete/${athlete.id}`}> View Profile </Link>
         </CardButton>
       </CardActions>
     </Card>

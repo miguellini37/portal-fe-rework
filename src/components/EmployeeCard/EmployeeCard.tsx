@@ -78,7 +78,7 @@ export const EmployeeCard: FC<EmployeeCardProps> = ({ employee }) => {
                 margin: 0,
               }}
             >
-              {fullName || 'Unknown'}
+              {fullName || '-'}
             </div>
           </div>
         </div>

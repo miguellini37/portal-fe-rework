@@ -3,13 +3,15 @@ import { StylesConfig } from 'react-select';
 export const customDropdownStyle: StylesConfig<any> = {
   control: (provided, state) => ({
     ...provided,
-    backgroundColor: 'var(--background)',
+    backgroundColor: state.isDisabled ? 'var(--muted)' : 'var(--background)',
     borderColor: 'var(--border)',
     borderRadius: '0.375rem',
     padding: '0px',
     minHeight: '3rem',
     height: '3rem',
     boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : 'none',
+    cursor: state.isDisabled ? 'not-allowed' : 'default',
+    opacity: state.isDisabled ? 0.7 : 1,
     '&:hover': {
       borderColor: 'var(--border)',
     },

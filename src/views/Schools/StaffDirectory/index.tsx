@@ -1,5 +1,4 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
-import { Search } from 'lucide-react';
 import {
   getSchoolEmployees,
   GetSchoolEmployeesFilter,
@@ -57,59 +56,40 @@ export const StaffDirectory: FC = () => {
 
   if (loading) {
     return (
-      <div className="staff-directory">
+      <div className="staff-directory-root">
         <div className="staff-directory-header">
-          <h1>Staff Directory</h1>
-          <p>Loading...</p>
+          <h1 className="staff-directory-title">Staff Directory</h1>
+          <div className="staff-directory-subtitle">Loading...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="staff-directory">
+    <div className="staff-directory-root">
       <div className="staff-directory-header">
-        <h1>Staff Directory</h1>
-        <p>
+        <h1 className="staff-directory-title">Staff Directory</h1>
+        <div className="staff-directory-subtitle">
           Meet the dedicated team supporting our student-athletes across academics, athletics, and
           career development.
-        </p>
-      </div>
-
-      {/* Search and Filters */}
-      <div className="search-filter-section">
-        <div className="search-filter-header">
-          <h2>
-            <Search size={20} />
-            Search Staff
-          </h2>
-        </div>
-
-        <div className="search-filter-controls">
-          <div className="search-bar">
-            <Search className="search-icon" size={16} />
-            <input
-              type="text"
-              placeholder="Search by name, email, or school..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
         </div>
       </div>
 
-      {/* Staff Directory */}
-      <div className="staff-list-section">
-        <div className="staff-list-header">
-          <h3>Staff Members ({filteredStaff.length})</h3>
-        </div>
-
-        <CardTable maxColumns={3} minCardWidth={320}>
-          {filteredStaff.map((employee) => (
-            <EmployeeCard key={employee.id} employee={employee} />
-          ))}
-        </CardTable>
+      <div className="staff-directory-searchbar-row">
+        <input
+          className="staff-directory-searchbar"
+          type="text"
+          placeholder="Search by name, email, or school..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
+
+      <CardTable maxColumns={4} minCardWidth={320}>
+        {filteredStaff.map((employee) => (
+          <EmployeeCard key={employee.id} employee={employee} />
+        ))}
+      </CardTable>
     </div>
   );
 };

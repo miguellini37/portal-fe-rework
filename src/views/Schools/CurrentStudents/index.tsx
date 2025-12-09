@@ -16,14 +16,14 @@ export const CurrentStudents = () => {
   // Helper function to calculate class year from graduation date
   const calculateClassYear = (graduationDate?: string): string => {
     if (!graduationDate) {
-      return 'Unknown';
+      return '-';
     }
 
     try {
       // Parse graduation date (format could be "May 2024", "2024-05-15", etc.)
       const yearMatch = graduationDate.match(/\d{4}/);
       if (!yearMatch) {
-        return 'Unknown';
+        return '-';
       }
 
       const gradYear = parseInt(yearMatch[0], 10);
@@ -51,7 +51,7 @@ export const CurrentStudents = () => {
 
       return 'Freshman'; // For students more than 3 years out
     } catch {
-      return 'Unknown';
+      return '-';
     }
   };
 
@@ -75,12 +75,12 @@ export const CurrentStudents = () => {
           lastName: athlete.lastName || '',
           email: athlete.email || '',
           phone: athlete.phone,
-          sport: athlete.athletics?.sport || 'Unknown',
+          sport: athlete.athletics?.sport || '-',
           position: athlete.athletics?.position,
           classYear: calculateClassYear(athlete.academics?.graduationDate),
-          major: athlete.academics?.major || 'Unknown',
+          major: athlete.academics?.major || '-',
           gpa: athlete.academics?.gpa || 0,
-          expectedGraduation: athlete.academics?.graduationDate || 'Unknown',
+          expectedGraduation: athlete.academics?.graduationDate || '-',
           location: athlete.location,
         }));
 

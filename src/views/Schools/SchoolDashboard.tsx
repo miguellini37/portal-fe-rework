@@ -182,7 +182,7 @@ export const SchoolDashboard: React.FC = () => {
   const recentActivity: ActivityItem[] = activity.map((item) => ({
     id: item.id || '',
     title: item.title || 'Activity',
-    timestamp: item.timestamp || 'Unknown',
+    timestamp: item.timestamp || '-',
     type: (item.type || 'info') as ActivityItem['type'],
   }));
 
