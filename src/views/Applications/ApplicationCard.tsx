@@ -61,8 +61,9 @@ export const ApplicationCard: FC<Props> = ({
     }
   };
 
+  console.log(currentApp?.status);
   const showInterviewButton =
-    currentApp?.status === ApplicationStatus.UnderReview ||
+    currentApp?.status === ApplicationStatus.Applied ||
     currentApp?.status === ApplicationStatus.InterviewRequested;
 
   const getStatusColor = (status: ApplicationStatus | undefined): string => {
@@ -242,7 +243,7 @@ export const ApplicationCard: FC<Props> = ({
                   disabled={loading}
                   aria-label="Setup interview"
                 >
-                  {currentApp?.interview?.id ? 'Edit' : 'Schedule'}
+                  {`${currentApp?.interview?.id ? 'Edit' : 'Schedule'} Interview`}
                 </CardButton>
               )}
               <CardButton
