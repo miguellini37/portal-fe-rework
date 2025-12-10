@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { IApplicationPayload, ApplicationStatus } from '../../api/application';
 import {
   Card,
@@ -14,6 +14,7 @@ import { USER_PERMISSIONS } from '../../auth/hooks';
 import { getFullName, toTitleCase } from '../../util/name';
 import { toast } from 'react-toastify';
 import { InterviewModal } from '../Interviews/InterviewModal';
+import { ExternalLink } from 'lucide-react';
 
 interface Props {
   application: IApplicationPayload;
@@ -150,26 +151,67 @@ export const ApplicationCard: FC<Props> = ({
     <>
       <Card variant="blue" ariaLabel={`Open job ${currentApp?.job?.position ?? 'job'}`}>
         <CardHeader>
-          {showJobPosition && currentApp.job?.position && (
-            <Link
-              to={`/job/${currentApp.job?.id}`}
-              style={{
-                fontSize: '1.25rem',
-                fontWeight: 700,
-                color: '#111827',
-                textDecoration: 'none',
-                margin: 0,
-                lineHeight: 1.3,
-              }}
-            >
-              {currentApp.job.position}
-            </Link>
-          )}
-          {!isCompanyPermission && (
-            <div style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-              {currentApp?.job?.company?.companyName || 'Company not specified'}
-            </div>
-          )}
+          <div style={{ marginBottom: '0.75rem' }}>
+            {showJobPosition && currentApp.job?.position && (
+              <div
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 700,
+                  color: '#111827',
+                  margin: '0 0 0.25rem 0',
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.025em',
+                }}
+              >
+                <Link
+                  to={`/job/${currentApp.job?.id}`}
+                  style={{
+                    color: '#111827',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {currentApp.job.position}
+                </Link>{' '}
+                <a
+                  href={`/job/${currentApp.job?.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#2563eb',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    textDecoration: 'none',
+                    verticalAlign: 'middle',
+                  }}
+                  aria-label="View job details in new tab"
+                >
+                  <ExternalLink size={16} />
+                </a>
+              </div>
+            )}
+            {!isCompanyPermission && currentApp?.job?.company?.companyName && (
+              <NavLink
+                to={`/company/${currentApp.job.company.id}`}
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 550,
+                  color: '#2563eb',
+                  textDecoration: 'none',
+                  display: 'block',
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.025em',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.textDecoration = 'underline';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.textDecoration = 'none';
+                }}
+              >
+                {currentApp.job.company.companyName}
+              </NavLink>
+            )}
+          </div>
         </CardHeader>
         <FormattedCardBody rows={rows} />
         <CardActions>

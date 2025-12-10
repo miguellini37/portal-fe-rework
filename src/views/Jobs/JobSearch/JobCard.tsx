@@ -8,6 +8,8 @@ import {
   FormattedCardBody,
   CardButton,
 } from '../../../components/Card';
+import { useAuthUser, USER_PERMISSIONS } from '../../../auth/hooks';
+import { ExternalLink } from 'lucide-react';
 
 export interface JobCardProps {
   job: IJobPayload;
@@ -18,6 +20,8 @@ export interface JobCardProps {
 }
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
+  const user = useAuthUser();
+
   if (job.status !== JobStatus.Open && !canEdit) {
     return null;
   }
@@ -26,12 +30,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
-  const rows = [];
-
-  if (job.salary) {
-    rows.push({
+  const rows = [
+    {
       label: 'Salary:',
-      value: (
+      value: job.salary ? (
         <span
           style={{
             fontWeight: 700,
@@ -44,39 +46,23 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
         >
           ${job.salary.toLocaleString()}
         </span>
+      ) : (
+        '-'
       ),
-    });
-  }
-
-  if (job.type) {
-    rows.push({ label: 'Type:', value: job.type });
-  }
-
-  if (job.location) {
-    rows.push({ label: 'Location:', value: job.location });
-  }
-
-  if (job.experience) {
-    rows.push({ label: 'Experience:', value: job.experience });
-  }
-
-  if (job.createdDate) {
-    rows.push({
+    },
+    { label: 'Type:', value: job.type || '-' },
+    { label: 'Location:', value: job.location || '-' },
+    { label: 'Experience:', value: job.experience || '-' },
+    {
       label: 'Posted:',
-      value: new Date(job.createdDate).toLocaleDateString(),
-    });
-  }
-
-  if (job.industry) {
-    rows.push({ label: 'Industry:', value: job.industry });
-  }
-
-  if (job.applicationDeadline) {
-    rows.push({
+      value: job.createdDate ? new Date(job.createdDate).toLocaleDateString() : '-',
+    },
+    { label: 'Industry:', value: job.industry || '-' },
+    {
       label: 'Apply by:',
-      value: new Date(job.applicationDeadline).toLocaleDateString(),
-    });
-  }
+      value: job.applicationDeadline ? new Date(job.applicationDeadline).toLocaleDateString() : '-',
+    },
+  ];
 
   return (
     <Card variant="orange">
@@ -96,13 +82,51 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
                 fontSize: '1.25rem',
                 fontWeight: 700,
                 color: '#111827',
-                margin: '0 0 0.625rem 0',
+                margin: '0 0 0.25rem 0',
                 lineHeight: 1.3,
                 letterSpacing: '-0.025em',
               }}
             >
-              {job.position || 'Associate'}
+              {job.position || 'Associate'}{' '}
+              <a
+                href={`/job/${job.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: '#2563eb',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  textDecoration: 'none',
+                  verticalAlign: 'middle',
+                }}
+                aria-label="View job details in new tab"
+              >
+                <ExternalLink size={16} />
+              </a>
             </div>
+            {job.company?.companyName && (
+              <NavLink
+                to={`/company/${job.company.id}`}
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 550,
+                  color: '#2563eb',
+                  textDecoration: 'none',
+                  display: 'block',
+                  marginTop: '0.25rem',
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.025em',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.textDecoration = 'underline';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.textDecoration = 'none';
+                }}
+              >
+                {job.company.companyName}
+              </NavLink>
+            )}
           </div>
           {job.status && (
             <span
@@ -142,14 +166,19 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
             Edit Job
           </CardButton>
         )}
-        {!canEdit && (
-          <CardButton variant="primary" disabled={!canApply} onClick={() => onApply?.(job)}>
-            Apply
-          </CardButton>
+        {!canEdit && user?.permission == USER_PERMISSIONS.ATHLETE && (
+          <>
+            {job.hasApplied ? (
+              <CardButton variant="primary" disabled>
+                Applied
+              </CardButton>
+            ) : (
+              <CardButton variant="primary" disabled={!canApply} onClick={() => onApply?.(job)}>
+                Apply
+              </CardButton>
+            )}
+          </>
         )}
-        <CardButton variant="secondary">
-          <NavLink to={`/job/${job.id}`}>View Job</NavLink>
-        </CardButton>
       </CardActions>
     </Card>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { IJobPayload, JobStatus } from '../../../api/job';
 import { NavLink } from 'react-router-dom';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, ExternalLink } from 'lucide-react';
 import {
   Card,
   CardHeader,
@@ -29,12 +29,10 @@ export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply
   const showAppliedBadge = Boolean(!canEdit && !canApply);
   const showWarning = nil.salary && nil.salary > 600;
 
-  const rows = [];
-
-  if (nil.salary) {
-    rows.push({
+  const rows = [
+    {
       label: 'Compensation:',
-      value: (
+      value: nil.salary ? (
         <span
           style={{
             fontWeight: 700,
@@ -49,37 +47,28 @@ export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply
           }}
         >
           ${nil.salary.toLocaleString()}
-          {showWarning && <AlertTriangle size={16} color="#f59e0b" />}
+          {showWarning && (
+            <span title="NIL compensation over $600 requires reporting">
+              <AlertTriangle size={16} color="#f59e0b" />
+            </span>
+          )}
         </span>
+      ) : (
+        '-'
       ),
-    });
-  }
-
-  if (nil.location) {
-    rows.push({ label: 'Location:', value: nil.location });
-  }
-
-  if (nil.experience) {
-    rows.push({ label: 'Type:', value: nil.experience });
-  }
-
-  if (nil.createdDate) {
-    rows.push({
+    },
+    { label: 'Location:', value: nil.location || '-' },
+    { label: 'Type:', value: nil.experience || '-' },
+    {
       label: 'Posted:',
-      value: new Date(nil.createdDate).toLocaleDateString(),
-    });
-  }
-
-  if (nil.industry) {
-    rows.push({ label: 'Industry:', value: nil.industry });
-  }
-
-  if (nil.applicationDeadline) {
-    rows.push({
+      value: nil.createdDate ? new Date(nil.createdDate).toLocaleDateString() : '-',
+    },
+    { label: 'Industry:', value: nil.industry || '-' },
+    {
       label: 'Apply by:',
-      value: new Date(nil.applicationDeadline).toLocaleDateString(),
-    });
-  }
+      value: nil.applicationDeadline ? new Date(nil.applicationDeadline).toLocaleDateString() : '-',
+    },
+  ];
 
   return (
     <Card variant="purple">
@@ -99,27 +88,51 @@ export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply
                 fontSize: '1.25rem',
                 fontWeight: 700,
                 color: '#111827',
-                margin: '0 0 0.625rem 0',
+                margin: '0 0 0.25rem 0',
                 lineHeight: 1.3,
                 letterSpacing: '-0.025em',
               }}
             >
-              {nil.position || 'NIL Opportunity'}
+              {nil.position || 'NIL Opportunity'}{' '}
+              <a
+                href={`/job/${nil.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: '#2563eb',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  textDecoration: 'none',
+                  verticalAlign: 'middle',
+                }}
+                aria-label="View NIL details in new tab"
+              >
+                <ExternalLink size={16} />
+              </a>
             </div>
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #f3e8ff, #e9d5ff)',
-                border: '1px solid #c4b5fd',
-                color: '#7c3aed',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '1rem',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                letterSpacing: '0.025em',
-              }}
-            >
-              NIL
-            </span>
+            {nil.company?.companyName && (
+              <NavLink
+                to={`/company/${nil.company.id}`}
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 550,
+                  color: '#2563eb',
+                  textDecoration: 'none',
+                  display: 'block',
+                  marginTop: '0.25rem',
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.025em',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.textDecoration = 'underline';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.textDecoration = 'none';
+                }}
+              >
+                {nil.company.companyName}
+              </NavLink>
+            )}
           </div>
           {nil.status && (
             <span
@@ -159,19 +172,19 @@ export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply
             Edit NIL
           </CardButton>
         )}
-        {showAppliedBadge && (
-          <CardButton variant="primary" disabled>
-            Applied
-          </CardButton>
+        {!canEdit && (
+          <>
+            {nil.hasApplied || showAppliedBadge ? (
+              <CardButton variant="primary" disabled>
+                Applied
+              </CardButton>
+            ) : canApply ? (
+              <CardButton variant="primary" onClick={() => onApply?.(nil)}>
+                Apply
+              </CardButton>
+            ) : null}
+          </>
         )}
-        {canApply && (
-          <CardButton variant="primary" onClick={() => onApply?.(nil)}>
-            Apply
-          </CardButton>
-        )}
-        <CardButton variant="secondary">
-          <NavLink to={`/job/${nil.id}`}>View Details</NavLink>
-        </CardButton>
       </CardActions>
     </Card>
   );

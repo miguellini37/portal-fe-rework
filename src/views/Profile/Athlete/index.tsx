@@ -87,7 +87,12 @@ export const AthleteProfile = () => {
       key: 'overview',
       label: 'Overview',
       component: (athlete: IUpdateAthletePayload) => (
-        <OverviewTab athlete={athlete} editMode={editMode} setAthlete={setAthlete} />
+        <OverviewTab
+          athlete={athlete}
+          editMode={editMode}
+          setAthlete={setAthlete}
+          canEdit={canEdit}
+        />
       ),
     },
     {

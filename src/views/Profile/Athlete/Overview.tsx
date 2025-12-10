@@ -3,12 +3,12 @@ import React, { JSX, useState } from 'react';
 import { IUpdateAthletePayload } from '../../../api/athlete';
 import { isNil } from 'lodash';
 import { formatPhone, normalizePhoneDigits } from '../../../util/phone';
-import { useAuthUser } from '../../../auth/hooks';
 
 interface OverviewTabProps {
   athlete: IUpdateAthletePayload;
   editMode: boolean;
   setAthlete: React.Dispatch<React.SetStateAction<IUpdateAthletePayload>>;
+  canEdit: boolean;
 }
 
 const PREDEFINED_SKILLS = [
@@ -22,9 +22,12 @@ const PREDEFINED_SKILLS = [
   'Goal Setting',
 ];
 
-export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, setAthlete }) => {
-  const user = useAuthUser();
-
+export const OverviewTab: React.FC<OverviewTabProps> = ({
+  athlete,
+  editMode,
+  setAthlete,
+  canEdit,
+}) => {
   const [customSkill, setCustomSkill] = useState('');
   const [showAllSkills, setShowAllSkills] = useState(false);
 
@@ -134,12 +137,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
                   <input
                     type="text"
                     className="first-name"
-                    value={user?.firstName || ''}
+                    value={athlete?.firstName || ''}
                     readOnly
                     tabIndex={-1}
                   />
                 ) : (
-                  <div className="readonly-display">{user?.firstName || ''}</div>
+                  <div className="readonly-display">{athlete?.firstName || ''}</div>
                 )}
               </div>
               <div className="field">
@@ -148,12 +151,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
                   <input
                     type="text"
                     className="last-name"
-                    value={user?.lastName || ''}
+                    value={athlete?.lastName || ''}
                     readOnly
                     tabIndex={-1}
                   />
                 ) : (
-                  <div className="readonly-display">{user?.lastName || ''}</div>
+                  <div className="readonly-display">{athlete?.lastName || ''}</div>
                 )}
               </div>
               <div className="field">
@@ -162,12 +165,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
                   <input
                     type="text"
                     className="email"
-                    value={user?.email || ''}
+                    value={athlete?.email || ''}
                     readOnly
                     tabIndex={-1}
                   />
                 ) : (
-                  <div className="readonly-display">{user?.email || ''}</div>
+                  <div className="readonly-display">{athlete?.email || ''}</div>
                 )}
               </div>
               <div className="field">
@@ -217,7 +220,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ athlete, editMode, set
       </div>
 
       {/* Profile Completion */}
-      {percentComplete === 100 ? (
+      {percentComplete === 100 || !canEdit ? (
         <></>
       ) : (
         <div className="completion-card card">
