@@ -19,6 +19,7 @@ import {
   BookUser,
   Star,
   Shield,
+  BarChart3,
 } from 'lucide-react';
 import { useState } from 'react';
 import { ActivityBell } from '../../views/Activity/ActivityBell';
@@ -142,11 +143,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               )}
               {isOrgVerified && permission === USER_PERMISSIONS.SCHOOL && (
                 <>
-                  {/* <li className="mb-4">
+                  <li className="mb-4">
                     <DisabledNavLink to="/school/dashboard" title="Dashboard">
                       <BarChart3 /> {!isCollapsed && <span>Dashboard</span>}
                     </DisabledNavLink>
-                  </li> */}
+                  </li>
                   <li className="mb-4">
                     <DisabledNavLink to={`/school/${user?.schoolId}`} title="School Profile">
                       <Building /> {!isCollapsed && <span>School Profile</span>}
