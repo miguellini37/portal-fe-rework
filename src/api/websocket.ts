@@ -16,7 +16,7 @@ export const initializeSocket = (authToken: string): Socket => {
   }
 
   socket = io(url || '', {
-    path: '/messages',
+    path: '/subscription',
     transports: ['websocket', 'polling'],
     auth: {
       token: authToken,
