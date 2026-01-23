@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { ActivityBell } from '../../views/Activity/ActivityBell';
+import { MessagesBell } from '../../views/Messages/MessagesBell';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -257,14 +258,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 </>
               ) : (
                 <>
-                  {permission != USER_PERMISSIONS.ADMIN && isOrgVerified && (
-                    <li className="mb-4">
-                      <ActivityBell
-                        isCollapsed={isCollapsed}
-                        className="text-blue-400 hover:text-blue-300 focus:outline-none"
-                      />
-                    </li>
-                  )}
                   {permission != USER_PERMISSIONS.ADMIN && (
                     <li className="mb-4">
                       <NavLink
@@ -274,6 +267,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                       >
                         <User /> {!isCollapsed && <span>Profile</span>}
                       </NavLink>
+                    </li>
+                  )}
+                  {permission != USER_PERMISSIONS.ADMIN && isOrgVerified && (
+                    <li className="mb-4">
+                      <MessagesBell
+                        isCollapsed={isCollapsed}
+                        className="text-blue-400 hover:text-blue-300"
+                      />
+                    </li>
+                  )}
+                  {permission != USER_PERMISSIONS.ADMIN && isOrgVerified && (
+                    <li className="mb-4">
+                      <ActivityBell
+                        isCollapsed={isCollapsed}
+                        className="text-blue-400 hover:text-blue-300 focus:outline-none"
+                      />
                     </li>
                   )}
 

@@ -25,6 +25,9 @@ import { CompanyNILPage } from './views/Jobs/CompanyNILPage';
 import { AdminUsers } from './views/Admin/AdminUsers';
 import { AdminSchools } from './views/Admin/AdminSchools';
 import { AdminCompanies } from './views/Admin/AdminCompanies';
+import { Messages } from './views/Messages';
+import { Conversation } from './views/Messages/Conversation';
+import { NewConversation } from './views/Messages/NewConversation';
 
 type PageRoute = {
   path: string;
@@ -36,6 +39,10 @@ type PageRoute = {
 export const AppRoutes = () => {
   const routes: PageRoute[] = [
     { path: '/activity', element: <ActivityPage />, withSidebar: true },
+
+    { path: '/messages', element: <Messages />, withSidebar: true },
+    { path: '/messages/new', element: <NewConversation />, withSidebar: true },
+    { path: '/messages/:userId', element: <Conversation />, withSidebar: true },
 
     { path: '/profile', element: <ProfileEdit />, withSidebar: true },
     { path: '/company/:id', element: <CompanyProfile />, withSidebar: true },
