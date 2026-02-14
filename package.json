@@ -16,7 +16,7 @@
     "dotenv": "^16.5.0",
     "keycloak-js": "^26.2.1",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.532.0",
+    "lucide-react": "^0.564.0",
     "react": "^19.1.0",
     "react-currency-input-field": "^3.10.0",
     "react-dom": "^19.1.0",

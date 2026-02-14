@@ -1,4 +1,4 @@
-import { Homepage } from './views/Homepage';
+import { LandingPage } from './views/LandingPage';
 import { Route, Routes } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { RequireAuth } from './auth/RequireAuth';
@@ -72,8 +72,8 @@ export const AppRoutes = () => {
     { path: '/admin/schools', element: <AdminSchools />, withSidebar: true },
     { path: '/admin/companies', element: <AdminCompanies />, withSidebar: true },
 
-    { path: '/', element: <Homepage />, withSidebar: true, noAuth: true },
-    { path: '*', element: <Homepage />, withSidebar: true, noAuth: true },
+    { path: '/', element: <LandingPage />, withSidebar: false, noAuth: true },
+    { path: '*', element: <LandingPage />, withSidebar: false, noAuth: true },
   ];
 
   return (
