@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useAuth } from '../../auth/hooks';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import {
   Users,
   GraduationCap,
@@ -59,24 +59,24 @@ export const LandingPage: FC = () => {
               >
                 Home
               </a>
-              <a
-                href="#athletes"
+              <Link
+                to="/athletes"
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 For Athletes
-              </a>
-              <a
-                href="#universities"
+              </Link>
+              <Link
+                to="/universities"
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 For Universities
-              </a>
-              <a
-                href="#employers"
+              </Link>
+              <Link
+                to="/employers"
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 For Employers
-              </a>
+              </Link>
             </div>
             <div className="flex items-center gap-3">
               <button onClick={handleLogin} className="lp-btn lp-btn-ghost">

@@ -1,4 +1,7 @@
 import { LandingPage } from './views/LandingPage';
+import { AthletesPage } from './views/LandingPage/athletes';
+import { EmployersPage } from './views/LandingPage/employers';
+import { UniversitiesPage } from './views/LandingPage/universities';
 import { Route, Routes } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { RequireAuth } from './auth/RequireAuth';
@@ -72,7 +75,11 @@ export const AppRoutes = () => {
     { path: '/admin/schools', element: <AdminSchools />, withSidebar: true },
     { path: '/admin/companies', element: <AdminCompanies />, withSidebar: true },
 
+    // Landing Pages
     { path: '/', element: <LandingPage />, withSidebar: false, noAuth: true },
+    { path: '/athletes', element: <AthletesPage />, withSidebar: false, noAuth: true },
+    { path: '/employers', element: <EmployersPage />, withSidebar: false, noAuth: true },
+    { path: '/universities', element: <UniversitiesPage />, withSidebar: false, noAuth: true },
     { path: '*', element: <LandingPage />, withSidebar: false, noAuth: true },
   ];
 
