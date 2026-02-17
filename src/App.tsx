@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AppRoutes } from './Routes';
 import Modal from 'react-modal';
+import { ScrollToTop } from './components/ScrollToTop';
 
 export const App = () => {
   // Set the app element for accessibility (only needs to be set once)
@@ -31,6 +32,7 @@ export const App = () => {
       <div style={{ height: '100vh' }}>
         <ReactKeycloakProvider authClient={keycloak} initOptions={keycloakInitOptions}>
           <BrowserRouter>
+            <ScrollToTop />
             <AppRoutes />
           </BrowserRouter>
         </ReactKeycloakProvider>

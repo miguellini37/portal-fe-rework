@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { LandingNavbar } from '../LandingNavbar';
+import { useAuth } from '../../../auth/hooks';
 import {
   Users,
   Trophy,
@@ -20,53 +22,16 @@ import {
 import '../LandingPage.css';
 
 export const AthletesPage: FC = () => {
+  const { register } = useAuth();
+
   const handleGetStarted = () => {
-    // For now, redirect to register (will use auth in future)
-    window.location.href = '/';
+    register();
   };
 
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="lp-nav fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-primary">Portal</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link
-                to="/"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                Home
-              </Link>
-              <Link to="/athletes" className="text-sm font-medium text-primary transition-colors">
-                For Athletes
-              </Link>
-              <Link
-                to="/universities"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Universities
-              </Link>
-              <Link
-                to="/employers"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Employers
-              </Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="lp-btn lp-btn-ghost">Login</button>
-              <button className="lp-btn lp-btn-primary">Sign Up Free</button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <LandingNavbar registerText="Sign Up Free" />
 
       {/* Hero Section */}
       <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
@@ -146,10 +111,7 @@ export const AthletesPage: FC = () => {
                 color: 'bg-purple-500',
               },
             ].map((feature, index) => (
-              <div
-                key={index}
-                className="lp-card lp-stat-card-large group hover:-translate-y-2 transition-all duration-300"
-              >
+              <div key={index} className="lp-card lp-stat-card-large overflow-hidden">
                 <div className={`h-2 ${feature.color}`} />
                 <div className="p-8">
                   <div

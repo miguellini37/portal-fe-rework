@@ -17,57 +17,13 @@ import {
   Settings,
 } from 'lucide-react';
 import '../LandingPage.css';
+import { LandingNavbar } from '../LandingNavbar';
 
 export const UniversitiesPage: FC = () => {
-  const handleGetStarted = () => {
-    window.location.href = '/';
-  };
-
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="lp-nav fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-primary">Portal</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link
-                to="/"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                to="/athletes"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Athletes
-              </Link>
-              <Link
-                to="/universities"
-                className="text-sm font-medium text-primary transition-colors"
-              >
-                For Universities
-              </Link>
-              <Link
-                to="/employers"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Employers
-              </Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="lp-btn lp-btn-ghost">Login</button>
-              <button className="lp-btn lp-btn-primary">Partner With Us</button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <LandingNavbar registerText="Partner With Us" />
 
       {/* Hero Section */}
       <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
@@ -90,11 +46,15 @@ export const UniversitiesPage: FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={handleGetStarted} className="lp-btn lp-btn-cta">
+              <a
+                href="mailto:info@portaljobs.net"
+                className="lp-btn lp-btn-cta"
+                style={{ color: 'white' }}
+              >
                 Request a Demo
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
-              <button className="lp-btn lp-btn-outline">View Case Studies</button>
+              </a>
+              {/* <button className="lp-btn lp-btn-outline">View Case Studies</button> */}
             </div>
           </div>
         </div>
@@ -156,13 +116,10 @@ export const UniversitiesPage: FC = () => {
                 icon: Database,
               },
             ].map((feature, index) => (
-              <div
-                key={index}
-                className="lp-card lp-stat-card-large group hover:-translate-y-2 transition-all duration-300 overflow-hidden"
-              >
+              <div key={index} className="lp-card lp-stat-card-large overflow-hidden">
                 <div className="h-1.5 bg-primary" />
                 <div className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <feature.icon className="w-6 h-6 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
@@ -305,17 +262,14 @@ export const UniversitiesPage: FC = () => {
             Join leading universities using Portal to support their student-athletes and maintain
             compliance.
           </p>
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={handleGetStarted}
-              className="lp-btn lp-btn-cta bg-white text-primary hover:bg-white/90"
-            >
-              Schedule a Demo
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </button>
-            <button className="lp-btn lp-btn-outline border-white text-white hover:bg-white hover:text-primary">
-              Download Partnership Guide
-            </button>
+            <div className="text-lg text-primary bg-white px-6 py-3 rounded-lg border border-white/30">
+              Schedule a Demo:{' '}
+              <a href="mailto:info@portaljobs.net" className="font-semibold hover:underline">
+                info@portaljobs.net
+              </a>
+            </div>
           </div>
         </div>
       </section>

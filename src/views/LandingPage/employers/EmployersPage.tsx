@@ -15,54 +15,20 @@ import {
   Building2,
 } from 'lucide-react';
 import '../LandingPage.css';
+import { useAuth } from '../../../auth/hooks';
+import { LandingNavbar } from '../LandingNavbar';
 
 export const EmployersPage: FC = () => {
-  const handleGetStarted = () => {
-    window.location.href = '/';
+  const { register } = useAuth();
+
+  const handleRegister = () => {
+    register();
   };
 
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="lp-nav fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-primary">Portal</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link
-                to="/"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                to="/athletes"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Athletes
-              </Link>
-              <Link
-                to="/universities"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Universities
-              </Link>
-              <Link to="/employers" className="text-sm font-medium text-primary transition-colors">
-                For Employers
-              </Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="lp-btn lp-btn-ghost">Login</button>
-              <button className="lp-btn lp-btn-primary">Start Recruiting</button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <LandingNavbar registerText="Start Recruiting" />
 
       {/* Hero Section */}
       <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
@@ -79,16 +45,17 @@ export const EmployersPage: FC = () => {
               Maximize Your <span className="text-primary">Recruitment ROI</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto text-balance leading-relaxed">
-              Access pre-vetted, high-performance student-athletes who fill roles faster, stay
-              longer, and outperform traditional hires.
+              Access pre-vetted, high-performance student-athletes who fill roles faster.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={handleGetStarted} className="lp-btn lp-btn-cta">
+              <button onClick={handleRegister} className="lp-btn lp-btn-cta">
                 Start Recruiting Today
                 <ArrowRight className="w-5 h-5 ml-2" />
               </button>
-              <button className="lp-btn lp-btn-outline">Schedule a Demo</button>
+              <a href="mailto:info@portaljobs.net" className="lp-btn lp-btn-outline">
+                Schedule a Demo
+              </a>
             </div>
           </div>
         </div>
@@ -140,13 +107,10 @@ export const EmployersPage: FC = () => {
                 icon: Target,
               },
             ].map((item, index) => (
-              <div
-                key={index}
-                className="lp-card lp-stat-card-large group hover:-translate-y-2 transition-all duration-300 overflow-hidden"
-              >
+              <div key={index} className="lp-card lp-stat-card-large overflow-hidden">
                 <div className="h-1.5 bg-primary" />
                 <div className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <item.icon className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-4xl font-bold text-primary mb-1">{item.stat}</div>
@@ -270,10 +234,8 @@ export const EmployersPage: FC = () => {
               },
             ].map((item, index) => (
               <div key={index} className="relative">
-                <div className="text-8xl font-bold text-primary/10 absolute -top-4 left-0">
-                  {item.step}
-                </div>
-                <div className="relative pt-12 pl-4">
+                <div className="text-6xl font-bold text-primary/10 mb-4">{item.step}</div>
+                <div className="relative">
                   <h3 className="text-xl font-semibold text-foreground mb-3">{item.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">{item.description}</p>
                 </div>
@@ -294,15 +256,18 @@ export const EmployersPage: FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={handleGetStarted}
-              className="lp-btn lp-btn-cta bg-white text-primary hover:bg-white/90"
+              onClick={handleRegister}
+              className="lp-btn lp-btn bg-white text-primary hover:bg-white/90"
             >
               Start Recruiting Now
               <ArrowRight className="w-5 h-5 ml-2" />
             </button>
-            <button className="lp-btn lp-btn-outline border-white text-white hover:bg-white hover:text-primary">
-              Talk to Our Team
-            </button>
+            <div className="text-lg text-primary bg-white px-6 py-3 rounded-lg border border-white/30">
+              Contact us:{' '}
+              <a href="mailto:info@portaljobs.net" className="font-semibold hover:underline">
+                info@portaljobs.net
+              </a>
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useAuth } from '../../auth/hooks';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import {
   Users,
   GraduationCap,
@@ -17,10 +17,11 @@ import {
   Award,
   BarChart3,
 } from 'lucide-react';
+import { LandingNavbar } from './LandingNavbar';
 import './LandingPage.css';
 
 export const LandingPage: FC = () => {
-  const { isAuthenticated, initialized, login, register } = useAuth();
+  const { isAuthenticated, initialized, register } = useAuth();
 
   // Wait for auth to initialize
   if (!initialized) {
@@ -32,10 +33,6 @@ export const LandingPage: FC = () => {
     return <Navigate to="/profile" replace />;
   }
 
-  const handleLogin = () => {
-    login();
-  };
-
   const handleRegister = () => {
     register();
   };
@@ -43,52 +40,7 @@ export const LandingPage: FC = () => {
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="lp-nav fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-primary">Portal</span>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a
-                href="#"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                Home
-              </a>
-              <Link
-                to="/athletes"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Athletes
-              </Link>
-              <Link
-                to="/universities"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Universities
-              </Link>
-              <Link
-                to="/employers"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                For Employers
-              </Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <button onClick={handleLogin} className="lp-btn lp-btn-ghost">
-                Login
-              </button>
-              <button onClick={handleRegister} className="lp-btn lp-btn-primary">
-                Get Started
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <LandingNavbar registerText="Get Started" />
 
       {/* Hero Section */}
       <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
@@ -127,21 +79,6 @@ export const LandingPage: FC = () => {
                 Recruit Talent (Employers)
               </button>
             </div>
-          </div>
-
-          {/* Stats Bar */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {[
-              { value: '550,000+', label: 'NCAA Athletes', icon: Users },
-              { value: '500+', label: 'Partner Companies', icon: Briefcase },
-              { value: 'Free', label: 'For All Athletes', icon: Star },
-            ].map((stat, index) => (
-              <div key={index} className="lp-card lp-stat-card">
-                <stat.icon className="w-8 h-8 text-primary mx-auto mb-3" />
-                <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
