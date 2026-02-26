@@ -332,3 +332,9 @@ input.email:disabled {
   min-height: 5rem;
 }
 
+.message-button-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+

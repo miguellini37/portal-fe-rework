@@ -2,6 +2,7 @@ import React from 'react';
 import { GetAthletesResponse } from '../../../api/athlete';
 import { getFullName, getInitials } from '../../../util/name';
 import { Link } from 'react-router-dom';
+import { MessageSquare } from 'lucide-react';
 import {
   Card,
   CardHeader,
@@ -9,6 +10,7 @@ import {
   FormattedCardBody,
   CardButton,
 } from '../../../components/Card';
+import './talentPool.css';
 
 export interface AthleteCardProps {
   athlete: GetAthletesResponse;
@@ -95,8 +97,14 @@ export const AthleteCard: React.FC<AthleteCardProps> = ({ athlete }) => {
       </CardHeader>
       <FormattedCardBody rows={rows} />
       <CardActions>
+        <CardButton variant="secondary">
+          <Link to={`/messages/${athlete.id}`}>
+            <span className="message-button-content">
+              <MessageSquare size={16} /> Message
+            </span>
+          </Link>
+        </CardButton>
         <CardButton variant="primary">
-          {/* <NavLink to={`/athlete/${athlete.id}`}>View Profile</NavLink> */}
           <Link to={`/athlete/${athlete.id}`}> View Profile </Link>
         </CardButton>
       </CardActions>

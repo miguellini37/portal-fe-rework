@@ -4,20 +4,23 @@ import { AcademicsTab } from './Academics';
 import { AthleticsTab } from './AthleticsTab';
 import './athlete.css';
 import { useAuthHeader } from '../../../auth/hooks';
-import { useAuthUser } from '../../../auth/hooks';
+import { useAuthUser, USER_PERMISSIONS } from '../../../auth/hooks';
 import { toast } from 'react-toastify';
 import { IUpdateAthletePayload, getAthleteById, updateAthlete } from '../../../api/athlete';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { AccountDeniedBanner } from '../../../components/AccountDeniedBanner';
+import { MessageSquare } from 'lucide-react';
 
 export const AthleteProfile = () => {
   const authHeader = useAuthHeader();
   const user = useAuthUser();
   const userId = user?.id;
   const params = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   const id = params.id ?? userId;
   const canEdit = id === userId;
+  const canMessage = !canEdit && user?.permission !== USER_PERMISSIONS.ATHLETE;
 
   const [athlete, setAthlete] = useState<IUpdateAthletePayload>({});
   const [editMode, setEditMode] = useState(false);
@@ -62,7 +65,7 @@ export const AthleteProfile = () => {
   };
 
   const EditSaveButton = () => (
-    <div className="absolute top-0 right-0 flex gap-2 z-10">
+    <>
       {editMode && (
         <button
           className="px-3 py-1.5 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition shadow"
@@ -79,7 +82,7 @@ export const AthleteProfile = () => {
       >
         {editMode ? (loading ? 'Saving...' : 'Save') : 'Edit'}
       </button>
-    </div>
+    </>
   );
 
   const TABS = [
@@ -119,9 +122,19 @@ export const AthleteProfile = () => {
     <div className="w-full max-w-6xl mx-auto mt-6 relative">
       <AccountDeniedBanner />
 
-      {/* Tabs + Edit/Save Button */}
+      {/* Tabs + Edit/Save/Message Buttons */}
       <div className="relative border-b border-gray-300 pb-0 mb-0">
-        {canEdit && <EditSaveButton />}
+        <div className="absolute top-0 right-0 flex gap-2 z-10">
+          {canMessage && (
+            <button
+              className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition shadow message-button-profile"
+              onClick={() => navigate(`/messages/${id}`)}
+            >
+              <MessageSquare size={16} /> Message
+            </button>
+          )}
+          {canEdit && <EditSaveButton />}
+        </div>
         <div className="flex space-x-4 mt-2">
           {TABS.map((tab) => (
             <button
