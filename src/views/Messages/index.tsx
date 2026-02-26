@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IRecentConversation, getRecentMessages } from '../../api/message';
-import { useAuthHeader, useAuthUser } from '../../auth/hooks';
+import { useAuthHeader, useAuthUser, useIsStudentNotVerified } from '../../auth/hooks';
 import { MessageSquare, Plus } from 'lucide-react';
 import {
   initializeSocket,
@@ -73,6 +73,8 @@ export const Messages: FC = () => {
     };
   }, [authHeader, user?.id, loadConversations]);
 
+  const isStudentNotVerified = useIsStudentNotVerified();
+
   const handleConversationClick = (otherUserId: string) => {
     navigate(`/messages/${otherUserId}`);
   };
@@ -130,7 +132,12 @@ export const Messages: FC = () => {
     <div className="messages-container">
       <div className="messages-header">
         <h1>Messages</h1>
-        <button className="new-conversation-btn" onClick={handleNewConversation}>
+        <button
+          className="new-conversation-btn"
+          onClick={handleNewConversation}
+          disabled={isStudentNotVerified}
+          title={isStudentNotVerified ? 'User is Not Validated' : undefined}
+        >
           <Plus size={20} />
           <span>New Conversation</span>
         </button>

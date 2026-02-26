@@ -96,13 +96,15 @@ export interface ISchoolPaylodLite {
   schoolName?: string;
 }
 export const getSchoolsForDropdown = async (
-  authHeader: string | null
+  authHeader: string | null,
+  wildcardTerm?: string
 ): Promise<ISchoolPaylod[]> => {
   const response = await axios.get(`${url}/getSchoolsForDropdown`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
     },
+    params: wildcardTerm ? { wildcardTerm } : undefined,
   });
 
   return response.data;

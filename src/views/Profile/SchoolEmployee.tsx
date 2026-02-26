@@ -61,8 +61,7 @@ export const SchoolEmployeeProfile = () => {
           <input
             id="firstName"
             value={schoolEmployee?.firstName ?? ''}
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, firstName: e.target.value }))}
-            required
+            disabled
             className="form-control w-full"
           />
         </div>
@@ -75,8 +74,7 @@ export const SchoolEmployeeProfile = () => {
           <input
             id="lastName"
             value={schoolEmployee?.lastName ?? ''}
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
-            required
+            disabled
             className="form-control w-full"
           />
         </div>
@@ -89,7 +87,7 @@ export const SchoolEmployeeProfile = () => {
           <SchoolDropdown
             onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolId: e?.value }))}
             selected={schoolEmployee.school?.id}
-            disabled={user?.isOrgVerified}
+            disabled
           />
         </div>
 

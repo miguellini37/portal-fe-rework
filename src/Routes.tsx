@@ -5,6 +5,7 @@ import { UniversitiesPage } from './views/LandingPage/universities';
 import { Route, Routes } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { RequireAuth } from './auth/RequireAuth';
+import { RequireVerified } from './auth/RequireVerified';
 import { JSX } from 'react';
 import { ProfileEdit } from './views/Profile';
 import { SchoolPage } from './views/Schools/SchoolPage';
@@ -37,6 +38,7 @@ type PageRoute = {
   element: JSX.Element;
   withSidebar: boolean;
   noAuth?: boolean;
+  nilRoute?: boolean;
 };
 
 export const AppRoutes = () => {
@@ -55,7 +57,7 @@ export const AppRoutes = () => {
     { path: '/job/:id', element: <JobPage />, withSidebar: true },
 
     { path: '/jobs', element: <JobSearchPage />, withSidebar: true },
-    { path: '/nil/search', element: <NILSearchPage />, withSidebar: true },
+    { path: '/nil/search', element: <NILSearchPage />, withSidebar: true, nilRoute: true },
     { path: '/internships/search', element: <InternshipSearchPage />, withSidebar: true },
     { path: '/company/search', element: <CompanySearch />, withSidebar: true },
     { path: '/applications', element: <ApplicationSearch />, withSidebar: true },
@@ -64,7 +66,7 @@ export const AppRoutes = () => {
     // Company Pages
     { path: '/talent-pool', element: <TalentPool />, withSidebar: true },
     { path: '/company/jobs', element: <CompanyJobsPage />, withSidebar: true },
-    { path: '/company/nil', element: <CompanyNILPage />, withSidebar: true },
+    { path: '/company/nil', element: <CompanyNILPage />, withSidebar: true, nilRoute: true },
 
     // School Pages
     { path: '/staff-directory', element: <StaffDirectory />, withSidebar: true },
@@ -85,7 +87,7 @@ export const AppRoutes = () => {
 
   return (
     <Routes>
-      {routes.map(({ path, element, withSidebar, noAuth }) => {
+      {routes.map(({ path, element, withSidebar, noAuth, nilRoute }) => {
         let content = element;
 
         if (withSidebar) {
@@ -93,7 +95,11 @@ export const AppRoutes = () => {
         }
 
         if (!noAuth) {
-          content = <RequireAuth fallbackPath={'/'}>{content}</RequireAuth>;
+          content = (
+            <RequireAuth fallbackPath={'/'}>
+              <RequireVerified nilRoute={nilRoute}>{content}</RequireVerified>
+            </RequireAuth>
+          );
         }
 
         return <Route key={path} path={path} element={content} />;

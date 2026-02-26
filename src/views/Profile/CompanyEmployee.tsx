@@ -59,8 +59,7 @@ export const CompanyEmployeeProfile = () => {
           <input
             id="firstName"
             value={companyEmployee?.firstName ?? ''}
-            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, firstName: e.target.value }))}
-            required
+            disabled
             className="form-control"
           />
         </div>
@@ -72,8 +71,7 @@ export const CompanyEmployeeProfile = () => {
           <input
             id="lastName"
             value={companyEmployee?.lastName ?? ''}
-            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, lastName: e.target.value }))}
-            required
+            disabled
             className="form-control"
           />
         </div>
@@ -84,8 +82,8 @@ export const CompanyEmployeeProfile = () => {
           </label>
           <CompanyDropdown
             onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, companyId: e?.value }))}
-            selected={companyEmployee.companyName}
-            disabled={user?.isOrgVerified}
+            selected={companyEmployee.companyId}
+            disabled
           />
         </div>
 

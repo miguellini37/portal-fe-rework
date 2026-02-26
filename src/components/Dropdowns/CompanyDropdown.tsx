@@ -1,5 +1,5 @@
 import { ActionMeta, SingleValue } from 'react-select';
-import CreatableSelect from 'react-select/creatable';
+import AsyncSelect from 'react-select/async';
 import { useEffect, useState } from 'react';
 import { getCompaniesForDropdown } from '../../api/company';
 import { customDropdownStyle } from './DropdownStyle';
@@ -20,30 +20,41 @@ interface CompanyDropdownProps {
 }
 
 export const CompanyDropdown = ({ id, onChange, disabled, selected }: CompanyDropdownProps) => {
-  const [options, setOptions] = useState<CompanyOption[]>([]);
+  const [selectedOption, setSelectedOption] = useState<CompanyOption | null>(null);
 
   const authHeader = useAuthHeader();
 
-  const fetchCompanies = async (): Promise<void> => {
-    const companies = await getCompaniesForDropdown(authHeader);
-    setOptions(
-      companies.map((c) => ({
-        value: c.id as string,
-        label: c.companyName as string,
-      }))
-    );
+  const loadOptions = async (inputValue: string): Promise<CompanyOption[]> => {
+    const companies = await getCompaniesForDropdown(authHeader, inputValue || undefined);
+    return companies.map((c) => ({
+      value: c.id as string,
+      label: c.companyName as string,
+    }));
   };
 
   useEffect(() => {
-    fetchCompanies();
-  }, []);
+    if (selected) {
+      getCompaniesForDropdown(authHeader, selected).then((companies) => {
+        const match = companies.find((c) => c.id === selected);
+        if (match) {
+          setSelectedOption({ value: match.id as string, label: match.companyName as string });
+        }
+      });
+    } else {
+      setSelectedOption(null);
+    }
+  }, [selected]);
 
   return (
-    <CreatableSelect<CompanyOption>
+    <AsyncSelect<CompanyOption>
       id={id}
-      value={options.find((x) => x.value == selected)}
-      options={options}
-      onChange={onChange}
+      value={selectedOption}
+      loadOptions={loadOptions}
+      defaultOptions
+      onChange={(newValue, actionMeta) => {
+        setSelectedOption(newValue);
+        onChange?.(newValue, actionMeta);
+      }}
       styles={customDropdownStyle}
       isDisabled={disabled}
     />

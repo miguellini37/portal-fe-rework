@@ -61,7 +61,6 @@ export const ApplicationCard: FC<Props> = ({
     }
   };
 
-  console.log(currentApp?.status);
   const showInterviewButton =
     currentApp?.status === ApplicationStatus.Applied ||
     currentApp?.status === ApplicationStatus.InterviewRequested;

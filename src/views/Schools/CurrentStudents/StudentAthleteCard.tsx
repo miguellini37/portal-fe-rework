@@ -30,8 +30,6 @@ export const StudentAthleteCard: React.FC<StudentAthleteCardProps> = ({ student 
     rows.push({ label: 'Location:', value: student.location });
   }
 
-  console.log(student.id);
-
   return (
     <Card variant="blue">
       <CardHeader>

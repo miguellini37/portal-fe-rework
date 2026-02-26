@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ActionMeta, SingleValue } from 'react-select';
-import CreatableSelect from 'react-select/creatable';
+import AsyncSelect from 'react-select/async';
 import { customDropdownStyle } from './DropdownStyle';
 import { useAuthHeader } from '../../auth/hooks';
 import { getSchoolsForDropdown } from '../../api/school';
@@ -27,29 +27,40 @@ export const SchoolDropdown = ({
   selected,
   className,
 }: SchoolDropdownProps) => {
-  const [options, setOptions] = useState<SchoolOption[]>([]);
+  const [selectedOption, setSelectedOption] = useState<SchoolOption | null>(null);
   const authHeader = useAuthHeader();
 
-  const fetchSchools = async (): Promise<void> => {
-    const schools = await getSchoolsForDropdown(authHeader);
-    setOptions(
-      schools.map((school) => ({
-        value: school.id as string,
-        label: school.schoolName as string,
-      }))
-    );
+  const loadOptions = async (inputValue: string): Promise<SchoolOption[]> => {
+    const schools = await getSchoolsForDropdown(authHeader, inputValue || undefined);
+    return schools.map((school) => ({
+      value: school.id as string,
+      label: school.schoolName as string,
+    }));
   };
 
   useEffect(() => {
-    fetchSchools();
-  }, []);
+    if (selected) {
+      getSchoolsForDropdown(authHeader, selected).then((schools) => {
+        const match = schools.find((s) => s.id === selected);
+        if (match) {
+          setSelectedOption({ value: match.id as string, label: match.schoolName as string });
+        }
+      });
+    } else {
+      setSelectedOption(null);
+    }
+  }, [selected]);
 
   return (
-    <CreatableSelect<SchoolOption>
+    <AsyncSelect<SchoolOption>
       id={id}
-      value={options.find((x) => x.value == selected)}
-      options={options}
-      onChange={onChange}
+      value={selectedOption}
+      loadOptions={loadOptions}
+      defaultOptions
+      onChange={(newValue, actionMeta) => {
+        setSelectedOption(newValue);
+        onChange?.(newValue, actionMeta);
+      }}
       styles={customDropdownStyle}
       isDisabled={disabled}
       className={className}

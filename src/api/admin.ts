@@ -7,10 +7,13 @@ export interface User {
   permission?: string;
   firstName?: string;
   lastName?: string;
+  isVerified?: boolean;
   company?: {
+    id?: string;
     companyName?: string;
   } | null;
   school?: {
+    id?: string;
     schoolName?: string;
   } | null;
 }

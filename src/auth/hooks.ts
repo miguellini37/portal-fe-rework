@@ -1,4 +1,6 @@
 import { useKeycloak } from '@react-keycloak/web';
+import { useEffect, useState } from 'react';
+import { getSchoolById } from '../api/school';
 
 export enum USER_PERMISSIONS {
   ATHLETE = 'athlete',
@@ -78,4 +80,41 @@ export const useAuthUser = (): IUserData | null => {
 export const useIsAuthenticated = (): boolean => {
   const { keycloak } = useKeycloak();
   return keycloak.authenticated ?? false;
+};
+
+/**
+ * Hook to check if the current student user is not verified.
+ * Returns true if the user is an athlete whose organization has not verified them.
+ */
+export const useIsStudentNotVerified = (): boolean => {
+  const user = useAuthUser();
+  return user?.permission === USER_PERMISSIONS.ATHLETE && !user?.isOrgVerified;
+};
+
+/**
+ * Hook to check if the athlete's school is verified.
+ * A school is considered verified if it has an ownerId.
+ * Returns undefined while loading, true/false once resolved.
+ */
+export const useIsSchoolVerified = (): boolean | undefined => {
+  const user = useAuthUser();
+  const authHeader = useAuthHeader();
+  const [isVerified, setIsVerified] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    if (user?.permission !== USER_PERMISSIONS.ATHLETE || !user?.schoolId || !authHeader) {
+      setIsVerified(undefined);
+      return;
+    }
+
+    getSchoolById(user.schoolId, authHeader)
+      .then((school) => {
+        setIsVerified(Boolean(school?.ownerId));
+      })
+      .catch(() => {
+        setIsVerified(undefined);
+      });
+  }, [user?.permission, user?.schoolId, authHeader]);
+
+  return isVerified;
 };

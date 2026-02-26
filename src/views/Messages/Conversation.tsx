@@ -8,7 +8,7 @@ import {
   getUserForMessaging,
   IUserToMessage,
 } from '../../api/message';
-import { useAuthHeader, useAuthUser } from '../../auth/hooks';
+import { useAuthHeader, useAuthUser, useIsStudentNotVerified } from '../../auth/hooks';
 import { ArrowLeft, Send } from 'lucide-react';
 import { onNewMessage, offNewMessage } from '../../api/websocket';
 import './Messages.css';
@@ -104,6 +104,8 @@ export const Conversation: FC = () => {
       offNewMessage(handleNewMessage);
     };
   }, [otherUserId, user?.id, authHeader]);
+
+  const isStudentNotVerified = useIsStudentNotVerified();
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,13 +213,18 @@ export const Conversation: FC = () => {
       <form className="message-input-form" onSubmit={handleSendMessage}>
         <input
           type="text"
-          placeholder="Type a message..."
+          placeholder={isStudentNotVerified ? 'User is Not Validated' : 'Type a message...'}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          disabled={sending}
+          disabled={sending || isStudentNotVerified}
           className="message-input"
         />
-        <button type="submit" disabled={!newMessage.trim() || sending} className="send-button">
+        <button
+          type="submit"
+          disabled={!newMessage.trim() || sending || isStudentNotVerified}
+          className="send-button"
+          title={isStudentNotVerified ? 'User is Not Validated' : undefined}
+        >
           <Send size={20} />
         </button>
       </form>

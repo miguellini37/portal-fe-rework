@@ -1,8 +1,7 @@
 import { NavLink, NavLinkProps, useNavigate } from 'react-router-dom';
 import { useIsAuthenticated, useAuthUser, useAuth } from '../../auth/hooks';
-import { USER_PERMISSIONS } from '../../auth/hooks';
+import { USER_PERMISSIONS, useIsSchoolVerified } from '../../auth/hooks';
 import {
-  Home,
   Briefcase,
   FileText,
   User,
@@ -36,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const navigate = useNavigate();
   const user = useAuthUser();
   const { permission, isOrgVerified } = user || {};
+  const isSchoolVerified = useIsSchoolVerified();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -101,25 +101,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           )}
           <nav>
             <ul>
-              {!isOrgVerified && (
-                <li className="mb-4">
-                  <NavLink to="/" title="Home">
-                    <Home /> {!isCollapsed && <span>Home</span>}
-                  </NavLink>
-                </li>
-              )}
-              {isOrgVerified && permission === USER_PERMISSIONS.ATHLETE && (
+              {/* Student (Athlete): Show full navigation, hide NIL if not verified or school not verified */}
+              {permission === USER_PERMISSIONS.ATHLETE && (
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to="/jobs/" title="Jobs">
                       <Briefcase /> {!isCollapsed && <span>Jobs</span>}
                     </DisabledNavLink>
                   </li>
-                  <li className="mb-4">
-                    <DisabledNavLink to="/nil/search" title="NIL Opportunities">
-                      <Star /> {!isCollapsed && <span>NIL Opportunities</span>}
-                    </DisabledNavLink>
-                  </li>
+                  {/* NIL tab hidden when student is not verified or school is explicitly not verified.
+                      isSchoolVerified === undefined means status unknown, so we show NIL in that case. */}
+                  {isOrgVerified && isSchoolVerified !== false && (
+                    <li className="mb-4">
+                      <DisabledNavLink to="/nil/search" title="NIL Opportunities">
+                        <Star /> {!isCollapsed && <span>NIL Opportunities</span>}
+                      </DisabledNavLink>
+                    </li>
+                  )}
                   <li className="mb-4">
                     <DisabledNavLink to="/internships/search" title="Internships">
                       <School /> {!isCollapsed && <span>Internships</span>}
@@ -142,36 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                 </>
               )}
-              {isOrgVerified && permission === USER_PERMISSIONS.SCHOOL && (
-                <>
-                  <li className="mb-4">
-                    <DisabledNavLink to="/school/dashboard" title="Dashboard">
-                      <BarChart3 /> {!isCollapsed && <span>Dashboard</span>}
-                    </DisabledNavLink>
-                  </li>
-                  <li className="mb-4">
-                    <DisabledNavLink to={`/school/${user?.schoolId}`} title="School Profile">
-                      <Building /> {!isCollapsed && <span>School Profile</span>}
-                    </DisabledNavLink>
-                  </li>
-                  <li className="mb-4">
-                    <DisabledNavLink to="/staff-directory" title="Staff Directory">
-                      <BookUser /> {!isCollapsed && <span>Staff Directory</span>}
-                    </DisabledNavLink>
-                  </li>
-
-                  <li className="mb-4">
-                    <DisabledNavLink to="/current-students" title="Current Students">
-                      <GraduationCap /> {!isCollapsed && <span>Current Students</span>}
-                    </DisabledNavLink>
-                  </li>
-                  <li className="mb-4">
-                    <DisabledNavLink to="/jobs" title="Jobs">
-                      <Briefcase /> {!isCollapsed && <span>Jobs</span>}
-                    </DisabledNavLink>
-                  </li>
-                </>
-              )}
+              {/* Company: Show navigation only when verified */}
               {isOrgVerified && permission === USER_PERMISSIONS.COMPANY && (
                 <>
                   <li className="mb-4">
@@ -202,6 +171,37 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <li className="mb-4">
                     <DisabledNavLink to="/interviews" title="Interviews">
                       <CalendarClock /> {!isCollapsed && <span>Interviews</span>}
+                    </DisabledNavLink>
+                  </li>
+                </>
+              )}
+              {/* School: Show navigation only when verified */}
+              {isOrgVerified && permission === USER_PERMISSIONS.SCHOOL && (
+                <>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/school/dashboard" title="Dashboard">
+                      <BarChart3 /> {!isCollapsed && <span>Dashboard</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to={`/school/${user?.schoolId}`} title="School Profile">
+                      <Building /> {!isCollapsed && <span>School Profile</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/staff-directory" title="Staff Directory">
+                      <BookUser /> {!isCollapsed && <span>Staff Directory</span>}
+                    </DisabledNavLink>
+                  </li>
+
+                  <li className="mb-4">
+                    <DisabledNavLink to="/current-students" title="Current Students">
+                      <GraduationCap /> {!isCollapsed && <span>Current Students</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/jobs" title="Jobs">
+                      <Briefcase /> {!isCollapsed && <span>Jobs</span>}
                     </DisabledNavLink>
                   </li>
                 </>

@@ -8,7 +8,7 @@ import {
   FormattedCardBody,
   CardButton,
 } from '../../../components/Card';
-import { useAuthUser, USER_PERMISSIONS } from '../../../auth/hooks';
+import { useAuthUser, USER_PERMISSIONS, useIsStudentNotVerified } from '../../../auth/hooks';
 import { ExternalLink } from 'lucide-react';
 
 export interface JobCardProps {
@@ -21,6 +21,7 @@ export interface JobCardProps {
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply, onApply }) => {
   const user = useAuthUser();
+  const isStudentNotVerified = useIsStudentNotVerified();
 
   if (job.status !== JobStatus.Open && !canEdit) {
     return null;
@@ -171,6 +172,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onView, canEdit, canApply
             {job.hasApplied ? (
               <CardButton variant="primary" disabled>
                 Applied
+              </CardButton>
+            ) : isStudentNotVerified ? (
+              <CardButton variant="primary" disabled title="User is Not Validated">
+                Apply
               </CardButton>
             ) : (
               <CardButton variant="primary" disabled={!canApply} onClick={() => onApply?.(job)}>

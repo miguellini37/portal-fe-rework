@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search } from 'lucide-react';
 import { getUsersToMessage, IUserToMessage } from '../../api/message';
 import './Messages.css';
-import { useAuthHeader } from '../../auth/hooks';
+import { useAuthHeader, useIsStudentNotVerified } from '../../auth/hooks';
 
 export const NewConversation: FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -11,6 +11,8 @@ export const NewConversation: FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const authHeader = useAuthHeader();
+
+  const isStudentNotVerified = useIsStudentNotVerified();
 
   const handleBack = () => {
     navigate('/messages');
@@ -40,6 +42,9 @@ export const NewConversation: FC = () => {
   }, [searchQuery, authHeader]);
 
   const handleStartConversation = (userId: string) => {
+    if (isStudentNotVerified) {
+      return;
+    }
     navigate(`/messages/${userId}`);
   };
 
@@ -73,18 +78,22 @@ export const NewConversation: FC = () => {
                 {searchQuery.trim() ? 'No users found' : 'Start typing to search for users'}
               </div>
             ) : (
-              users.map((user) => (
+              users.map((recipient) => (
                 <div
-                  key={user.id}
+                  key={recipient.id}
                   className="user-item"
-                  onClick={() => handleStartConversation(user.id)}
+                  onClick={() => handleStartConversation(recipient.id)}
+                  style={isStudentNotVerified ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+                  title={isStudentNotVerified ? 'User is Not Validated' : undefined}
                 >
                   <div className="user-info">
                     <div className="user-name">
-                      {user.firstName} {user.lastName}
+                      {recipient.firstName} {recipient.lastName}
                     </div>
-                    {(user.companyName || user.schoolName) && (
-                      <div className="user-affiliation">{user.companyName || user.schoolName}</div>
+                    {(recipient.companyName || recipient.schoolName) && (
+                      <div className="user-affiliation">
+                        {recipient.companyName || recipient.schoolName}
+                      </div>
                     )}
                   </div>
                 </div>

@@ -9,6 +9,7 @@ import {
   FormattedCardBody,
   CardButton,
 } from '../../../components/Card';
+import { useIsStudentNotVerified } from '../../../auth/hooks';
 
 export interface NILCardProps {
   nil: IJobPayload;
@@ -19,6 +20,8 @@ export interface NILCardProps {
 }
 
 export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply, onApply }) => {
+  const isStudentNotVerified = useIsStudentNotVerified();
+
   if (nil.status !== JobStatus.Open && !canEdit) {
     return null;
   }
@@ -177,6 +180,10 @@ export const NILCard: React.FC<NILCardProps> = ({ nil, onView, canEdit, canApply
             {nil.hasApplied || showAppliedBadge ? (
               <CardButton variant="primary" disabled>
                 Applied
+              </CardButton>
+            ) : isStudentNotVerified ? (
+              <CardButton variant="primary" disabled title="User is Not Validated">
+                Apply
               </CardButton>
             ) : canApply ? (
               <CardButton variant="primary" onClick={() => onApply?.(nil)}>

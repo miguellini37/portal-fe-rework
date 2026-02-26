@@ -1,7 +1,7 @@
 import './job.css';
 import { FC, useEffect, useMemo, useState, useCallback } from 'react';
 import { useAuthHeader } from '../../../auth/hooks';
-import { useAuthUser } from '../../../auth/hooks';
+import { useAuthUser, useIsStudentNotVerified } from '../../../auth/hooks';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 
@@ -43,6 +43,8 @@ export const JobPage: FC = () => {
   const canEdit = Boolean(
     isCompany && user?.companyId && job?.company?.id && user.companyId === job.company.id
   );
+  const isStudentNotVerified = useIsStudentNotVerified();
+
   const canApply =
     user?.permission === USER_PERMISSIONS.ATHLETE &&
     job?.status === JobStatus.Open &&
@@ -306,6 +308,10 @@ export const JobPage: FC = () => {
             {canEdit ? (
               <button onClick={() => setEditModalOpen(true)} className="btn btn-primary btn-sm">
                 Edit Job
+              </button>
+            ) : isStudentNotVerified ? (
+              <button className="btn btn-primary btn-sm" disabled title="User is Not Validated">
+                Apply
               </button>
             ) : canApply ? (
               myApplication ? (

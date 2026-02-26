@@ -1,5 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { Check } from 'lucide-react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { whiteListUser } from '../../api/profile';
 import { getAllUsers, User } from '../../api/admin';
 import { useAuthHeader } from '../../auth/hooks';
 import '../../components/Table/Table.css';
@@ -22,6 +24,21 @@ export const AdminUsers: FC = () => {
       setLoading(false);
     }
   };
+
+  const handleVerify = useCallback(
+    async (user: User) => {
+      const orgId = user.company?.id ?? user.school?.id ?? '';
+      try {
+        await whiteListUser(authHeader, { email: user.email ?? '', orgId, isActive: true });
+        setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isVerified: true } : u)));
+        toast.success('User verified successfully');
+      } catch (error) {
+        toast.error('Failed to verify user');
+        console.error('Error verifying user:', error);
+      }
+    },
+    [authHeader]
+  );
 
   useEffect(() => {
     fetchUsers();
@@ -74,6 +91,7 @@ export const AdminUsers: FC = () => {
                 <th className="th">Last Name</th>
                 <th className="th">School</th>
                 <th className="th">Company</th>
+                <th className="th">Verified</th>
               </tr>
             </thead>
             <tbody>
@@ -96,11 +114,24 @@ export const AdminUsers: FC = () => {
                     <td className="td">{user.lastName || '-'}</td>
                     <td className="td">{user.school?.schoolName || '-'}</td>
                     <td className="td">{user.company?.companyName || '-'}</td>
+                    <td className="td" style={{ textAlign: 'center' }}>
+                      {user.isVerified ? (
+                        <Check size={18} color="green" />
+                      ) : (
+                        <button
+                          className="btn btn-primary"
+                          style={{ fontSize: '0.75rem', padding: '4px 10px' }}
+                          onClick={() => handleVerify(user)}
+                        >
+                          Verify
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="td table-empty">
+                  <td colSpan={7} className="td table-empty">
                     {searchTerm ? `No users found matching "${searchTerm}"` : 'No users available.'}
                   </td>
                 </tr>

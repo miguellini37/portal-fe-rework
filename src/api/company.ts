@@ -127,13 +127,15 @@ export interface ICompanyPayloadLite {
   companyName?: string;
 }
 export const getCompaniesForDropdown = async (
-  authHeader: string | null
+  authHeader: string | null,
+  wildcardTerm?: string
 ): Promise<ICompanyPayloadLite[]> => {
   const response = await axios.get(`${url}/getCompaniesForDropdown`, {
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: authHeader,
     },
+    params: wildcardTerm ? { wildcardTerm } : undefined,
   });
 
   return response.data;
