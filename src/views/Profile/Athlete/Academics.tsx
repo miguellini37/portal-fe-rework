@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { IUpdateAthletePayload } from '../../../api/athlete';
-import { SchoolDropdown } from '../../../components/Dropdowns/SchoolDropdown';
 import { MajorDropdown } from '../../../components/Dropdowns/MajorDropdown';
 
 interface AcademicsTabProps {
@@ -24,16 +23,7 @@ export const AcademicsTab: React.FC<AcademicsTabProps> = ({ athlete, editMode, s
         <div className="academic-field">
           <div className="academic-label">University</div>
           <div className="academic-value">
-            <SchoolDropdown
-              onChange={(e) =>
-                setAthlete((a) => ({
-                  ...a,
-                  schoolId: e?.value,
-                }))
-              }
-              selected={athlete?.schoolId}
-              disabled
-            />
+            <input className="academic-input" value={athlete?.school?.schoolName ?? ''} disabled />
           </div>
         </div>
         <div className="academic-field">

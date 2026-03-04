@@ -5,9 +5,11 @@ import { isNil } from 'lodash';
 
 interface OverviewTabProps {
   company: ICompanyPaylod;
+  editMode: boolean;
+  setCompany: React.Dispatch<React.SetStateAction<ICompanyPaylod>>;
 }
 
-export const OverviewTab: React.FC<OverviewTabProps> = ({ company }) => {
+export const OverviewTab: React.FC<OverviewTabProps> = ({ company, editMode, setCompany }) => {
   const skills = [
     'Leadership',
     'Team Collaboration',
@@ -68,60 +70,18 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ company }) => {
         <h2 className="section-title">Company Information</h2>
 
         <div className="info-row">
-          {/* <div className="avatar">{initials || '--'}</div>
-
           <div className="info-fields">
-            <div className="two-column">
-              <div className="field">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  className="first-name"
-                  value={company.firstName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  className="last-name"
-                  value={company.lastName || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Email</label>
-                <input
-                  type="text"
-                  className="email"
-                  value={company.email || ''}
-                  readOnly
-                  tabIndex={-1}
-                />
-              </div>
-              <div className="field">
-                <label>Phone</label>
-                <input
-                  type="text"
-                  value={company.phone || ''}
-                  readOnly={!editMode}
-                  onChange={(e) => setCompany((a) => ({ ...a, phone: e.target.value }))}
-                />
-              </div>
-            </div>
             <div className="field full-width">
-              <label>Location</label>
+              <label>Company Name</label>
               <input
                 type="text"
-                value={company.location || ''}
+                value={company.companyName || ''}
                 readOnly={!editMode}
-                onChange={(e) => setCompany((a) => ({ ...a, location: e.target.value }))}
+                tabIndex={editMode ? 0 : -1}
+                onChange={(e) => setCompany((c) => ({ ...c, companyName: e.target.value }))}
               />
             </div>
-          </div> */}
+          </div>
         </div>
 
         <div className="bio">

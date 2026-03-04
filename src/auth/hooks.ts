@@ -17,7 +17,7 @@ export interface IUserData {
   lastName?: string;
   companyId?: string;
   schoolId?: string;
-  isOrgVerified?: boolean;
+  isVerified?: boolean;
 }
 
 /**
@@ -31,7 +31,15 @@ export const useAuth = () => {
     initialized,
     login: () => keycloak.login(),
     logout: () => keycloak.logout(),
-    register: () => keycloak.register(),
+    register: async (role?: string) => {
+      const redirectUri = window.location.origin + '/';
+      if (role) {
+        const registerUrl = await keycloak.createRegisterUrl({ redirectUri });
+        window.location.href = registerUrl + `&role=${encodeURIComponent(role)}`;
+      } else {
+        keycloak.register({ redirectUri });
+      }
+    },
     refresh: () => keycloak.updateToken(-1),
   };
 };
@@ -70,7 +78,7 @@ export const useAuthUser = (): IUserData | null => {
     permission: tokenParsed.permission as USER_PERMISSIONS,
     companyId: tokenParsed.companyId,
     schoolId: tokenParsed.schoolId,
-    isOrgVerified: tokenParsed.isOrgVerified,
+    isVerified: tokenParsed.isVerified,
   };
 };
 
@@ -88,7 +96,7 @@ export const useIsAuthenticated = (): boolean => {
  */
 export const useIsStudentNotVerified = (): boolean => {
   const user = useAuthUser();
-  return user?.permission === USER_PERMISSIONS.ATHLETE && !user?.isOrgVerified;
+  return user?.permission === USER_PERMISSIONS.ATHLETE && !user?.isVerified;
 };
 
 /**

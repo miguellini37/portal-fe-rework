@@ -8,7 +8,6 @@ import {
   IUpdateSchoolEmployeePayload,
   updateSchoolEmployee,
 } from '../../api/schoolEmployee';
-import { SchoolDropdown } from '../../components/Dropdowns/SchoolDropdown';
 import './Profiles.css';
 import { AccountDeniedBanner } from '../../components/AccountDeniedBanner';
 
@@ -84,10 +83,11 @@ export const SchoolEmployeeProfile = () => {
           <label htmlFor="School" className="form-label">
             School
           </label>
-          <SchoolDropdown
-            onChange={(e) => setSchoolEmployee((prev) => ({ ...prev, schoolId: e?.value }))}
-            selected={schoolEmployee.school?.id}
+          <input
+            id="School"
+            value={schoolEmployee.school?.schoolName ?? ''}
             disabled
+            className="form-control w-full"
           />
         </div>
 

@@ -4,15 +4,16 @@ import { IUserData } from '../auth/hooks';
 
 export interface IUpdateCompanyEmployeePayload {
   bio?: string;
-  companyId?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
   location?: string;
   phone?: string;
-  companyName?: string;
   id?: string;
   position?: string;
+  company?: {
+    companyName?: string;
+  };
 }
 
 export const updateCompanyEmployee = async (

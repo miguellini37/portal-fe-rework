@@ -22,13 +22,13 @@ export const EmployersPage: FC = () => {
   const { register } = useAuth();
 
   const handleRegister = () => {
-    register();
+    register('company');
   };
 
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
-      <LandingNavbar registerText="Start Recruiting" />
+      <LandingNavbar registerText="Start Recruiting" role="company" />
 
       {/* Hero Section */}
       <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">

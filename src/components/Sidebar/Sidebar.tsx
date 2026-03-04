@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const { logout, register, login } = useAuth();
   const navigate = useNavigate();
   const user = useAuthUser();
-  const { permission, isOrgVerified } = user || {};
+  const { permission, isVerified } = user || {};
   const isSchoolVerified = useIsSchoolVerified();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -101,8 +101,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           )}
           <nav>
             <ul>
-              {/* Student (Athlete): Show full navigation, hide NIL if not verified or school not verified */}
-              {permission === USER_PERMISSIONS.ATHLETE && (
+              {/* Student (Athlete): Show navigation only when schoolId is set */}
+              {permission === USER_PERMISSIONS.ATHLETE && !!user?.schoolId && (
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to="/jobs/" title="Jobs">
@@ -111,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                   {/* NIL tab hidden when student is not verified or school is explicitly not verified.
                       isSchoolVerified === undefined means status unknown, so we show NIL in that case. */}
-                  {isOrgVerified && isSchoolVerified !== false && (
+                  {isVerified && isSchoolVerified !== false && (
                     <li className="mb-4">
                       <DisabledNavLink to="/nil/search" title="NIL Opportunities">
                         <Star /> {!isCollapsed && <span>NIL Opportunities</span>}
@@ -141,7 +141,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 </>
               )}
               {/* Company: Show navigation only when verified */}
-              {isOrgVerified && permission === USER_PERMISSIONS.COMPANY && (
+              {isVerified && permission === USER_PERMISSIONS.COMPANY && (
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to={`/company/${user?.companyId}`} title="Company Profile">
@@ -176,7 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 </>
               )}
               {/* School: Show navigation only when verified */}
-              {isOrgVerified && permission === USER_PERMISSIONS.SCHOOL && (
+              {isVerified && permission === USER_PERMISSIONS.SCHOOL && (
                 <>
                   <li className="mb-4">
                     <DisabledNavLink to="/school/dashboard" title="Dashboard">
@@ -269,22 +269,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                       </NavLink>
                     </li>
                   )}
-                  {permission != USER_PERMISSIONS.ADMIN && isOrgVerified && (
-                    <li className="mb-4">
-                      <MessagesBell
-                        isCollapsed={isCollapsed}
-                        className="text-blue-400 hover:text-blue-300"
-                      />
-                    </li>
-                  )}
-                  {permission != USER_PERMISSIONS.ADMIN && isOrgVerified && (
-                    <li className="mb-4">
-                      <ActivityBell
-                        isCollapsed={isCollapsed}
-                        className="text-blue-400 hover:text-blue-300 focus:outline-none"
-                      />
-                    </li>
-                  )}
+                  {permission != USER_PERMISSIONS.ADMIN &&
+                    isVerified &&
+                    !(permission === USER_PERMISSIONS.ATHLETE && !user?.schoolId) && (
+                      <li className="mb-4">
+                        <MessagesBell
+                          isCollapsed={isCollapsed}
+                          className="text-blue-400 hover:text-blue-300"
+                        />
+                      </li>
+                    )}
+                  {permission != USER_PERMISSIONS.ADMIN &&
+                    isVerified &&
+                    !(permission === USER_PERMISSIONS.ATHLETE && !user?.schoolId) && (
+                      <li className="mb-4">
+                        <ActivityBell
+                          isCollapsed={isCollapsed}
+                          className="text-blue-400 hover:text-blue-300 focus:outline-none"
+                        />
+                      </li>
+                    )}
 
                   <li className="mb-4">
                     <button

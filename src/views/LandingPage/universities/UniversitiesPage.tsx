@@ -23,7 +23,7 @@ export const UniversitiesPage: FC = () => {
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
-      <LandingNavbar registerText="Partner With Us" />
+      <LandingNavbar registerText="Partner With Us" role="school" />
 
       {/* Hero Section */}
       <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">

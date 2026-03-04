@@ -96,7 +96,9 @@ export const CompanyProfile = () => {
     {
       key: 'overview',
       label: 'Overview',
-      component: (company: IUpdateCompanyEmployeePayload) => <OverviewTab company={company} />,
+      component: (company: IUpdateCompanyEmployeePayload) => (
+        <OverviewTab company={company} editMode={editMode} setCompany={setCompany} />
+      ),
     },
     {
       key: 'culture',

@@ -25,13 +25,13 @@ export const AthletesPage: FC = () => {
   const { register } = useAuth();
 
   const handleGetStarted = () => {
-    register();
+    register('athlete');
   };
 
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
-      <LandingNavbar registerText="Sign Up Free" />
+      <LandingNavbar registerText="Sign Up Free" role="athlete" />
 
       {/* Hero Section */}
       <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">

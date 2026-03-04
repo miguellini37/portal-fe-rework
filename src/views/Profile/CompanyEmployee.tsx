@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthHeader } from '../../auth/hooks';
 import { useAuthUser } from '../../auth/hooks';
 import { toast } from 'react-toastify';
-import { CompanyDropdown } from '../../components/Dropdowns/CompanyDropdown';
 import {
   getCompanyEmployeeById,
   IUpdateCompanyEmployeePayload,
@@ -19,6 +18,8 @@ export const CompanyEmployeeProfile = () => {
   const id = user?.id;
 
   const [companyEmployee, setCompanyEmployee] = useState<IUpdateCompanyEmployeePayload>({});
+
+  console.log(companyEmployee);
 
   const fetchCompany = async () => {
     try {
@@ -80,10 +81,11 @@ export const CompanyEmployeeProfile = () => {
           <label htmlFor="company" className="form-label">
             Company
           </label>
-          <CompanyDropdown
-            onChange={(e) => setCompanyEmployee((prev) => ({ ...prev, companyId: e?.value }))}
-            selected={companyEmployee.companyId}
+          <input
+            id="company"
+            value={companyEmployee.company?.companyName ?? ''}
             disabled
+            className="form-control w-full"
           />
         </div>
 

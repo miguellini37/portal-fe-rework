@@ -1,11 +1,8 @@
 import axios from 'axios';
-import { IUserData, USER_PERMISSIONS } from '../auth/hooks';
+import { IUserData } from '../auth/hooks';
 import { url } from '../config/url';
 
 export interface ICreateUserInput {
-  permission?: USER_PERMISSIONS;
-
-  companyId?: string;
   schoolId?: string;
 }
 

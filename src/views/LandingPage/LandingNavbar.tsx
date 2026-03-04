@@ -5,9 +5,10 @@ import { useAuth } from '../../auth/hooks';
 
 interface LandingNavbarProps {
   registerText?: string;
+  role?: string;
 }
 
-export const LandingNavbar: FC<LandingNavbarProps> = ({ registerText = 'Get Started' }) => {
+export const LandingNavbar: FC<LandingNavbarProps> = ({ registerText = 'Get Started', role }) => {
   const { login, register } = useAuth();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -28,7 +29,7 @@ export const LandingNavbar: FC<LandingNavbarProps> = ({ registerText = 'Get Star
   };
 
   const handleRegister = () => {
-    register();
+    register(role);
   };
 
   const isActive = (path: string) => {

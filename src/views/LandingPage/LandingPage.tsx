@@ -33,10 +33,6 @@ export const LandingPage: FC = () => {
     return <Navigate to="/profile" replace />;
   }
 
-  const handleRegister = () => {
-    register();
-  };
-
   return (
     <div className="lp-root min-h-screen bg-background">
       {/* Navigation */}
@@ -66,15 +62,15 @@ export const LandingPage: FC = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={handleRegister} className="lp-btn lp-btn-cta">
+              <button onClick={() => register('athlete')} className="lp-btn lp-btn-cta">
                 <Users className="w-5 h-5 mr-2" />
                 Join Now (Athletes)
               </button>
-              <button onClick={handleRegister} className="lp-btn lp-btn-outline">
+              <button onClick={() => register('school')} className="lp-btn lp-btn-outline">
                 <GraduationCap className="w-5 h-5 mr-2" />
                 Partner with Portal (Schools)
               </button>
-              <button onClick={handleRegister} className="lp-btn lp-btn-outline">
+              <button onClick={() => register('company')} className="lp-btn lp-btn-outline">
                 <Briefcase className="w-5 h-5 mr-2" />
                 Recruit Talent (Employers)
               </button>
@@ -277,15 +273,15 @@ export const LandingPage: FC = () => {
             student-athletes ready to make an impact.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onClick={handleRegister} className="lp-btn lp-btn-cta">
+            <button onClick={() => register('athlete')} className="lp-btn lp-btn-cta">
               <Users className="w-5 h-5 mr-2" />
               Join Now (Athletes)
             </button>
-            <button onClick={handleRegister} className="lp-btn lp-btn-outline">
+            <button onClick={() => register('school')} className="lp-btn lp-btn-outline">
               <GraduationCap className="w-5 h-5 mr-2" />
               Partner with Portal (Schools)
             </button>
-            <button onClick={handleRegister} className="lp-btn lp-btn-outline">
+            <button onClick={() => register('company')} className="lp-btn lp-btn-outline">
               <Briefcase className="w-5 h-5 mr-2" />
               Recruit Talent (Employers)
             </button>
