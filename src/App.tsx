@@ -11,13 +11,9 @@ export const App = () => {
   // Set the app element for accessibility (only needs to be set once)
   Modal.setAppElement('#root');
 
-  // Keycloak initialization config
-  // Only set redirectUri if we're on the root path, otherwise stay on current page
-  const isRoot = window.location.pathname === '/';
   const keycloakInitOptions = {
-    onLoad: 'check-sso',
+    onLoad: 'check-sso' as const,
     checkLoginIframe: false,
-    ...(isRoot && { redirectUri: window.location.origin + '/profile' }),
   };
 
   return (
