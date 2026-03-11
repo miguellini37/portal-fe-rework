@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { useAuth } from '../../auth/hooks';
-import { Navigate } from 'react-router-dom';
 import {
   Trophy,
   Zap,
@@ -66,16 +65,8 @@ const sourcingBenefits = [
 ];
 
 export const LandingPage: FC = () => {
-  const { isAuthenticated, initialized, register } = useAuth();
+  const { register } = useAuth();
   const [activeTab, setActiveTab] = useState<'athlete' | 'company' | 'school'>('athlete');
-
-  if (!initialized) {
-    return <div className="lp-loading-container">Loading...</div>;
-  }
-
-  if (isAuthenticated) {
-    return <Navigate to="/profile" replace />;
-  }
 
   return (
     <div className="lp-root">
