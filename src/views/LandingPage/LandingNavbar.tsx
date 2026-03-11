@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Trophy, X } from 'lucide-react';
+import { Menu, X, Zap } from 'lucide-react';
 import { useAuth } from '../../auth/hooks';
 
 interface LandingNavbarProps {
@@ -37,32 +37,32 @@ export const LandingNavbar: FC<LandingNavbarProps> = ({ registerText = 'Get Star
   };
 
   return (
-    <nav className="lp-nav fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Trophy className="w-5 h-5 text-primary-foreground" />
+    <nav className="lp-nav">
+      <div className="lp-container">
+        <div className="lp-nav-inner">
+          <Link to="/" className="lp-nav-logo">
+            <div className="lp-nav-logo-icon">
+              <Zap className="lp-nav-zap" />
             </div>
-            <span className="text-xl font-bold text-primary">Portal</span>
+            <span className="lp-nav-logo-text">Portal</span>
           </Link>
-          <div className="lp-nav-desktop-links items-center gap-8">
+          <div className="lp-nav-desktop-links">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors ${
+                className={`lp-nav-link ${
                   isActive(link.path) || (link.path === '/' && isActive(''))
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-primary'
+                    ? 'lp-nav-link-active'
+                    : ''
                 }`}
               >
                 {link.label}
               </Link>
             ))}
           </div>
-          <div className="lp-nav-desktop-actions items-center gap-3">
-            <button onClick={handleLogin} className="lp-btn lp-btn-ghost">
+          <div className="lp-nav-desktop-actions">
+            <button onClick={handleLogin} className="lp-btn lp-btn-ghost-dark">
               Login
             </button>
             <button onClick={handleRegister} className="lp-btn lp-btn-primary">
@@ -76,7 +76,11 @@ export const LandingNavbar: FC<LandingNavbarProps> = ({ registerText = 'Get Star
             aria-expanded={isMobileMenuOpen}
             onClick={() => setIsMobileMenuOpen((previous) => !previous)}
           >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isMobileMenuOpen ? (
+              <X className="lp-nav-toggle-icon" />
+            ) : (
+              <Menu className="lp-nav-toggle-icon" />
+            )}
           </button>
         </div>
 
@@ -89,8 +93,8 @@ export const LandingNavbar: FC<LandingNavbarProps> = ({ registerText = 'Get Star
                   to={link.path}
                   className={`lp-nav-mobile-link ${
                     isActive(link.path) || (link.path === '/' && isActive(''))
-                      ? 'lp-nav-mobile-link-active text-primary'
-                      : 'text-muted-foreground'
+                      ? 'lp-nav-mobile-link-active'
+                      : ''
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -102,14 +106,14 @@ export const LandingNavbar: FC<LandingNavbarProps> = ({ registerText = 'Get Star
               <button
                 type="button"
                 onClick={handleLogin}
-                className="lp-nav-mobile-link lp-nav-mobile-action-link text-muted-foreground"
+                className="lp-nav-mobile-link lp-nav-mobile-action-link"
               >
                 Login
               </button>
               <button
                 type="button"
                 onClick={handleRegister}
-                className="lp-nav-mobile-link lp-nav-mobile-action-link text-muted-foreground"
+                className="lp-nav-mobile-link lp-nav-mobile-action-link"
               >
                 {registerText}
               </button>

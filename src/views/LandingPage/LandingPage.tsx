@@ -1,305 +1,332 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useAuth } from '../../auth/hooks';
 import { Navigate } from 'react-router-dom';
 import {
-  Users,
-  GraduationCap,
-  Briefcase,
   Trophy,
+  Zap,
+  Star,
+  ArrowRight,
+  CheckCircle,
+  Shield,
   Target,
   Clock,
-  Shield,
-  TrendingUp,
-  CheckCircle,
-  ArrowRight,
-  Star,
-  Zap,
-  Award,
-  BarChart3,
+  Users,
+  Mail,
 } from 'lucide-react';
 import { LandingNavbar } from './LandingNavbar';
 import './LandingPage.css';
 
+const universityLogos = ['UMICH', 'STANFORD', 'DUKE', 'ND', 'UCLA', 'USC'];
+
+const traits = [
+  {
+    title: 'Proven Discipline',
+    description:
+      'A results-focused mindset, built through years of high-stakes competition where there are no excuses.',
+    icon: Shield,
+  },
+  {
+    title: 'Resilience & Focus',
+    description:
+      "These candidates work well under pressure and in demanding roles \u2014 they've been doing it since age 18.",
+    icon: Target,
+  },
+  {
+    title: 'Open to Feedback and Direction',
+    description:
+      "Years of coaching build people who take direction, improve quickly, and don't take criticism personally.",
+    icon: Users,
+  },
+  {
+    title: 'Skilled at Managing Heavy Workloads',
+    description:
+      'Balancing full academic schedule with varsity sport creates professionals who know how to prioritize and execute.',
+    icon: Clock,
+  },
+];
+
+const sourcingBenefits = [
+  {
+    title: 'Early Access',
+    description: 'Reach driven, dependable candidates before they appear on standard job boards.',
+    icon: Zap,
+  },
+  {
+    title: 'Direct Access',
+    description:
+      "A dedicated connection to qualified student-athletes that standard job boards don't reach.",
+    icon: ArrowRight,
+  },
+  {
+    title: 'Measurable Results',
+    description:
+      'This candidate group outperforms peers in graduation rates (68%) and workplace engagement (42%).',
+    icon: CheckCircle,
+  },
+];
+
 export const LandingPage: FC = () => {
   const { isAuthenticated, initialized, register } = useAuth();
+  const [activeTab, setActiveTab] = useState<'athlete' | 'company' | 'school'>('athlete');
 
-  // Wait for auth to initialize
   if (!initialized) {
     return <div className="lp-loading-container">Loading...</div>;
   }
 
-  // Redirect authenticated users to profile
   if (isAuthenticated) {
     return <Navigate to="/profile" replace />;
   }
 
   return (
-    <div className="lp-root min-h-screen bg-background">
-      {/* Navigation */}
+    <div className="lp-root">
       <LandingNavbar registerText="Get Started" />
 
       {/* Hero Section */}
-      <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-background to-background" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      <section className="lp-hero">
+        <div className="lp-hero-bg" />
+        <div className="lp-container lp-hero-content">
+          <p className="lp-hero-eyebrow">The Career Platform Built for Student-Athletes</p>
+          <h1 className="lp-hero-title">
+            Where Student-Athletes Build Their <span className="lp-text-accent">Careers</span>
+          </h1>
+          <p className="lp-hero-subtitle">
+            Portal connects NCAA athletes with employers, internships, and NIL opportunities — while
+            giving universities the tools to support every step.
+          </p>
+          <div className="lp-hero-actions">
+            <button onClick={() => register('athlete')} className="lp-btn lp-btn-cta">
+              Create Free Profile
+            </button>
+            <button onClick={() => register('company')} className="lp-btn lp-btn-outline-light">
+              Request a Demo
+            </button>
+          </div>
+          <div className="lp-hero-labels">
+            <span>For athletes — always free</span>
+            <span>For employers & universities</span>
+          </div>
+        </div>
+      </section>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <Zap className="w-4 h-4" />
-              The Future of Athletic Talent Recruitment
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
-              The Direct Pipeline to{' '}
-              <span className="text-primary">Elite Student-Athlete Talent</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-              A career platform that connects student-athletes and employers for jobs, internships,
-              and NIL opportunities while modernizing university career systems.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={() => register('athlete')} className="lp-btn lp-btn-cta">
-                <Users className="w-5 h-5 mr-2" />
-                Join Now (Athletes)
-              </button>
-              <button onClick={() => register('school')} className="lp-btn lp-btn-outline">
-                <GraduationCap className="w-5 h-5 mr-2" />
-                Partner with Portal (Schools)
-              </button>
-              <button onClick={() => register('company')} className="lp-btn lp-btn-outline">
-                <Briefcase className="w-5 h-5 mr-2" />
-                Recruit Talent (Employers)
-              </button>
-            </div>
+      {/* Logo Cloud */}
+      <section className="lp-logo-cloud">
+        <div className="lp-container">
+          <p className="lp-logo-cloud-title">Trusted by leading athletic programs</p>
+          <div className="lp-logo-cloud-grid">
+            {universityLogos.map((name) => (
+              <span key={name} className="lp-logo-cloud-item">
+                {name}
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Why Student-Athletes Section */}
-      <section id="athletes" className="lp-section py-20 md:py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <Award className="w-4 h-4" />
-              The Competitive Edge
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              The Student-Athlete Advantage:{' '}
-              <span className="text-primary">Why They Are Your Best Hire</span>
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Student-athletes are a pre-vetted source of high-performance talent who find work at
-              higher rates than their peers.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Statistical Proof Section */}
-      <section id="employers" className="lp-section py-20 md:py-32 bg-secondary/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <BarChart3 className="w-4 h-4" />
-              Data-Driven Results
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              The Statistical Proof
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              The numbers speak for themselves. Student-athletes dominate corporate leadership.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                stat: '80%',
-                highlight: 'Fortune 500 Executives',
-                description:
-                  'of Fortune 500 executives and 94% of female C-suite leaders come from athletic backgrounds.',
-                icon: TrendingUp,
-              },
-              {
-                stat: '68%',
-                highlight: 'CEO Backgrounds',
-                description: 'of top CEOs have backgrounds in collegiate athletics.',
-                icon: Star,
-              },
-              {
-                stat: '66%',
-                highlight: 'Corporate Leaders',
-                description:
-                  'of corporate leaders played sports in college. Join this elite population.',
-                icon: Trophy,
-              },
-            ].map((item, index) => (
-              <div key={index} className="lp-card lp-stat-card-large">
-                <div className="h-2 bg-primary lp-card-accent" />
-                <div className="p-8">
-                  <div className="lp-icon-container mb-6">
-                    <item.icon className="w-7 h-7 text-primary" />
-                  </div>
-                  <div className="text-5xl font-bold text-primary mb-2">{item.stat}</div>
-                  <div className="text-lg font-semibold text-foreground mb-3">{item.highlight}</div>
-                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Inherent Traits Section */}
-      <section id="universities" className="lp-section py-20 md:py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-                <Zap className="w-4 h-4" />
-                Built Different
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                Their Inherent Traits
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Success in demanding athletic roles requires a specific DNA that translates directly
-                to corporate success.
+      <section className="lp-section lp-section-dark">
+        <div className="lp-container">
+          <div className="lp-two-col">
+            <div className="lp-two-col-text">
+              <p className="lp-section-eyebrow">Why Student-Athletes</p>
+              <h2 className="lp-section-title">The Candidate Most Overlooked</h2>
+              <p className="lp-section-body">
+                Student-athletes have been tested in ways most candidates never are. They show up,
+                they perform, and they don&apos;t need motivation — habit built years before.
               </p>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {[
-                {
-                  title: 'Pre-Vetted Discipline',
-                  description:
-                    'Athletes possess a "win-now" mentality and proven discipline developed in highly demanding environments.',
-                  icon: Shield,
-                },
-                {
-                  title: 'Resilience & Focus',
-                  description:
-                    'These candidates thrive in fast-paced environments that require extreme focus and the ability to perform under pressure.',
-                  icon: Target,
-                },
-                {
-                  title: 'Teamwork & Coachability',
-                  description:
-                    'Years of high-level competition foster deep coachability and the teamwork skills necessary for modern organizations.',
-                  icon: Users,
-                },
-                {
-                  title: 'Time Management',
-                  description:
-                    'Balancing academic responsibilities with intense athletic commitments creates masters of time poverty and efficiency.',
-                  icon: Clock,
-                },
-              ].map((trait, index) => (
-                <div key={index} className="lp-card lp-trait-card">
-                  <div className="lp-trait-icon">
-                    <trait.icon className="w-6 h-6 text-primary-foreground" />
+            <div className="lp-advantage-box">
+              <h3 className="lp-advantage-box-title">The Athlete Advantage</h3>
+              <p className="lp-advantage-box-subtitle">Athletes Lead in Business</p>
+              <p className="lp-advantage-box-body">
+                The traits that make great athletes — discipline, resilience, coachability — are the
+                same traits that define top performers in the workplace.
+              </p>
+              <div className="lp-stats-row">
+                <div className="lp-stat-item">
+                  <div className="lp-stat-number">
+                    <Star className="lp-stat-icon" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">{trait.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {trait.description}
-                  </p>
+                  <div className="lp-stat-label">Fortune 500 Leadership</div>
                 </div>
-              ))}
+                <div className="lp-stat-item">
+                  <div className="lp-stat-number">
+                    <Trophy className="lp-stat-icon" />
+                  </div>
+                  <div className="lp-stat-label">CEO Backgrounds</div>
+                </div>
+                <div className="lp-stat-item">
+                  <div className="lp-stat-number">
+                    <Target className="lp-stat-icon" />
+                  </div>
+                  <div className="lp-stat-label">Corporate Leadership</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Recruiting Advantage Section */}
-      <section className="lp-section lp-advantage-section py-20 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              The Recruiting Advantage for You
-            </h2>
-            <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto">
-              Gain the competitive edge in talent acquisition with exclusive access to elite
-              candidates.
+      {/* Traits Section */}
+      <section className="lp-section lp-section-dark">
+        <div className="lp-container">
+          <div className="lp-traits-header">
+            <h2 className="lp-section-title">What Sets Them Apart</h2>
+            <p className="lp-section-body lp-traits-intro">
+              Student-athletes develop qualities that translate directly to workplace success —
+              through years of training, not a weekend seminar. Most new hires need months to prove
+              work ethic. Student-athletes come with it already built in.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Exclusive First-Look',
-                description:
-                  'Secure these high-resilience leaders before they ever hit general job boards like LinkedIn or Handshake.',
-                icon: Star,
-              },
-              {
-                title: 'Direct Pipeline',
-                description:
-                  'Connect your organization to an elite talent pool that is often overlooked by traditional recruitment channels.',
-                icon: ArrowRight,
-              },
-              {
-                title: 'Quantifiable Impact',
-                description:
-                  'Recruit from a population that already outperforms peers in graduation rates (68%) and workplace engagement (42%).',
-                icon: CheckCircle,
-              },
-            ].map((advantage, index) => (
-              <div key={index} className="lp-advantage-card">
-                <div className="lp-advantage-icon">
-                  <advantage.icon className="w-8 h-8 text-primary-foreground" />
+          <div className="lp-traits-grid">
+            {traits.map((trait) => (
+              <div key={trait.title} className="lp-trait-card">
+                <div className="lp-trait-icon">
+                  <trait.icon className="lp-trait-icon-svg" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{advantage.title}</h3>
-                <p className="text-primary-foreground/80 leading-relaxed">
-                  {advantage.description}
-                </p>
+                <h3 className="lp-trait-card-title">{trait.title}</h3>
+                <p className="lp-trait-card-body">{trait.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="lp-section py-20 md:py-32 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Ready to Access Elite Talent?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Join the platform that connects you directly with pre-vetted, high-performance
-            student-athletes ready to make an impact.
+      {/* Sourcing Section */}
+      <section className="lp-section lp-section-dark">
+        <div className="lp-container">
+          <div className="lp-sourcing-header">
+            <h2 className="lp-section-title">Find Strong Candidates Before Your Competitors Do</h2>
+            <p className="lp-section-body">
+              Portal gives your hiring team early access to qualified student-athletes before they
+              hit the open market.
+            </p>
+          </div>
+          <div className="lp-sourcing-grid">
+            {sourcingBenefits.map((benefit) => (
+              <div key={benefit.title} className="lp-sourcing-card">
+                <div className="lp-sourcing-icon">
+                  <benefit.icon className="lp-sourcing-icon-svg" />
+                </div>
+                <h3 className="lp-sourcing-card-title">{benefit.title}</h3>
+                <p className="lp-sourcing-card-body">{benefit.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="lp-section lp-section-dark lp-cta-section">
+        <div className="lp-container lp-cta-container">
+          <h2 className="lp-section-title">Ready to Get Started?</h2>
+          <p className="lp-section-body">
+            Join the waitlist and be first to access Portal when we launch.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onClick={() => register('athlete')} className="lp-btn lp-btn-cta">
-              <Users className="w-5 h-5 mr-2" />
-              Join Now (Athletes)
+          <div className="lp-cta-tabs">
+            <button
+              className={`lp-cta-tab ${activeTab === 'athlete' ? 'lp-cta-tab-active' : ''}`}
+              onClick={() => setActiveTab('athlete')}
+            >
+              Athlete
             </button>
-            <button onClick={() => register('school')} className="lp-btn lp-btn-outline">
-              <GraduationCap className="w-5 h-5 mr-2" />
-              Partner with Portal (Schools)
+            <button
+              className={`lp-cta-tab ${activeTab === 'company' ? 'lp-cta-tab-active' : ''}`}
+              onClick={() => setActiveTab('company')}
+            >
+              Employer
             </button>
-            <button onClick={() => register('company')} className="lp-btn lp-btn-outline">
-              <Briefcase className="w-5 h-5 mr-2" />
-              Recruit Talent (Employers)
+            <button
+              className={`lp-cta-tab ${activeTab === 'school' ? 'lp-cta-tab-active' : ''}`}
+              onClick={() => setActiveTab('school')}
+            >
+              University
             </button>
+          </div>
+          <button onClick={() => register(activeTab)} className="lp-btn lp-btn-cta lp-cta-waitlist">
+            Join the Waitlist — Free
+          </button>
+          <p className="lp-cta-legal">
+            By signing up you agree to our Privacy Policy and Terms of Service
+          </p>
+          <div className="lp-cta-badges">
+            <span>Free for athletes</span>
+            <span>No credit card required</span>
+            <span>Early access priority</span>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="lp-footer py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-primary-foreground" />
+      <footer className="lp-footer">
+        <div className="lp-container">
+          <div className="lp-footer-top">
+            <div className="lp-footer-brand">
+              <div className="lp-footer-logo">
+                <div className="lp-footer-logo-icon">
+                  <Zap className="lp-footer-zap" />
+                </div>
+                <span className="lp-footer-logo-text">Portal</span>
               </div>
-              <span className="text-xl font-bold">Portal</span>
+              <p className="lp-footer-tagline">
+                The career platform connecting NCAA student-athletes with jobs, internships, and NIL
+                opportunities.
+              </p>
             </div>
-            <p className="text-sm text-background/70">© 2026 Portal. All rights reserved.</p>
+            <div className="lp-footer-links-grid">
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Athletes</h4>
+                <a href="/athletes" className="lp-footer-link">
+                  Overview
+                </a>
+                <a href="/athletes" className="lp-footer-link">
+                  Jobs & Internships
+                </a>
+                <a href="/athletes" className="lp-footer-link">
+                  NIL Opportunities
+                </a>
+              </div>
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Universities</h4>
+                <a href="/universities" className="lp-footer-link">
+                  Overview
+                </a>
+                <a href="/universities" className="lp-footer-link">
+                  Admin Dashboard
+                </a>
+                <a href="/universities" className="lp-footer-link">
+                  NIL Compliance
+                </a>
+              </div>
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Employers</h4>
+                <a href="/employers" className="lp-footer-link">
+                  Overview
+                </a>
+                <a href="/employers" className="lp-footer-link">
+                  Start Recruiting
+                </a>
+                <a href="/employers" className="lp-footer-link">
+                  ROI Advantage
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="lp-footer-bottom">
+            <div className="lp-footer-contact">
+              <Mail className="lp-footer-mail-icon" />
+              <a href="mailto:info@portaljobs.net" className="lp-footer-link">
+                info@portaljobs.net
+              </a>
+            </div>
+            <p className="lp-footer-copyright">&copy; 2026 Portal</p>
+            <div className="lp-footer-legal">
+              <a href="#" className="lp-footer-link">
+                Privacy Policy
+              </a>
+              <a href="#" className="lp-footer-link">
+                Terms of Service
+              </a>
+            </div>
           </div>
         </div>
       </footer>
