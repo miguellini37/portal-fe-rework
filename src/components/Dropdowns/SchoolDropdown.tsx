@@ -17,6 +17,7 @@ interface SchoolDropdownProps {
     | undefined;
   disabled?: boolean;
   selected?: string;
+  selectedLabel?: string;
   className?: string;
 }
 
@@ -25,6 +26,7 @@ export const SchoolDropdown = ({
   onChange,
   disabled,
   selected,
+  selectedLabel,
   className,
 }: SchoolDropdownProps) => {
   const [selectedOption, setSelectedOption] = useState<SchoolOption | null>(null);
@@ -46,10 +48,12 @@ export const SchoolDropdown = ({
           setSelectedOption({ value: match.id as string, label: match.schoolName as string });
         }
       });
+    } else if (selectedLabel) {
+      setSelectedOption({ value: selectedLabel, label: selectedLabel });
     } else {
       setSelectedOption(null);
     }
-  }, [selected]);
+  }, [selected, selectedLabel]);
 
   return (
     <AsyncSelect<SchoolOption>

@@ -11,6 +11,15 @@ export interface IUpdateCompanyEmployeePayload {
   phone?: string;
   id?: string;
   position?: string;
+  linkedIn?: string;
+  roleType?: string;
+  companyId?: string;
+  isFormerAthlete?: boolean;
+  athleteSport?: string;
+  athletePosition?: string;
+  athleteUniversity?: string;
+  athleteGraduationYear?: string;
+  athleteAchievements?: string;
   company?: {
     companyName?: string;
   };

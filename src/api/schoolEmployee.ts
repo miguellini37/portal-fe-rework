@@ -6,6 +6,15 @@ import { ISchoolPaylod } from './school';
 export interface IUpdateSchoolEmployeePayload {
   firstName?: string;
   lastName?: string;
+  email?: string;
+  phone?: string;
+  bio?: string;
+  linkedIn?: string;
+  position?: string;
+  department?: string;
+  officeLocation?: string;
+  officeHours?: string;
+  schoolId?: string;
   school?: ISchoolPaylod;
 }
 
