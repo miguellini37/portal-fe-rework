@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { useAuth } from '../../auth/hooks';
 import { Navigate } from 'react-router-dom';
 import {
-  Trophy,
   Zap,
   Star,
   ArrowRight,
@@ -12,6 +11,9 @@ import {
   Clock,
   Users,
   Mail,
+  Hexagon,
+  BarChart3,
+  Sparkles,
 } from 'lucide-react';
 import { LandingNavbar } from './LandingNavbar';
 import './LandingPage.css';
@@ -28,7 +30,7 @@ const traits = [
   {
     title: 'Resilience & Focus',
     description:
-      "These candidates work well under pressure and in demanding roles \u2014 they've been doing it since age 18.",
+      "These candidates work well under pressure and in demanding roles \u2014 they've been doing it since they were 18.",
     icon: Target,
   },
   {
@@ -40,7 +42,7 @@ const traits = [
   {
     title: 'Skilled at Managing Heavy Workloads',
     description:
-      'Balancing full academic schedule with varsity sport creates professionals who know how to prioritize and execute.',
+      'Balancing a full academic schedule with a varsity sport creates professionals who know how to prioritize and execute.',
     icon: Clock,
   },
 ];
@@ -49,7 +51,7 @@ const sourcingBenefits = [
   {
     title: 'Early Access',
     description: 'Reach driven, dependable candidates before they appear on standard job boards.',
-    icon: Zap,
+    icon: Star,
   },
   {
     title: 'Direct Access',
@@ -81,11 +83,18 @@ export const LandingPage: FC = () => {
     <div className="lp-root">
       <LandingNavbar registerText="Get Started" />
 
-      {/* Hero Section */}
-      <section className="lp-hero">
-        <div className="lp-hero-bg" />
+      {/* Hero Section - Dark */}
+      <section className="lp-hero lp-gradient-mesh">
+        <div className="lp-hero-floats">
+          <div className="lp-hero-float lp-hero-float-1" />
+          <div className="lp-hero-float lp-hero-float-2" />
+          <div className="lp-hero-float lp-hero-float-3" />
+        </div>
         <div className="lp-container lp-hero-content">
-          <p className="lp-hero-eyebrow">The Career Platform Built for Student-Athletes</p>
+          <div className="lp-hero-badge">
+            <Sparkles className="lp-hero-badge-icon" />
+            The Career Platform Built for Student-Athletes
+          </div>
           <h1 className="lp-hero-title">
             Where Student-Athletes Build Their <span className="lp-text-accent">Careers</span>
           </h1>
@@ -94,22 +103,25 @@ export const LandingPage: FC = () => {
             giving universities the tools to support every step.
           </p>
           <div className="lp-hero-actions">
-            <button onClick={() => register('athlete')} className="lp-btn lp-btn-cta">
-              Create Free Profile
-            </button>
-            <button onClick={() => register('company')} className="lp-btn lp-btn-outline-light">
-              Request a Demo
-            </button>
-          </div>
-          <div className="lp-hero-labels">
-            <span>For athletes — always free</span>
-            <span>For employers & universities</span>
+            <div className="lp-hero-action-group">
+              <button onClick={() => register('athlete')} className="lp-btn lp-btn-cta">
+                Create Free Profile
+              </button>
+              <span className="lp-hero-label">For athletes — always free</span>
+            </div>
+            <div className="lp-hero-action-group">
+              <button onClick={() => register('company')} className="lp-btn lp-btn-outline-light">
+                Request a Demo
+              </button>
+              <span className="lp-hero-label">For employers &amp; universities</span>
+            </div>
           </div>
         </div>
+        <div className="lp-hero-fade" />
       </section>
 
-      {/* Logo Cloud */}
-      <section className="lp-logo-cloud">
+      {/* Logo Cloud - White */}
+      <section className="lp-section-white lp-logo-cloud">
         <div className="lp-container">
           <p className="lp-logo-cloud-title">Trusted by leading athletic programs</p>
           <div className="lp-logo-cloud-grid">
@@ -122,141 +134,177 @@ export const LandingPage: FC = () => {
         </div>
       </section>
 
-      {/* Why Student-Athletes Section */}
-      <section className="lp-section lp-section-dark">
-        <div className="lp-container">
-          <div className="lp-two-col">
-            <div className="lp-two-col-text">
-              <p className="lp-section-eyebrow">Why Student-Athletes</p>
-              <h2 className="lp-section-title">The Candidate Most Overlooked</h2>
-              <p className="lp-section-body">
-                Student-athletes have been tested in ways most candidates never are. They show up,
-                they perform, and they don&apos;t need motivation — habit built years before.
-              </p>
-            </div>
-            <div className="lp-advantage-box">
-              <h3 className="lp-advantage-box-title">The Athlete Advantage</h3>
-              <p className="lp-advantage-box-subtitle">Athletes Lead in Business</p>
-              <p className="lp-advantage-box-body">
-                The traits that make great athletes — discipline, resilience, coachability — are the
-                same traits that define top performers in the workplace.
-              </p>
-              <div className="lp-stats-row">
-                <div className="lp-stat-item">
-                  <div className="lp-stat-number">
-                    <Star className="lp-stat-icon" />
-                  </div>
-                  <div className="lp-stat-label">Fortune 500 Leadership</div>
-                </div>
-                <div className="lp-stat-item">
-                  <div className="lp-stat-number">
-                    <Trophy className="lp-stat-icon" />
-                  </div>
-                  <div className="lp-stat-label">CEO Backgrounds</div>
-                </div>
-                <div className="lp-stat-item">
-                  <div className="lp-stat-number">
-                    <Target className="lp-stat-icon" />
-                  </div>
-                  <div className="lp-stat-label">Corporate Leadership</div>
-                </div>
-              </div>
-            </div>
+      {/* Why Student-Athletes - White */}
+      <section className="lp-section-white lp-section-padded">
+        <div className="lp-container lp-text-center">
+          <div className="lp-badge-light">
+            <Hexagon className="lp-badge-icon" />
+            Why Student-Athletes
           </div>
+          <h2 className="lp-heading-dark">The Candidate Most Companies Overlook</h2>
+          <p className="lp-body-muted">
+            Student-athletes have been tested in ways most candidates never are. They show up, they
+            perform, and they don&apos;t need to be motivated — that habit was built years before
+            they applied.
+          </p>
         </div>
       </section>
 
-      {/* Traits Section */}
-      <section className="lp-section lp-section-dark">
+      {/* Stats Section - Dark */}
+      <section className="lp-gradient-mesh lp-section-padded">
         <div className="lp-container">
-          <div className="lp-traits-header">
-            <h2 className="lp-section-title">What Sets Them Apart</h2>
-            <p className="lp-section-body lp-traits-intro">
-              Student-athletes develop qualities that translate directly to workplace success —
-              through years of training, not a weekend seminar. Most new hires need months to prove
-              work ethic. Student-athletes come with it already built in.
+          <div className="lp-text-center lp-mb-16">
+            <div className="lp-badge-dark">
+              <BarChart3 className="lp-badge-icon" />
+              The Athlete Advantage
+            </div>
+            <h2 className="lp-heading-white">Athletes Lead in Business</h2>
+            <p className="lp-body-white-muted">
+              The traits that make great athletes — discipline, resilience, coachability — are the
+              same traits that define top performers in the workplace.
             </p>
           </div>
-          <div className="lp-traits-grid">
-            {traits.map((trait) => (
-              <div key={trait.title} className="lp-trait-card">
-                <div className="lp-trait-icon">
-                  <trait.icon className="lp-trait-icon-svg" />
-                </div>
-                <h3 className="lp-trait-card-title">{trait.title}</h3>
-                <p className="lp-trait-card-body">{trait.description}</p>
+          <div className="lp-stats-grid">
+            {[
+              {
+                label: 'Fortune 500 Leadership',
+                body: 'Of Fortune 500 executives, and 94% of female C-suite leaders, come from competitive athletic backgrounds.',
+              },
+              {
+                label: 'CEO Backgrounds',
+                body: 'Of CEOs at leading companies played collegiate sports.',
+              },
+              {
+                label: 'Corporate Leadership',
+                body: 'Student-athletes dominate corporate leadership — and have for decades.',
+              },
+            ].map((stat) => (
+              <div key={stat.label} className="lp-glass-card lp-text-center">
+                <div className="lp-stat-number-large">0</div>
+                <div className="lp-stat-card-label">{stat.label}</div>
+                <p className="lp-stat-card-body">{stat.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Sourcing Section */}
-      <section className="lp-section lp-section-dark">
+      {/* Traits Section - White */}
+      <section className="lp-section-white lp-section-padded">
         <div className="lp-container">
-          <div className="lp-sourcing-header">
-            <h2 className="lp-section-title">Find Strong Candidates Before Your Competitors Do</h2>
-            <p className="lp-section-body">
+          <div className="lp-traits-layout">
+            <div className="lp-traits-text">
+              <div className="lp-badge-light">
+                <Zap className="lp-badge-icon" />
+                What Sets Them Apart
+              </div>
+              <h2 className="lp-heading-dark">What Sets Them Apart</h2>
+              <p className="lp-body-muted">
+                Student-athletes develop qualities that translate directly to workplace success —
+                through years of training, not a weekend seminar.
+              </p>
+              <p className="lp-traits-quote">
+                Most new hires need months to prove their work ethic. Student-athletes come with it
+                already built in.
+              </p>
+            </div>
+            <div className="lp-traits-grid">
+              {traits.map((trait) => (
+                <div key={trait.title} className="lp-trait-card-light">
+                  <div className="lp-trait-icon-light">
+                    <trait.icon className="lp-trait-icon-svg-light" />
+                  </div>
+                  <h3 className="lp-trait-card-title-light">{trait.title}</h3>
+                  <p className="lp-trait-card-body-light">{trait.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sourcing Section - Dark */}
+      <section className="lp-gradient-mesh lp-section-padded">
+        <div className="lp-container">
+          <div className="lp-text-center lp-mb-16">
+            <h2 className="lp-heading-white">
+              Find Strong Candidates Before Your Competitors Do
+            </h2>
+            <p className="lp-body-white-muted">
               Portal gives your hiring team early access to qualified student-athletes before they
               hit the open market.
             </p>
           </div>
           <div className="lp-sourcing-grid">
             {sourcingBenefits.map((benefit) => (
-              <div key={benefit.title} className="lp-sourcing-card">
-                <div className="lp-sourcing-icon">
-                  <benefit.icon className="lp-sourcing-icon-svg" />
+              <div key={benefit.title} className="lp-glass-card">
+                <div className="lp-glass-icon">
+                  <benefit.icon className="lp-glass-icon-svg" />
                 </div>
-                <h3 className="lp-sourcing-card-title">{benefit.title}</h3>
-                <p className="lp-sourcing-card-body">{benefit.description}</p>
+                <h3 className="lp-glass-card-title">{benefit.title}</h3>
+                <p className="lp-glass-card-body">{benefit.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="lp-section lp-section-dark lp-cta-section">
-        <div className="lp-container lp-cta-container">
-          <h2 className="lp-section-title">Ready to Get Started?</h2>
-          <p className="lp-section-body">
+      {/* CTA Section - White */}
+      <section className="lp-section-white lp-section-padded">
+        <div className="lp-container lp-text-center">
+          <h2 className="lp-heading-dark">Ready to Get Started?</h2>
+          <p className="lp-body-muted">
             Join the waitlist and be first to access Portal when we launch.
           </p>
-          <div className="lp-cta-tabs">
+          <div className="lp-cta-form-wrapper">
+            <div className="lp-cta-tabs-light">
+              <button
+                className={`lp-cta-tab-light ${activeTab === 'athlete' ? 'lp-cta-tab-light-active' : ''}`}
+                onClick={() => setActiveTab('athlete')}
+              >
+                Athlete
+              </button>
+              <button
+                className={`lp-cta-tab-light ${activeTab === 'company' ? 'lp-cta-tab-light-active' : ''}`}
+                onClick={() => setActiveTab('company')}
+              >
+                Employer
+              </button>
+              <button
+                className={`lp-cta-tab-light ${activeTab === 'school' ? 'lp-cta-tab-light-active' : ''}`}
+                onClick={() => setActiveTab('school')}
+              >
+                University
+              </button>
+            </div>
             <button
-              className={`lp-cta-tab ${activeTab === 'athlete' ? 'lp-cta-tab-active' : ''}`}
-              onClick={() => setActiveTab('athlete')}
+              onClick={() => register(activeTab)}
+              className="lp-btn lp-btn-cta lp-cta-submit"
             >
-              Athlete
+              Join the Waitlist — Free
             </button>
-            <button
-              className={`lp-cta-tab ${activeTab === 'company' ? 'lp-cta-tab-active' : ''}`}
-              onClick={() => setActiveTab('company')}
-            >
-              Employer
-            </button>
-            <button
-              className={`lp-cta-tab ${activeTab === 'school' ? 'lp-cta-tab-active' : ''}`}
-              onClick={() => setActiveTab('school')}
-            >
-              University
-            </button>
+            <p className="lp-cta-legal-light">
+              By signing up you agree to our Privacy Policy and Terms of Service
+            </p>
           </div>
-          <button onClick={() => register(activeTab)} className="lp-btn lp-btn-cta lp-cta-waitlist">
-            Join the Waitlist — Free
-          </button>
-          <p className="lp-cta-legal">
-            By signing up you agree to our Privacy Policy and Terms of Service
-          </p>
-          <div className="lp-cta-badges">
-            <span>Free for athletes</span>
-            <span>No credit card required</span>
-            <span>Early access priority</span>
+          <div className="lp-cta-badges-light">
+            <span>
+              <span className="lp-dot-green" />
+              Free for athletes
+            </span>
+            <span>
+              <span className="lp-dot-green" />
+              No credit card required
+            </span>
+            <span>
+              <span className="lp-dot-green" />
+              Early access priority
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer - Dark */}
       <footer className="lp-footer">
         <div className="lp-container">
           <div className="lp-footer-top">
