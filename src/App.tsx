@@ -7,15 +7,11 @@ import { AppRoutes } from './Routes';
 import Modal from 'react-modal';
 import { ScrollToTop } from './components/ScrollToTop';
 
-const PUBLIC_PATHS = ['/', '/athletes', '/employers', '/universities'];
-
-const isPublicPath = PUBLIC_PATHS.includes(window.location.pathname);
-
 export const App = () => {
   Modal.setAppElement('#root');
 
   const keycloakInitOptions = {
-    onLoad: isPublicPath ? undefined : ('check-sso' as const),
+    onLoad: 'check-sso' as const,
     checkLoginIframe: false,
   };
 

@@ -11,6 +11,18 @@
   --lp-text-subtle: rgba(255, 255, 255, 0.4);
   --lp-border: rgba(255, 255, 255, 0.1);
   --lp-radius: 0.75rem;
+  /* Override global :root vars for dark theme */
+  --background: #0a0f2e;
+  --foreground: #ffffff;
+  --card: #111640;
+  --card-foreground: #ffffff;
+  --primary: #046ee5;
+  --primary-foreground: #ffffff;
+  --secondary: #111640;
+  --secondary-foreground: #ffffff;
+  --muted: #111640;
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --border: rgba(255, 255, 255, 0.1);
   font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
