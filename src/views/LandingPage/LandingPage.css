@@ -7,9 +7,9 @@
   --lp-primary: #046ee5;
   --lp-primary-hover: #0359b8;
   --lp-text: #ffffff;
-  --lp-text-muted: rgba(255, 255, 255, 0.6);
-  --lp-text-subtle: rgba(255, 255, 255, 0.4);
-  --lp-border: rgba(255, 255, 255, 0.1);
+  --lp-text-muted: rgba(255, 255, 255, 0.7);
+  --lp-text-subtle: rgba(255, 255, 255, 0.5);
+  --lp-border: rgba(255, 255, 255, 0.15);
   --lp-radius: 0.75rem;
   /* Override global :root vars for dark theme */
   --background: #0a0f2e;
@@ -21,8 +21,8 @@
   --secondary: #111640;
   --secondary-foreground: #ffffff;
   --muted: #111640;
-  --muted-foreground: rgba(255, 255, 255, 0.6);
-  --border: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.7);
+  --border: rgba(255, 255, 255, 0.15);
   font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

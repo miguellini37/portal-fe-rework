@@ -43,4 +43,6 @@ export const ProfileEdit = () => {
   if (permission == USER_PERMISSIONS.COMPANY) {
     return <CompanyEmployeeProfile />;
   }
+
+  return <SetupProfile />;
 };
