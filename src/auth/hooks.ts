@@ -29,10 +29,10 @@ export const useAuth = () => {
   return {
     isAuthenticated: keycloak.authenticated ?? false,
     initialized,
-    login: () => keycloak.login(),
+    login: () => keycloak.login({ redirectUri: window.location.origin + '/profile' }),
     logout: () => keycloak.logout(),
     register: async (role?: string) => {
-      const redirectUri = window.location.origin + '/';
+      const redirectUri = window.location.origin + '/profile';
       if (role) {
         const registerUrl = await keycloak.createRegisterUrl({ redirectUri });
         window.location.href = registerUrl + `&role=${encodeURIComponent(role)}`;
