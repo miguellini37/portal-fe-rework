@@ -63,7 +63,9 @@ const ActivityItem: React.FC<{ item: UniversityOverview['recentActivity'][0] }> 
 };
 
 function calcChange(current: number, previous: number): { text: string; direction: 'up' | 'down' } {
-  if (previous === 0) return { text: '+0%', direction: 'up' };
+  if (previous === 0) {
+    return { text: '+0%', direction: 'up' };
+  }
   const pct = Math.round(((current - previous) / previous) * 100);
   return { text: `${pct >= 0 ? '+' : ''}${pct}%`, direction: pct >= 0 ? 'up' : 'down' };
 }
@@ -74,7 +76,9 @@ export const SchoolDashboard: React.FC = () => {
   const authHeader = useAuthHeader();
 
   useEffect(() => {
-    if (!authHeader) return;
+    if (!authHeader) {
+      return;
+    }
     setLoading(true);
     getUniversityOverview(authHeader)
       .then(setData)
@@ -95,8 +99,14 @@ export const SchoolDashboard: React.FC = () => {
     );
   }
 
-  const gradsChange = calcChange(data.placedGraduates.currentMonth, data.placedGraduates.previousMonth);
-  const sponsorsChange = calcChange(data.activeSponsors.currentMonth, data.activeSponsors.previousMonth);
+  const gradsChange = calcChange(
+    data.placedGraduates.currentMonth,
+    data.placedGraduates.previousMonth
+  );
+  const sponsorsChange = calcChange(
+    data.activeSponsors.currentMonth,
+    data.activeSponsors.previousMonth
+  );
 
   const displayMetrics = [
     {

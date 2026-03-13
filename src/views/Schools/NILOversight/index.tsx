@@ -9,15 +9,14 @@ import {
   DollarSign,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import {
-  getUniversityNILOversight,
-  UniversityNILOversightResponse,
-} from '../../../api/school';
+import { getUniversityNILOversight, UniversityNILOversightResponse } from '../../../api/school';
 import { useAuthHeader } from '../../../auth/hooks';
 import './NILOversight.css';
 
 const formatCurrency = (value: number | undefined): string => {
-  if (value == null) return '$0';
+  if (value == null) {
+    return '$0';
+  }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',

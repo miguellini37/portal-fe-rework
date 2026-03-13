@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, TrendingDown, Building2, Briefcase, Award, DollarSign } from 'lucide-react';
 import { toast } from 'react-toastify';
-import {
-  getCompaniesForUniversity,
-  CompaniesForUniversityResponse,
-} from '../../../api/school';
+import { getCompaniesForUniversity, CompaniesForUniversityResponse } from '../../../api/school';
 import { useAuthHeader } from '../../../auth/hooks';
 import './UniversityCompanies.css';
 
 const formatCurrency = (value: number | undefined): string => {
-  if (value == null) return '$0';
+  if (value == null) {
+    return '$0';
+  }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',

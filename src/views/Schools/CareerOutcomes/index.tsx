@@ -22,8 +22,13 @@ const formatCurrency = (value: number): string => {
   return `$${value.toLocaleString()}`;
 };
 
-const formatDelta = (current: number, lastYear: number): { text: string; direction: 'up' | 'down' } => {
-  if (lastYear === 0) return { text: '+0%', direction: 'up' };
+const formatDelta = (
+  current: number,
+  lastYear: number
+): { text: string; direction: 'up' | 'down' } => {
+  if (lastYear === 0) {
+    return { text: '+0%', direction: 'up' };
+  }
   const pct = ((current - lastYear) / lastYear) * 100;
   const sign = pct >= 0 ? '+' : '';
   return {
@@ -49,10 +54,18 @@ export const CareerOutcomes: React.FC = () => {
 
   const buildFilters = (): OutcomeFilters => {
     const filters: OutcomeFilters = {};
-    if (filterSport) filters.sport = filterSport;
-    if (filterIndustry) filters.industry = filterIndustry;
-    if (filterYear) filters.year = filterYear;
-    if (filterHasJob) filters.hasJob = true;
+    if (filterSport) {
+      filters.sport = filterSport;
+    }
+    if (filterIndustry) {
+      filters.industry = filterIndustry;
+    }
+    if (filterYear) {
+      filters.year = filterYear;
+    }
+    if (filterHasJob) {
+      filters.hasJob = true;
+    }
     return filters;
   };
 
@@ -83,8 +96,12 @@ export const CareerOutcomes: React.FC = () => {
   }, [filterSport, filterIndustry, filterYear, filterHasJob]);
 
   // Derive unique values for filter dropdowns
-  const sportOptions = Array.from(new Set(students.map((s) => s.sport).filter(Boolean))) as string[];
-  const industryOptions = Array.from(new Set(students.map((s) => s.industry).filter(Boolean))) as string[];
+  const sportOptions = Array.from(
+    new Set(students.map((s) => s.sport).filter(Boolean))
+  ) as string[];
+  const industryOptions = Array.from(
+    new Set(students.map((s) => s.industry).filter(Boolean))
+  ) as string[];
 
   // Salary distribution rendering helpers
   const salaryBuckets = salaryDist
@@ -120,7 +137,10 @@ export const CareerOutcomes: React.FC = () => {
         {
           label: 'Active Job Seekers',
           value: jobOutcomes.activeJobSeekers.current.toLocaleString(),
-          ...formatDelta(jobOutcomes.activeJobSeekers.current, jobOutcomes.activeJobSeekers.lastYear),
+          ...formatDelta(
+            jobOutcomes.activeJobSeekers.current,
+            jobOutcomes.activeJobSeekers.lastYear
+          ),
         },
       ]
     : [];
@@ -223,10 +243,7 @@ export const CareerOutcomes: React.FC = () => {
                     <div className="co-salary-row" key={bucket.label}>
                       <span className="co-salary-label">{bucket.label}</span>
                       <div className="co-salary-bar-bg">
-                        <div
-                          className="co-salary-bar-fill"
-                          style={{ width: `${widthPct}%` }}
-                        >
+                        <div className="co-salary-bar-fill" style={{ width: `${widthPct}%` }}>
                           <span className="co-salary-bar-count">{bucket.count}</span>
                         </div>
                       </div>
