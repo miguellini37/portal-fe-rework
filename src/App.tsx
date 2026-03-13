@@ -1,5 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
+import * as Sentry from '@sentry/react';
 import keycloak from './config/keycloak';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,7 +17,7 @@ export const App = () => {
   };
 
   return (
-    <>
+    <Sentry.ErrorBoundary fallback={<p>Something went wrong.</p>}>
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -32,6 +33,6 @@ export const App = () => {
           </BrowserRouter>
         </ReactKeycloakProvider>
       </div>
-    </>
+    </Sentry.ErrorBoundary>
   );
 };
