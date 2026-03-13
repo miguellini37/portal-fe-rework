@@ -4,9 +4,17 @@ const MANIFEST_URL = 'https://beta.portaljobs.net/install/manifest.plist';
 const INSTALL_URL = `itms-services://?action=download-manifest&url=${encodeURIComponent(MANIFEST_URL)}`;
 
 export const InstallPage = () => {
+  const [code, setCode] = useState('');
   const [revealed, setRevealed] = useState(false);
 
   const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code === 'portalbeta') {
+      setRevealed(true);
+    }
+  };
 
   if (!revealed) {
     return (
@@ -14,16 +22,18 @@ export const InstallPage = () => {
         <div style={styles.card}>
           <div style={styles.logo}>Portal</div>
           <p style={styles.subtitle}>Internal testing access</p>
-          <input
-            type="password"
-            placeholder="Access code"
-            style={styles.input}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && (e.target as HTMLInputElement).value === 'portalbeta') {
-                setRevealed(true);
-              }
-            }}
-          />
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' as const, gap: 12 }}>
+            <input
+              type="password"
+              placeholder="Access code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              style={styles.input}
+            />
+            <button type="submit" style={styles.submitButton}>
+              Enter
+            </button>
+          </form>
         </div>
       </div>
     );
@@ -98,6 +108,16 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 16,
     outline: 'none',
     boxSizing: 'border-box' as const,
+  },
+  submitButton: {
+    padding: '12px 16px',
+    background: '#0a1628',
+    color: 'white',
+    border: 'none',
+    borderRadius: 8,
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: 'pointer',
   },
   button: {
     display: 'inline-block',
