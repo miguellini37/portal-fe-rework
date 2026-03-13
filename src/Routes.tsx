@@ -33,19 +33,6 @@ import { Messages } from './views/Messages';
 import { Conversation } from './views/Messages/Conversation';
 import { NewConversation } from './views/Messages/NewConversation';
 import { InstallPage } from './views/Install/InstallPage';
-import * as Sentry from '@sentry/react';
-
-const SentryTestPage = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: 16 }}>
-    <h1>Sentry Test</h1>
-    <button onClick={() => { throw new Error('Sentry frontend test error'); }} style={{ padding: '12px 24px', background: '#ef4444', color: 'white', border: 'none', borderRadius: 8, fontSize: 16, cursor: 'pointer' }}>
-      Throw Error
-    </button>
-    <button onClick={() => Sentry.captureMessage('Test message from Portal frontend')} style={{ padding: '12px 24px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: 8, fontSize: 16, cursor: 'pointer' }}>
-      Send Test Message
-    </button>
-  </div>
-);
 
 type PageRoute = {
   path: string;
@@ -97,7 +84,6 @@ export const AppRoutes = () => {
     { path: '/employers', element: <EmployersPage />, withSidebar: false, noAuth: true },
     { path: '/universities', element: <UniversitiesPage />, withSidebar: false, noAuth: true },
     { path: '/install', element: <InstallPage />, withSidebar: false, noAuth: true },
-    { path: '/sentry-test', element: <SentryTestPage />, withSidebar: false, noAuth: true },
     { path: '*', element: <LandingPage />, withSidebar: false, noAuth: true },
   ];
 
