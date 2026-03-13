@@ -32,6 +32,7 @@ import { AdminCompanies } from './views/Admin/AdminCompanies';
 import { Messages } from './views/Messages';
 import { Conversation } from './views/Messages/Conversation';
 import { NewConversation } from './views/Messages/NewConversation';
+import { InstallPage } from './views/Install/InstallPage';
 
 type PageRoute = {
   path: string;
@@ -82,6 +83,7 @@ export const AppRoutes = () => {
     { path: '/athletes', element: <AthletesPage />, withSidebar: false, noAuth: true },
     { path: '/employers', element: <EmployersPage />, withSidebar: false, noAuth: true },
     { path: '/universities', element: <UniversitiesPage />, withSidebar: false, noAuth: true },
+    { path: '/install', element: <InstallPage />, withSidebar: false, noAuth: true },
     { path: '*', element: <LandingPage />, withSidebar: false, noAuth: true },
   ];
 
