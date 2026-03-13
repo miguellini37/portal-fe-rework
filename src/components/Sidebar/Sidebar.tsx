@@ -21,8 +21,12 @@ import {
   BarChart3,
   TrendingUp,
   Handshake,
+  Sun,
+  Moon,
+  Monitor,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 import { ActivityBell } from '../../views/Activity/ActivityBell';
 import { MessagesBell } from '../../views/Messages/MessagesBell';
 import './Sidebar.css';
@@ -39,6 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const { permission, isVerified } = user || {};
   const isSchoolVerified = useIsSchoolVerified();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -246,6 +251,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           </nav>
         </div>
         <div>
+          <div className="theme-toggle mb-4">
+            <button
+              onClick={() => setTheme('light')}
+              className={`theme-btn ${theme === 'light' ? 'theme-btn-active' : ''}`}
+              title="Light"
+            >
+              <Sun size={16} />
+            </button>
+            <button
+              onClick={() => setTheme('system')}
+              className={`theme-btn ${theme === 'system' ? 'theme-btn-active' : ''}`}
+              title="System"
+            >
+              <Monitor size={16} />
+            </button>
+            <button
+              onClick={() => setTheme('dark')}
+              className={`theme-btn ${theme === 'dark' ? 'theme-btn-active' : ''}`}
+              title="Dark"
+            >
+              <Moon size={16} />
+            </button>
+          </div>
           <div className="mb-4">
             <ul>
               {!isLoggedIn ? (

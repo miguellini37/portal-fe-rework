@@ -30,7 +30,7 @@
   flex: 1;
   overflow-y: auto;
   margin-left: 210px;
-  background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1));
+  background-color: var(--background);
   transition: margin-left 0.3s ease;
 }
 
@@ -170,9 +170,9 @@ button .collapse-button {
 }
 
 .sidebar a.active {
-  background-color: #dbeafe;
+  background-color: var(--active-bg, #dbeafe);
   color: var(--blue);
-  border: 1px solid #93c5fd;
+  border: 1px solid var(--active-border, #93c5fd);
 }
 
 /* Color utility classes */
@@ -263,5 +263,52 @@ button .collapse-button {
 
 .sidebar-action-btn {
   position: relative;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background-color: var(--secondary);
+  border-radius: 8px;
+  margin: 0 8px;
+}
+
+.theme-btn {
+  flex: 1;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 6px !important;
+  border: none !important;
+  border-radius: 6px !important;
+  background: none !important;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  gap: 0 !important;
+}
+
+.theme-btn:hover {
+  color: var(--foreground);
+  background-color: transparent !important;
+}
+
+.theme-btn-active {
+  background-color: var(--card) !important;
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.theme-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Dark mode overrides */
+.dark .sidebar a.active {
+  --active-bg: rgba(59, 130, 246, 0.15);
+  --active-border: rgba(59, 130, 246, 0.3);
 }
 

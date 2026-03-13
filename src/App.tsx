@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AppRoutes } from './Routes';
 import Modal from 'react-modal';
 import { ScrollToTop } from './components/ScrollToTop';
+import { ThemeProvider } from './context/ThemeContext';
 
 export const App = () => {
   Modal.setAppElement('#root');
@@ -17,6 +18,7 @@ export const App = () => {
   };
 
   return (
+    <ThemeProvider>
     <Sentry.ErrorBoundary fallback={<p>Something went wrong.</p>}>
       <ToastContainer
         position="top-right"
@@ -34,5 +36,6 @@ export const App = () => {
         </ReactKeycloakProvider>
       </div>
     </Sentry.ErrorBoundary>
+    </ThemeProvider>
   );
 };
