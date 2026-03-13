@@ -75,6 +75,12 @@
   color: var(--lp-navy);
 }
 
+/* Light gray sections */
+.lp-section-gray {
+  background-color: #f8fafc;
+  color: var(--lp-navy);
+}
+
 .lp-section-padded {
   padding: 6rem 0;
 }
@@ -1334,6 +1340,156 @@
 .lp-root .hover\:bg-white\/90:hover { background-color: rgba(255, 255, 255, 0.9); }
 .lp-root .hover\:underline:hover { text-decoration: underline; }
 .lp-root .hover\:text-primary:hover { color: var(--lp-blue); }
+
+/* ===== Sub-page shared styles ===== */
+
+/* FAQ Accordion */
+.lp-faq-item {
+  background-color: white;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.lp-faq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0a0f2e;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.lp-faq-trigger:hover {
+  background-color: #f8fafc;
+}
+
+.lp-faq-chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #64748b;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.lp-faq-chevron-open {
+  transform: rotate(180deg);
+}
+
+.lp-faq-content {
+  padding: 0 1.5rem 1.25rem;
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 0.9375rem;
+}
+
+/* Comparison table */
+.lp-comparison-table {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+}
+
+.lp-comparison-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lp-comparison-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s;
+}
+
+.lp-comparison-row:last-child {
+  border-bottom: none;
+}
+
+.lp-comparison-row:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Job card */
+.lp-job-card {
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px solid rgba(10, 15, 46, 0.08);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.lp-job-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.lp-job-card-bar {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(to right, #046ee5, #22d3ee);
+}
+
+/* Athlete card */
+.lp-athlete-card {
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px solid rgba(10, 15, 46, 0.08);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.lp-athlete-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.lp-athlete-card-bar {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(to right, #046ee5, #a855f7);
+}
+
+.lp-athlete-card-blurred {
+  opacity: 0.4;
+  filter: blur(2px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Gradient text for stat values */
+.lp-text-gradient {
+  background: linear-gradient(135deg, #046ee5, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light-themed glass card */
+.lp-light-card {
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.lp-light-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
 
 /* Responsive: sub-page mobile buttons */
 @media (max-width: 639px) {

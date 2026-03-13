@@ -2,21 +2,94 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Briefcase,
-  Trophy,
-  TrendingUp,
-  Clock,
-  DollarSign,
-  Users,
-  CheckCircle,
   ArrowRight,
   Zap,
-  BarChart3,
+  CheckCircle,
   Target,
-  Building2,
+  Users,
+  Lock,
+  Search,
+  Mail,
+  GraduationCap,
+  MapPin,
+  Star,
+  BookOpen,
+  Calendar,
+  Sparkles,
+  HeadphonesIcon,
 } from 'lucide-react';
 import '../LandingPage.css';
 import { useAuth } from '../../../auth/hooks';
 import { LandingNavbar } from '../LandingNavbar';
+
+const athletes = [
+  {
+    initials: 'JJ',
+    name: 'John Johnson',
+    sport: 'Basketball',
+    position: 'Forward',
+    school: 'University of South Dakota',
+    location: 'South Dakota',
+    gpa: '3.4',
+    major: 'Business Administration',
+    graduation: 'May 2026',
+  },
+  {
+    initials: 'TB',
+    name: 'Tennel Bryant',
+    sport: 'Football',
+    position: 'HB',
+    school: 'University of South Dakota',
+    location: 'South Dakota',
+    gpa: '3.1',
+    major: 'Sociology',
+    graduation: 'Dec 2025',
+  },
+  {
+    initials: 'SC',
+    name: 'Scott Corbutt',
+    sport: 'Ice Hockey',
+    position: 'Wing',
+    school: 'University of South Dakota',
+    location: 'Chicago, IL',
+    gpa: '4.0',
+    major: 'Business Administration',
+    graduation: 'Feb 2026',
+  },
+  {
+    initials: 'SP',
+    name: 'Sierra Pokharel',
+    sport: 'Volleyball',
+    position: 'Defensive Specialist',
+    school: 'University of South Dakota',
+    location: 'South Dakota',
+    gpa: '3.3',
+    major: 'Anthropology',
+    graduation: 'May 2026',
+  },
+  {
+    initials: 'LP',
+    name: 'LJ Phillips Jr',
+    sport: 'Football',
+    position: 'HB',
+    school: 'University of South Dakota',
+    location: 'South Dakota',
+    gpa: '3.9',
+    major: 'Environmental Science',
+    graduation: 'May 2026',
+  },
+  {
+    initials: 'SS',
+    name: 'Smokey Silver',
+    sport: 'Ice Hockey',
+    position: 'Center',
+    school: 'Miami University OH',
+    location: 'Chicago, IL',
+    gpa: '3.9',
+    major: 'Supply Chain',
+    graduation: 'May 2026',
+  },
+];
 
 export const EmployersPage: FC = () => {
   const { register } = useAuth();
@@ -26,147 +99,204 @@ export const EmployersPage: FC = () => {
   };
 
   return (
-    <div className="lp-root min-h-screen bg-background">
-      {/* Navigation */}
+    <div className="lp-root">
       <LandingNavbar registerText="Start Recruiting" role="company" />
 
-      {/* Hero Section */}
-      <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-background to-background" />
-        <div className="absolute top-20 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      {/* ===== 1. Hero Section (dark) ===== */}
+      <section className="lp-gradient-mesh lp-hero">
+        <div className="lp-hero-floats">
+          <div className="lp-hero-float lp-hero-float-1" />
+          <div className="lp-hero-float lp-hero-float-2" />
+          <div className="lp-hero-float lp-hero-float-3" />
+        </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <Briefcase className="w-4 h-4" />
-              For Employers
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance">
-              Maximize Your <span className="text-primary">Recruitment ROI</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto text-balance leading-relaxed">
-              Access pre-vetted, high-performance student-athletes who fill roles faster.
-            </p>
+        <div className="lp-hero-content lp-container">
+          <div className="lp-hero-badge">
+            <Briefcase className="lp-hero-badge-icon" />
+            For Employers
+          </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={handleRegister} className="lp-btn lp-btn-cta">
-                Start Recruiting Today
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
-              <a href="mailto:info@portaljobs.net" className="lp-btn lp-btn-outline">
-                Schedule a Demo
-              </a>
-            </div>
+          <h1 className="lp-hero-title">Hire Student-Athletes Who Are Ready to Work</h1>
+
+          <p className="lp-hero-subtitle">
+            Get direct access to driven, coachable, high-character candidates from NCAA programs
+            across the country -- before they hit any other job board.
+          </p>
+
+          <div className="lp-hero-actions">
+            <button onClick={handleRegister} className="lp-btn lp-btn-cta">
+              Start Recruiting Today
+              <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
+            </button>
+            <a href="mailto:info@portaljobs.net" className="lp-btn lp-btn-outline-light">
+              Schedule a Demo
+            </a>
           </div>
         </div>
+
+        <div className="lp-hero-fade" />
       </section>
 
-      {/* ROI Statistics */}
-      <section className="lp-section py-20 md:py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <BarChart3 className="w-4 h-4" />
-              The ROI Advantage
+      {/* ===== 2. ROI Section (white) ===== */}
+      <section className="lp-section-white lp-section-padded">
+        <div className="lp-container">
+          <div className="lp-text-center lp-mb-16">
+            <div className="lp-badge-light">
+              <Sparkles className="lp-badge-icon" />
+              By the Numbers
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              The Numbers That Matter
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Student-athletes deliver measurable business impact from day one.
+            <h2 className="lp-heading-dark">The Numbers That Matter</h2>
+            <p className="lp-body-muted">
+              Student-athletes deliver measurable results from day one.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '1.5rem',
+            }}
+          >
             {[
               {
                 stat: '20-40%',
-                label: 'Faster Role Fulfillment',
+                label: 'Faster Hiring',
                 description:
-                  'Student-athletes fill positions significantly faster than traditional candidates',
-                icon: Clock,
+                  'Student-athletes fill positions significantly faster than traditional candidates.',
               },
               {
                 stat: '50%',
                 label: 'Lower Onboarding Costs',
                 description:
-                  "Portal's direct pipeline reduces recruiting overhead and onboarding time",
-                icon: DollarSign,
+                  "Portal's direct pipeline reduces recruiting overhead and onboarding time.",
               },
               {
                 stat: '68%',
                 label: 'Higher Graduation Rates',
                 description:
-                  'Demonstrating commitment, follow-through, and ability to complete goals',
-                icon: TrendingUp,
+                  'Demonstrating commitment, follow-through, and ability to complete goals.',
               },
               {
                 stat: '42%',
                 label: 'Better Engagement',
-                description: 'Student-athletes show higher workplace engagement scores',
-                icon: Target,
+                description:
+                  'Student-athletes show higher workplace engagement and retention scores.',
               },
-            ].map((item, index) => (
-              <div key={index} className="lp-card lp-stat-card-large overflow-hidden">
-                <div className="h-1.5 bg-primary" />
-                <div className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <item.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="text-4xl font-bold text-primary mb-1">{item.stat}</div>
-                  <div className="text-base font-semibold text-foreground mb-2">{item.label}</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {item.description}
-                  </p>
+            ].map((item, i) => (
+              <div
+                key={i}
+                style={{
+                  background: 'white',
+                  borderRadius: '1rem',
+                  border: '1px solid rgba(10, 15, 46, 0.08)',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+                  padding: '2rem 1.5rem',
+                  textAlign: 'center',
+                }}
+              >
+                <div
+                  className="lp-text-gradient"
+                  style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '0.5rem' }}
+                >
+                  {item.stat}
                 </div>
+                <div
+                  style={{
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    color: '#0a0f2e',
+                    marginBottom: '0.5rem',
+                  }}
+                >
+                  {item.label}
+                </div>
+                <p style={{ fontSize: '0.875rem', color: '#64748b', lineHeight: 1.6 }}>
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Why Choose Portal */}
-      <section className="lp-section py-20 md:py-32 bg-secondary/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-                <Zap className="w-4 h-4" />
-                Your Competitive Edge
+      {/* ===== 3. Quality Section (gray) ===== */}
+      <section className="lp-section-gray lp-section-padded">
+        <div className="lp-container">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr',
+              gap: '4rem',
+              alignItems: 'center',
+            }}
+            className="lp-quality-layout"
+          >
+            {/* Left column */}
+            <div style={{ gridColumn: '1', textAlign: 'left' }}>
+              <div className="lp-badge-light">
+                <Zap className="lp-badge-icon" />
+                Why Portal
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 text-balance">
-                Why Recruit Through Portal?
+              <h2 className="lp-heading-dark" style={{ textAlign: 'left' }}>
+                Standard Job Boards Give You Volume. Portal Gives You Quality.
               </h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Traditional job boards give you volume. Portal gives you quality. Access candidates
-                who are already proven performers.
+              <p
+                style={{
+                  fontSize: '1.125rem',
+                  color: '#64748b',
+                  lineHeight: 1.7,
+                  marginBottom: '2rem',
+                }}
+              >
+                Traditional recruiting channels bury you in unqualified applicants. Portal connects
+                you directly with verified student-athletes who bring discipline, resilience, and a
+                competitive edge to every role.
               </p>
 
-              <div className="space-y-4">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {[
                   'Exclusive access before LinkedIn or Handshake',
                   'Pre-screened candidates with verified athletic backgrounds',
                   'Direct connection to university career centers',
                   'NIL-integrated opportunities for unique engagement',
                   'Detailed performance profiles and character assessments',
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <span className="text-foreground">{item}</span>
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}
+                  >
+                    <CheckCircle
+                      style={{
+                        width: '1.25rem',
+                        height: '1.25rem',
+                        color: '#046ee5',
+                        flexShrink: 0,
+                        marginTop: '0.125rem',
+                      }}
+                    />
+                    <span style={{ color: '#0a0f2e', fontSize: '1rem' }}>{item}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Right column - 2x2 grid */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '1rem',
+              }}
+            >
               {[
                 {
-                  title: 'Exclusive First-Look',
+                  title: 'Early Access',
                   description: 'Secure high-resilience leaders before they hit general job boards.',
                   icon: Target,
                 },
                 {
-                  title: 'Direct Pipeline',
+                  title: 'Direct Access',
                   description: 'Connect to elite talent often overlooked by traditional channels.',
                   icon: ArrowRight,
                 },
@@ -178,15 +308,35 @@ export const EmployersPage: FC = () => {
                 {
                   title: 'Dedicated Support',
                   description: 'Our team helps you find the perfect athlete for your needs.',
-                  icon: Users,
+                  icon: HeadphonesIcon,
                 },
-              ].map((feature, index) => (
-                <div key={index} className="lp-card lp-trait-card">
-                  <div className="lp-trait-icon">
-                    <feature.icon className="w-6 h-6 text-primary-foreground" />
+              ].map((feature, i) => (
+                <div key={i} className="lp-light-card">
+                  <div
+                    style={{
+                      width: '3rem',
+                      height: '3rem',
+                      borderRadius: '0.75rem',
+                      backgroundColor: 'rgba(4, 110, 229, 0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '1rem',
+                    }}
+                  >
+                    <feature.icon style={{ width: '1.5rem', height: '1.5rem', color: '#046ee5' }} />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <h3
+                    style={{
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      color: '#0a0f2e',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', lineHeight: 1.6 }}>
                     {feature.description}
                   </p>
                 </div>
@@ -194,25 +344,37 @@ export const EmployersPage: FC = () => {
             </div>
           </div>
         </div>
+
+        <style>{`
+          @media (min-width: 1024px) {
+            .lp-quality-layout {
+              grid-template-columns: 1fr 1fr !important;
+            }
+          }
+        `}</style>
       </section>
 
-      {/* How It Works */}
-      <section className="lp-section py-20 md:py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <Building2 className="w-4 h-4" />
+      {/* ===== 4. Hiring Process Section (white) ===== */}
+      <section className="lp-section-white lp-section-padded">
+        <div className="lp-container">
+          <div className="lp-text-center lp-mb-16">
+            <div className="lp-badge-light">
+              <Briefcase className="lp-badge-icon" />
               Simple Process
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              How Portal Works for Employers
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Three simple steps to access elite student-athlete talent.
+            <h2 className="lp-heading-dark">How Portal Works for Employers</h2>
+            <p className="lp-body-muted">
+              Three simple steps to find and hire qualified student-athletes.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '2rem',
+            }}
+          >
             {[
               {
                 step: '01',
@@ -232,68 +394,365 @@ export const EmployersPage: FC = () => {
                 description:
                   'Reach out directly, schedule interviews, and extend offers through our streamlined platform.',
               },
-            ].map((item, index) => (
-              <div key={index} className="relative">
-                <div className="text-6xl font-bold text-primary/10 mb-4">{item.step}</div>
-                <div className="relative">
-                  <h3 className="text-xl font-semibold text-foreground mb-3">{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+            ].map((item, i) => (
+              <div key={i} style={{ position: 'relative', padding: '1.5rem 0' }}>
+                <div
+                  style={{
+                    fontSize: '6rem',
+                    fontWeight: 700,
+                    color: 'rgba(4, 110, 229, 0.06)',
+                    lineHeight: 1,
+                    marginBottom: '0.5rem',
+                    letterSpacing: '-0.025em',
+                  }}
+                >
+                  {item.step}
                 </div>
+                <h3
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: 600,
+                    color: '#0a0f2e',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  {item.title}
+                </h3>
+                <p style={{ color: '#64748b', lineHeight: 1.7 }}>{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="lp-section lp-advantage-section py-20 md:py-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-balance">
-            Ready to Transform Your Hiring?
-          </h2>
-          <p className="text-lg text-primary-foreground/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Join hundreds of companies already recruiting elite student-athletes through Portal.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={handleRegister}
-              className="lp-btn lp-btn bg-white text-primary hover:bg-white/90"
+      {/* ===== 5. Talent Pool Preview (gray) ===== */}
+      <section className="lp-section-gray lp-section-padded">
+        <div className="lp-container">
+          <div className="lp-text-center lp-mb-16">
+            <div className="lp-badge-light">
+              <Users className="lp-badge-icon" />
+              Talent Pool
+            </div>
+            <h2 className="lp-heading-dark">Meet Your Next Hire</h2>
+            <p className="lp-body-muted">
+              Browse vetted student-athletes ready to make an impact at your organization.
+            </p>
+          </div>
+
+          {/* Mock search bar */}
+          <div
+            style={{
+              maxWidth: '36rem',
+              margin: '0 auto 3rem',
+              position: 'relative',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'white',
+                borderRadius: '9999px',
+                border: '1px solid rgba(10, 15, 46, 0.08)',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+                padding: '0.75rem 1.25rem',
+                gap: '0.75rem',
+              }}
             >
-              Start Recruiting Now
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </button>
-            <div className="text-lg text-primary bg-white px-6 py-3 rounded-lg border border-white/30">
-              Contact us:{' '}
-              <a href="mailto:info@portaljobs.net" className="font-semibold hover:underline">
-                info@portaljobs.net
-              </a>
+              <Search style={{ width: '1.25rem', height: '1.25rem', color: '#94a3b8' }} />
+              <span style={{ color: '#94a3b8', fontSize: '0.9375rem' }}>
+                Search by sport, major, school...
+              </span>
+            </div>
+          </div>
+
+          {/* Athlete cards grid */}
+          <div style={{ position: 'relative' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                gap: '1.5rem',
+              }}
+            >
+              {athletes.map((a, i) => (
+                <div
+                  key={i}
+                  className={`lp-athlete-card${i >= 3 ? ' lp-athlete-card-blurred' : ''}`}
+                >
+                  <div className="lp-athlete-card-bar" />
+                  <div style={{ padding: '1.5rem' }}>
+                    {/* Initials circle + name */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        marginBottom: '1rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '3rem',
+                          height: '3rem',
+                          borderRadius: '50%',
+                          backgroundColor: '#046ee5',
+                          color: 'white',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontWeight: 700,
+                          fontSize: '0.875rem',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {a.initials}
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#0a0f2e', fontSize: '1rem' }}>
+                          {a.name}
+                        </div>
+                        <div style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                          {a.sport} &middot; {a.position}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Info rows */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <GraduationCap
+                          style={{ width: '1rem', height: '1rem', color: '#94a3b8' }}
+                        />
+                        <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>{a.school}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <MapPin style={{ width: '1rem', height: '1rem', color: '#94a3b8' }} />
+                        <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                          {a.location}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <Star style={{ width: '1rem', height: '1rem', color: '#94a3b8' }} />
+                          <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                            GPA: {a.gpa}
+                          </span>
+                        </div>
+                        <span
+                          style={{
+                            fontSize: '0.6875rem',
+                            color: '#94a3b8',
+                            fontWeight: 500,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                          }}
+                        >
+                          NCAA Division I
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <BookOpen style={{ width: '1rem', height: '1rem', color: '#94a3b8' }} />
+                        <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>{a.major}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Calendar style={{ width: '1rem', height: '1rem', color: '#94a3b8' }} />
+                        <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                          {a.graduation}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* View Profile button */}
+                    <button
+                      style={{
+                        marginTop: '1.25rem',
+                        width: '100%',
+                        padding: '0.625rem',
+                        borderRadius: '0.5rem',
+                        border: '1px solid #046ee5',
+                        background: 'transparent',
+                        color: '#046ee5',
+                        fontWeight: 600,
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        fontFamily: 'inherit',
+                      }}
+                    >
+                      View Profile
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Lock overlay for bottom 3 blurred cards */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: '70%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                paddingBottom: '3rem',
+                background: 'linear-gradient(to top, #f8fafc 30%, transparent)',
+                pointerEvents: 'none',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  pointerEvents: 'auto',
+                }}
+              >
+                <div
+                  style={{
+                    width: '3.5rem',
+                    height: '3.5rem',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(4, 110, 229, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Lock style={{ width: '1.5rem', height: '1.5rem', color: '#046ee5' }} />
+                </div>
+                <p
+                  style={{
+                    color: '#64748b',
+                    fontSize: '1rem',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Request access to view all 200+ athlete profiles
+                </p>
+                <button onClick={handleRegister} className="lp-btn lp-btn-cta">
+                  Request Early Access
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="lp-footer py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-primary-foreground" />
+      {/* ===== 6. Employers CTA (dark) ===== */}
+      <section className="lp-gradient-mesh lp-section-padded">
+        <div className="lp-container lp-text-center">
+          <h2 className="lp-heading-white">Ready to Transform Your Hiring?</h2>
+          <p className="lp-body-white-muted" style={{ marginBottom: '2.5rem' }}>
+            Join hundreds of companies already recruiting elite student-athletes through Portal.
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '1rem',
+            }}
+          >
+            <button onClick={handleRegister} className="lp-btn lp-btn-cta">
+              Start Recruiting Now
+              <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
+            </button>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9375rem' }}>
+              Or email us at{' '}
+              <a
+                href="mailto:info@portaljobs.net"
+                style={{ color: 'white', fontWeight: 600, textDecoration: 'underline' }}
+              >
+                info@portaljobs.net
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Footer ===== */}
+      <footer className="lp-footer">
+        <div className="lp-container">
+          <div className="lp-footer-top">
+            <div className="lp-footer-brand">
+              <div className="lp-footer-logo">
+                <div className="lp-footer-logo-icon">
+                  <Zap className="lp-footer-zap" />
+                </div>
+                <span className="lp-footer-logo-text">Portal</span>
               </div>
-              <span className="text-xl font-bold">Portal</span>
-            </Link>
-            <div className="flex items-center gap-8 text-sm text-background/70">
-              <Link to="/athletes" className="hover:text-background transition-colors">
-                For Athletes
-              </Link>
-              <Link to="/universities" className="hover:text-background transition-colors">
-                For Universities
-              </Link>
-              <Link to="/employers" className="hover:text-background transition-colors">
-                For Employers
-              </Link>
+              <p className="lp-footer-tagline">
+                The career platform connecting NCAA student-athletes with jobs, internships, and NIL
+                opportunities.
+              </p>
             </div>
-            <p className="text-sm text-background/70">© 2026 Portal. All rights reserved.</p>
+            <div className="lp-footer-links-grid">
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Athletes</h4>
+                <Link to="/athletes" className="lp-footer-link">
+                  Overview
+                </Link>
+                <Link to="/athletes" className="lp-footer-link">
+                  Jobs & Internships
+                </Link>
+                <Link to="/athletes" className="lp-footer-link">
+                  NIL Opportunities
+                </Link>
+              </div>
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Universities</h4>
+                <Link to="/universities" className="lp-footer-link">
+                  Overview
+                </Link>
+                <Link to="/universities" className="lp-footer-link">
+                  Admin Dashboard
+                </Link>
+                <Link to="/universities" className="lp-footer-link">
+                  NIL Compliance
+                </Link>
+              </div>
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Employers</h4>
+                <Link to="/employers" className="lp-footer-link">
+                  Overview
+                </Link>
+                <Link to="/employers" className="lp-footer-link">
+                  Start Recruiting
+                </Link>
+                <Link to="/employers" className="lp-footer-link">
+                  ROI Advantage
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="lp-footer-bottom">
+            <div className="lp-footer-contact">
+              <Mail className="lp-footer-mail-icon" />
+              <a href="mailto:info@portaljobs.net" className="lp-footer-link">
+                info@portaljobs.net
+              </a>
+            </div>
+            <p className="lp-footer-copyright">&copy; 2026 Portal. All rights reserved.</p>
+            <div className="lp-footer-legal">
+              <a href="#" className="lp-footer-link">
+                Privacy Policy
+              </a>
+              <a href="#" className="lp-footer-link">
+                Terms of Service
+              </a>
+            </div>
           </div>
         </div>
       </footer>

@@ -2,155 +2,230 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import {
   GraduationCap,
-  Trophy,
-  LayoutDashboard,
   Shield,
   BarChart3,
   Users,
+  TrendingUp,
+  Bell,
+  Database,
   CheckCircle,
   ArrowRight,
   Zap,
-  FileCheck,
-  Bell,
-  Database,
-  PieChart,
   Settings,
+  AlertCircle,
+  Mail,
 } from 'lucide-react';
 import '../LandingPage.css';
 import { LandingNavbar } from '../LandingNavbar';
 
+const dashboardFeatures = [
+  {
+    title: 'Placement Tracking',
+    description:
+      'Monitor job and internship placements in real-time. See which athletes are employed, where, and track success metrics.',
+    icon: BarChart3,
+  },
+  {
+    title: 'NIL Compliance',
+    description:
+      'Ensure all NIL activities meet NCAA regulations. Review and approve deals before they go live.',
+    icon: Shield,
+  },
+  {
+    title: 'Employer Management',
+    description:
+      'Vet and approve companies recruiting your athletes. Build relationships with top employers.',
+    icon: Users,
+  },
+  {
+    title: 'Analytics Dashboard',
+    description:
+      'Comprehensive reporting on placement rates, salary data, industry trends, and athlete engagement.',
+    icon: TrendingUp,
+  },
+  {
+    title: 'Automated Alerts',
+    description:
+      'Get notified about pending approvals, compliance issues, and milestone achievements.',
+    icon: Bell,
+  },
+  {
+    title: 'Centralized Database',
+    description:
+      'All athlete profiles, employer contacts, and historical data in one searchable location.',
+    icon: Database,
+  },
+];
+
+const complianceChecklist = [
+  { label: 'NCAA Guidelines Review', status: 'complete' as const },
+  { label: 'State Regulation Check', status: 'complete' as const },
+  { label: 'Employer Verification', status: 'complete' as const },
+  { label: 'Contract Terms Approval', status: 'pending' as const },
+  { label: 'Final Compliance Sign-off', status: 'pending' as const },
+];
+
+const valueCards = [
+  {
+    title: 'Improve Placement Rates',
+    description:
+      'Give your athletes direct access to employers actively seeking their unique skills. Track and report improved outcomes.',
+    icon: Settings,
+  },
+  {
+    title: 'Reduce Administrative Burden',
+    description:
+      'Automate NIL approvals, employer vetting, and placement tracking. Free your staff to focus on strategy.',
+    icon: Settings,
+  },
+  {
+    title: 'Strengthen Your Recruiting Pitch',
+    description:
+      'Show prospective athletes that your program invests in their career success beyond graduation.',
+    icon: Settings,
+  },
+  {
+    title: 'Build Employer Relationships',
+    description:
+      'Create lasting partnerships with companies who want to recruit your athletes year after year.',
+    icon: Settings,
+  },
+];
+
 export const UniversitiesPage: FC = () => {
   return (
-    <div className="lp-root min-h-screen bg-background">
+    <div className="lp-root">
       {/* Navigation */}
       <LandingNavbar registerText="Partner With Us" role="school" />
 
-      {/* Hero Section */}
-      <section className="lp-hero relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-background to-background" />
-        <div className="absolute top-20 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <GraduationCap className="w-4 h-4" />
-              For Universities
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance">
-              Centralized Oversight for{' '}
-              <span className="text-primary">Student-Athlete Success</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto text-balance leading-relaxed">
-              Modernize your career services with a powerful admin dashboard. Track placements,
-              ensure NIL compliance, and give your athletes the tools they need to succeed.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="mailto:info@portaljobs.net"
-                className="lp-btn lp-btn-cta"
-                style={{ color: 'white' }}
-              >
-                Request a Demo
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
-              {/* <button className="lp-btn lp-btn-outline">View Case Studies</button> */}
-            </div>
+      {/* 1. Hero Section - Dark */}
+      <section className="lp-hero lp-gradient-mesh">
+        <div className="lp-hero-floats">
+          <div className="lp-hero-float lp-hero-float-1" />
+          <div className="lp-hero-float lp-hero-float-2" />
+          <div className="lp-hero-float lp-hero-float-3" />
+        </div>
+        <div className="lp-container lp-hero-content">
+          <div className="lp-hero-badge">
+            <GraduationCap className="lp-hero-badge-icon" />
+            For Universities
+          </div>
+          <h1 className="lp-hero-title">
+            Centralized Oversight for{' '}
+            <span className="lp-text-accent">Student-Athlete Success</span>
+          </h1>
+          <p className="lp-hero-subtitle">
+            Modernize your career services with a powerful admin dashboard. Track placements, ensure
+            NIL compliance, and give your athletes the tools they need to succeed.
+          </p>
+          <div className="lp-hero-actions">
+            <a
+              href="mailto:info@portaljobs.net"
+              className="lp-btn lp-btn-cta"
+              style={{ color: 'white' }}
+            >
+              Request a Demo
+              <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
+            </a>
           </div>
         </div>
+        <div className="lp-hero-fade" />
       </section>
 
-      {/* Admin Dashboard Features */}
-      <section className="lp-section py-20 md:py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <LayoutDashboard className="w-4 h-4" />
+      {/* 2. Dashboard Section - White */}
+      <section className="lp-section-white lp-section-padded">
+        <div className="lp-container">
+          <div className="lp-text-center lp-mb-16">
+            <div className="lp-badge-light">
+              <BarChart3 className="lp-badge-icon" />
               Admin Dashboard
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Complete Visibility and Control
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="lp-heading-dark">Complete Visibility and Control</h2>
+            <p className="lp-body-muted">
               One platform to manage all student-athlete career activities, NIL deals, and employer
               relationships.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Placement Tracking',
-                description:
-                  'Monitor job and internship placements in real-time. See which athletes are employed, where, and track success metrics.',
-                icon: BarChart3,
-              },
-              {
-                title: 'NIL Compliance',
-                description:
-                  'Ensure all NIL activities meet NCAA regulations. Review and approve deals before they go live.',
-                icon: Shield,
-              },
-              {
-                title: 'Employer Management',
-                description:
-                  'Vet and approve companies recruiting your athletes. Build relationships with top employers.',
-                icon: Users,
-              },
-              {
-                title: 'Analytics Dashboard',
-                description:
-                  'Comprehensive reporting on placement rates, salary data, industry trends, and athlete engagement.',
-                icon: PieChart,
-              },
-              {
-                title: 'Automated Alerts',
-                description:
-                  'Get notified about pending approvals, compliance issues, and milestone achievements.',
-                icon: Bell,
-              },
-              {
-                title: 'Centralized Database',
-                description:
-                  'All athlete profiles, employer contacts, and historical data in one searchable location.',
-                icon: Database,
-              },
-            ].map((feature, index) => (
-              <div key={index} className="lp-card lp-stat-card-large overflow-hidden">
-                <div className="h-1.5 bg-primary" />
-                <div className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <feature.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '1.5rem',
+            }}
+          >
+            {dashboardFeatures.map((feature, index) => (
+              <div key={index} className="lp-light-card">
+                <div
+                  style={{
+                    width: '3rem',
+                    height: '3rem',
+                    borderRadius: '0.75rem',
+                    backgroundColor: 'rgba(4, 110, 229, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  <feature.icon style={{ width: '1.5rem', height: '1.5rem', color: '#046ee5' }} />
                 </div>
+                <h3
+                  style={{
+                    fontSize: '1.125rem',
+                    fontWeight: 600,
+                    color: '#0a0f2e',
+                    marginBottom: '0.5rem',
+                  }}
+                >
+                  {feature.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '0.875rem',
+                    color: '#64748b',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* NIL Compliance Section */}
-      <section className="lp-section py-20 md:py-32 bg-secondary/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      {/* 3. Compliance Section - Gray */}
+      <section className="lp-section-gray lp-section-padded">
+        <div className="lp-container">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '4rem',
+              alignItems: 'center',
+            }}
+          >
+            {/* Left column */}
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-                <Shield className="w-4 h-4" />
+              <div className="lp-badge-light">
+                <Shield className="lp-badge-icon" />
                 NIL Compliance Made Simple
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 text-balance">
-                Stay Compliant, Stay Competitive
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              <h2 className="lp-heading-dark">Stay Compliant, Stay Competitive</h2>
+              <p
+                style={{
+                  fontSize: '1.125rem',
+                  color: '#64748b',
+                  lineHeight: 1.7,
+                  marginBottom: '2rem',
+                }}
+              >
                 Navigate the complex NIL landscape with confidence. Portal provides the tools you
                 need to support your athletes while maintaining full compliance.
               </p>
 
-              <div className="space-y-4">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {[
                   'Review and approve all NIL opportunities before athletes commit',
                   'Automated compliance checks against NCAA and state regulations',
@@ -158,40 +233,94 @@ export const UniversitiesPage: FC = () => {
                   'Real-time notifications for pending approvals',
                   'Generate compliance reports for athletic directors and administrators',
                 ].map((item, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <span className="text-foreground">{item}</span>
+                  <div
+                    key={index}
+                    style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}
+                  >
+                    <CheckCircle
+                      style={{
+                        width: '1.25rem',
+                        height: '1.25rem',
+                        color: '#046ee5',
+                        marginTop: '0.125rem',
+                        flexShrink: 0,
+                      }}
+                    />
+                    <span style={{ color: '#0a0f2e' }}>{item}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="lp-card lp-stat-card-large overflow-hidden">
-              <div className="h-2 bg-primary" />
-              <div className="p-8">
-                <h3 className="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-                  <FileCheck className="w-5 h-5 text-primary" />
-                  NIL Compliance Checklist
-                </h3>
-                <div className="space-y-4">
-                  {[
-                    { label: 'Athlete eligibility verified', status: 'complete' },
-                    { label: 'Deal terms reviewed', status: 'complete' },
-                    { label: 'NCAA guidelines check', status: 'complete' },
-                    { label: 'State regulation compliance', status: 'complete' },
-                    { label: 'University policy alignment', status: 'pending' },
-                  ].map((item, index) => (
+            {/* Right column - Compliance checklist card */}
+            <div className="lp-light-card" style={{ padding: 0, overflow: 'hidden' }}>
+              {/* Card header */}
+              <div
+                style={{
+                  padding: '1.5rem',
+                  borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    marginBottom: '0.25rem',
+                  }}
+                >
+                  <Shield style={{ width: '1.25rem', height: '1.25rem', color: '#046ee5' }} />
+                  <h3
+                    style={{
+                      fontSize: '1.125rem',
+                      fontWeight: 600,
+                      color: '#0a0f2e',
+                      margin: 0,
+                    }}
+                  >
+                    NIL Compliance Checklist
+                  </h3>
+                </div>
+                <p
+                  style={{
+                    fontSize: '0.875rem',
+                    color: '#64748b',
+                    margin: 0,
+                    paddingLeft: '2rem',
+                  }}
+                >
+                  Marketing Intern + NIL Deal
+                </p>
+              </div>
+
+              {/* Checklist items */}
+              <div style={{ padding: '1rem 1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {complianceChecklist.map((item, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.75rem 1rem',
+                        backgroundColor: '#f8fafc',
+                        borderRadius: '0.5rem',
+                      }}
                     >
-                      <span className="text-foreground">{item.label}</span>
+                      <span style={{ color: '#0a0f2e', fontSize: '0.9375rem' }}>{item.label}</span>
                       <span
-                        className={`text-xs font-medium px-2 py-1 rounded-full ${
-                          item.status === 'complete'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-yellow-100 text-yellow-700'
-                        }`}
+                        style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: '9999px',
+                          backgroundColor:
+                            item.status === 'complete'
+                              ? 'rgba(34, 197, 94, 0.1)'
+                              : 'rgba(245, 158, 11, 0.1)',
+                          color: item.status === 'complete' ? '#16a34a' : '#d97706',
+                        }}
                       >
                         {item.status === 'complete' ? 'Complete' : 'Pending'}
                       </span>
@@ -199,103 +328,180 @@ export const UniversitiesPage: FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Bottom info bar */}
+              <div
+                style={{
+                  padding: '1rem 1.5rem',
+                  backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                  borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                }}
+              >
+                <AlertCircle
+                  style={{ width: '1rem', height: '1rem', color: '#d97706', flexShrink: 0 }}
+                />
+                <span style={{ fontSize: '0.875rem', color: '#d97706' }}>
+                  2 items require your review
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Benefits */}
-      <section className="lp-section py-20 md:py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <Zap className="w-4 h-4" />
+      {/* 4. Value Section - White */}
+      <section className="lp-section-white lp-section-padded">
+        <div className="lp-container">
+          <div className="lp-text-center lp-mb-16">
+            <div className="lp-badge-light">
+              <Zap className="lp-badge-icon" />
               Why Partner With Portal
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Benefits for Your Institution
-            </h2>
+            <h2 className="lp-heading-dark">Benefits for Your Institution</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                title: 'Improve Placement Rates',
-                description:
-                  'Give your athletes direct access to employers actively seeking their unique skills. Track and report improved outcomes.',
-              },
-              {
-                title: 'Reduce Administrative Burden',
-                description:
-                  'Automate NIL approvals, employer vetting, and placement tracking. Free your staff to focus on strategy.',
-              },
-              {
-                title: 'Enhance Recruiting Pitch',
-                description:
-                  'Show prospective athletes that your program invests in their career success beyond graduation.',
-              },
-              {
-                title: 'Build Employer Relationships',
-                description:
-                  'Create lasting partnerships with companies who want to recruit your athletes year after year.',
-              },
-            ].map((benefit, index) => (
-              <div key={index} className="lp-card lp-trait-card">
-                <div className="lp-trait-icon">
-                  <Settings className="w-6 h-6 text-primary-foreground" />
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '1.5rem',
+              maxWidth: '56rem',
+              margin: '0 auto',
+            }}
+          >
+            {valueCards.map((card, index) => (
+              <div key={index} className="lp-light-card">
+                <div
+                  style={{
+                    width: '3rem',
+                    height: '3rem',
+                    borderRadius: '0.75rem',
+                    backgroundColor: 'rgba(4, 110, 229, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  <card.icon style={{ width: '1.5rem', height: '1.5rem', color: '#046ee5' }} />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">{benefit.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
+                <h3
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: 600,
+                    color: '#0a0f2e',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  style={{
+                    color: '#64748b',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {card.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="lp-section lp-advantage-section py-20 md:py-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-balance">
-            Ready to Modernize Your Career Services?
-          </h2>
-          <p className="text-lg text-primary-foreground/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+      {/* 5. CTA Section - Dark */}
+      <section className="lp-gradient-mesh lp-section-padded">
+        <div className="lp-container lp-text-center">
+          <h2 className="lp-heading-white">Ready to Upgrade Your Career Services?</h2>
+          <p className="lp-body-white-muted" style={{ marginBottom: '2.5rem' }}>
             Join leading universities using Portal to support their student-athletes and maintain
             compliance.
           </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <div className="text-lg text-primary bg-white px-6 py-3 rounded-lg border border-white/30">
-              Schedule a Demo:{' '}
-              <a href="mailto:info@portaljobs.net" className="font-semibold hover:underline">
-                info@portaljobs.net
-              </a>
-            </div>
-          </div>
+          <a
+            href="mailto:info@portaljobs.net"
+            className="lp-btn lp-btn-cta"
+            style={{ color: 'white' }}
+          >
+            Request a Demo
+            <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
+          </a>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="lp-footer py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-primary-foreground" />
+      {/* Footer - Dark */}
+      <footer className="lp-footer">
+        <div className="lp-container">
+          <div className="lp-footer-top">
+            <div className="lp-footer-brand">
+              <div className="lp-footer-logo">
+                <div className="lp-footer-logo-icon">
+                  <Zap className="lp-footer-zap" />
+                </div>
+                <span className="lp-footer-logo-text">Portal</span>
               </div>
-              <span className="text-xl font-bold">Portal</span>
-            </Link>
-            <div className="flex items-center gap-8 text-sm text-background/70">
-              <Link to="/athletes" className="hover:text-background transition-colors">
-                For Athletes
-              </Link>
-              <Link to="/universities" className="hover:text-background transition-colors">
-                For Universities
-              </Link>
-              <Link to="/employers" className="hover:text-background transition-colors">
-                For Employers
-              </Link>
+              <p className="lp-footer-tagline">
+                The career platform connecting NCAA student-athletes with jobs, internships, and NIL
+                opportunities.
+              </p>
             </div>
-            <p className="text-sm text-background/70">© 2026 Portal. All rights reserved.</p>
+            <div className="lp-footer-links-grid">
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Athletes</h4>
+                <Link to="/athletes" className="lp-footer-link">
+                  Overview
+                </Link>
+                <Link to="/athletes" className="lp-footer-link">
+                  Jobs & Internships
+                </Link>
+                <Link to="/athletes" className="lp-footer-link">
+                  NIL Opportunities
+                </Link>
+              </div>
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Universities</h4>
+                <Link to="/universities" className="lp-footer-link">
+                  Overview
+                </Link>
+                <Link to="/universities" className="lp-footer-link">
+                  Admin Dashboard
+                </Link>
+                <Link to="/universities" className="lp-footer-link">
+                  NIL Compliance
+                </Link>
+              </div>
+              <div className="lp-footer-col">
+                <h4 className="lp-footer-col-title">For Employers</h4>
+                <Link to="/employers" className="lp-footer-link">
+                  Overview
+                </Link>
+                <Link to="/employers" className="lp-footer-link">
+                  Start Recruiting
+                </Link>
+                <Link to="/employers" className="lp-footer-link">
+                  ROI Advantage
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="lp-footer-bottom">
+            <div className="lp-footer-contact">
+              <Mail className="lp-footer-mail-icon" />
+              <a href="mailto:info@portaljobs.net" className="lp-footer-link">
+                info@portaljobs.net
+              </a>
+            </div>
+            <p className="lp-footer-copyright">&copy; 2026 Portal</p>
+            <div className="lp-footer-legal">
+              <a href="#" className="lp-footer-link">
+                Privacy Policy
+              </a>
+              <a href="#" className="lp-footer-link">
+                Terms of Service
+              </a>
+            </div>
           </div>
         </div>
       </footer>

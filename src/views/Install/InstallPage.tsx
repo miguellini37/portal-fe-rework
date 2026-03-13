@@ -22,7 +22,10 @@ export const InstallPage = () => {
         <div style={styles.card}>
           <div style={styles.logo}>Portal</div>
           <p style={styles.subtitle}>Internal testing access</p>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' as const, gap: 12 }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: 'flex', flexDirection: 'column' as const, gap: 12 }}
+          >
             <input
               type="password"
               placeholder="Access code"
@@ -51,15 +54,15 @@ export const InstallPage = () => {
               Install App
             </a>
             <p style={styles.hint}>
-              After installing, go to<br />
-              <strong>Settings → General → VPN & Device Management</strong><br />
+              After installing, go to
+              <br />
+              <strong>Settings → General → VPN & Device Management</strong>
+              <br />
               and trust the developer certificate.
             </p>
           </>
         ) : (
-          <p style={styles.hint}>
-            Open this page on your iPhone to install.
-          </p>
+          <p style={styles.hint}>Open this page on your iPhone to install.</p>
         )}
       </div>
     </div>

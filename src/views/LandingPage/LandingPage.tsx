@@ -227,9 +227,7 @@ export const LandingPage: FC = () => {
       <section className="lp-gradient-mesh lp-section-padded">
         <div className="lp-container">
           <div className="lp-text-center lp-mb-16">
-            <h2 className="lp-heading-white">
-              Find Strong Candidates Before Your Competitors Do
-            </h2>
+            <h2 className="lp-heading-white">Find Strong Candidates Before Your Competitors Do</h2>
             <p className="lp-body-white-muted">
               Portal gives your hiring team early access to qualified student-athletes before they
               hit the open market.
@@ -277,10 +275,7 @@ export const LandingPage: FC = () => {
                 University
               </button>
             </div>
-            <button
-              onClick={() => register(activeTab)}
-              className="lp-btn lp-btn-cta lp-cta-submit"
-            >
+            <button onClick={() => register(activeTab)} className="lp-btn lp-btn-cta lp-cta-submit">
               Join the Waitlist — Free
             </button>
             <p className="lp-cta-legal-light">
