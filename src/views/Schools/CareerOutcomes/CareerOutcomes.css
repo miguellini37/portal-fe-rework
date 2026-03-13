@@ -1,0 +1,364 @@
+.career-outcomes {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.career-outcomes-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.career-outcomes-header {
+  margin-bottom: 2rem;
+}
+
+.career-outcomes-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.career-outcomes-subtitle {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* ── Metric Cards ─────────────────────────────────────────────────────────── */
+
+.co-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.co-metric-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.co-metric-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.co-metric-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  margin-bottom: 0.5rem;
+}
+
+.co-metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+}
+
+.co-metric-comparison {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.co-metric-comparison.up {
+  color: #10b981;
+}
+
+.co-metric-comparison.down {
+  color: #ef4444;
+}
+
+.co-metric-comparison .arrow {
+  font-size: 0.75rem;
+}
+
+/* ── Middle Section (two-column) ──────────────────────────────────────────── */
+
+.co-middle-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .co-middle-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.co-panel {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.co-panel-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+/* Placement by Sport table */
+
+.co-sport-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.co-sport-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.co-sport-table td {
+  font-size: 0.875rem;
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.co-sport-table tr:last-child td {
+  border-bottom: none;
+}
+
+.co-percentage-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: var(--muted);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.co-percentage-bar-fill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.co-percentage-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.co-percentage-label {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* Salary Distribution */
+
+.co-salary-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.co-salary-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.co-salary-label {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  min-width: 100px;
+  text-align: right;
+}
+
+.co-salary-bar-bg {
+  flex: 1;
+  height: 24px;
+  background-color: var(--muted);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.co-salary-bar-fill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+}
+
+.co-salary-bar-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary-foreground);
+}
+
+/* ── Filter Bar ───────────────────────────────────────────────────────────── */
+
+.co-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.co-filter-select {
+  padding: 8px 12px;
+  border: 1px solid var(--input);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: var(--muted);
+  color: var(--foreground);
+  cursor: pointer;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.co-filter-select:focus {
+  border: 1.5px solid var(--primary);
+  background: var(--background);
+}
+
+.co-filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.co-filter-toggle input[type='checkbox'] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ── Student Outcomes Table ───────────────────────────────────────────────── */
+
+.co-outcomes-section {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.co-outcomes-table-wrapper {
+  overflow-x: auto;
+}
+
+.co-outcomes-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.co-outcomes-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.co-outcomes-table td {
+  font-size: 0.875rem;
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.co-outcomes-table tr:last-child td {
+  border-bottom: none;
+}
+
+.co-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.co-badge.green {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.co-badge.red {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+/* ── Loading / Empty ──────────────────────────────────────────────────────── */
+
+.co-loading {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted-foreground);
+}
+
+.co-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .career-outcomes {
+    padding: 1rem;
+  }
+
+  .co-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .career-outcomes-title {
+    font-size: 1.5rem;
+  }
+
+  .co-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .co-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

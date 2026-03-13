@@ -19,6 +19,8 @@ import {
   Star,
   Shield,
   BarChart3,
+  TrendingUp,
+  Handshake,
 } from 'lucide-react';
 import { useState } from 'react';
 import { ActivityBell } from '../../views/Activity/ActivityBell';
@@ -197,6 +199,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <li className="mb-4">
                     <DisabledNavLink to="/current-students" title="Current Students">
                       <GraduationCap /> {!isCollapsed && <span>Current Students</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/school/career-outcomes" title="Career Outcomes">
+                      <TrendingUp /> {!isCollapsed && <span>Career Outcomes</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/school/companies" title="Partner Companies">
+                      <Handshake /> {!isCollapsed && <span>Partner Companies</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/school/nil-oversight" title="NIL Oversight">
+                      <Star /> {!isCollapsed && <span>NIL Oversight</span>}
                     </DisabledNavLink>
                   </li>
                   <li className="mb-4">

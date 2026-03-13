@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { TrendingUp, TrendingDown, Shield, Users, GraduationCap, Plus, Clock } from 'lucide-react';
-import {
-  getSchoolDashboardMetrics,
-  getSchoolActivity,
-  SchoolDashboardMetrics,
-  SchoolActivity,
-} from '../../api/school';
+import { TrendingUp, TrendingDown, Users, GraduationCap, Building2, Clock } from 'lucide-react';
+import { getUniversityOverview, UniversityOverview } from '../../api/school';
 import './SchoolDashboard.css';
-import { useAuthHeader, useAuthUser } from '../../auth/hooks';
+import { useAuthHeader } from '../../auth/hooks';
 
 interface MetricCardProps {
   title: string;
@@ -18,19 +13,6 @@ interface MetricCardProps {
   icon: React.ReactNode;
 }
 
-interface ActivityItem {
-  id: string;
-  title: string;
-  timestamp: string;
-  type: 'approved' | 'info' | 'compliance' | 'partnership';
-}
-
-interface QuickActionProps {
-  title: string;
-  icon: React.ReactNode;
-  onClick: () => void;
-}
-
 const MetricCard: React.FC<MetricCardProps> = ({
   title,
   value,
@@ -38,190 +20,69 @@ const MetricCard: React.FC<MetricCardProps> = ({
   changeDirection,
   description,
   icon,
-}) => {
-  return (
-    <div className="metric-card">
-      <div className="metric-header">
-        <div className="metric-icon">{icon}</div>
-        <div className="metric-title">{title}</div>
-      </div>
-      <div className="metric-value">{value}</div>
-      <div className="metric-change">
-        {changeDirection === 'up' ? (
-          <TrendingUp className="change-icon up" />
-        ) : (
-          <TrendingDown className="change-icon down" />
-        )}
-        <span className={`change-text ${changeDirection}`}>{change} from last month</span>
-      </div>
-      <div className="metric-description">{description}</div>
+}) => (
+  <div className="metric-card">
+    <div className="metric-header">
+      <div className="metric-icon">{icon}</div>
+      <div className="metric-title">{title}</div>
     </div>
-  );
-};
+    <div className="metric-value">{value}</div>
+    <div className="metric-change">
+      {changeDirection === 'up' ? (
+        <TrendingUp className="change-icon up" />
+      ) : (
+        <TrendingDown className="change-icon down" />
+      )}
+      <span className={`change-text ${changeDirection}`}>{change} from last month</span>
+    </div>
+    <div className="metric-description">{description}</div>
+  </div>
+);
 
-const ActivityItem: React.FC<{ item: ActivityItem }> = ({ item }) => {
-  const getActivityColor = (type: ActivityItem['type']) => {
-    switch (type) {
-      case 'approved':
-        return 'green';
-      case 'info':
-        return 'blue';
-      case 'compliance':
-        return 'yellow';
-      case 'partnership':
-        return 'green';
-      default:
-        return 'gray';
-    }
-  };
+const ActivityItem: React.FC<{ item: UniversityOverview['recentActivity'][0] }> = ({ item }) => {
+  const dotColor =
+    item.type === 'approved' || item.type === 'partnership'
+      ? 'green'
+      : item.type === 'compliance'
+        ? 'yellow'
+        : 'blue';
 
   return (
     <div className="activity-item">
-      <div className={`activity-dot ${getActivityColor(item.type)}`}></div>
+      <div className={`activity-dot ${dotColor}`}></div>
       <div className="activity-content">
-        <div className="activity-title">{item.title}</div>
+        <div className="activity-title">{item.message}</div>
         <div className="activity-timestamp">
           <Clock className="timestamp-icon" />
-          {item.timestamp}
+          {item.studentName ? `${item.studentName} · ` : ''}
+          {new Date(item.date).toLocaleDateString()}
         </div>
       </div>
     </div>
   );
 };
 
-const QuickAction: React.FC<QuickActionProps> = ({ title, icon, onClick }) => {
-  return (
-    <button className="quick-action" onClick={onClick}>
-      <div className="quick-action-icon">{icon}</div>
-      <div className="quick-action-title">{title}</div>
-    </button>
-  );
-};
+function calcChange(current: number, previous: number): { text: string; direction: 'up' | 'down' } {
+  if (previous === 0) return { text: '+0%', direction: 'up' };
+  const pct = Math.round(((current - previous) / previous) * 100);
+  return { text: `${pct >= 0 ? '+' : ''}${pct}%`, direction: pct >= 0 ? 'up' : 'down' };
+}
 
 export const SchoolDashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState<SchoolDashboardMetrics>({});
-  const [activity, setActivity] = useState<SchoolActivity[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<UniversityOverview | null>(null);
+  const [loading, setLoading] = useState(true);
   const authHeader = useAuthHeader();
-  const user = useAuthUser();
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        const schoolId = user?.schoolId;
+    if (!authHeader) return;
+    setLoading(true);
+    getUniversityOverview(authHeader)
+      .then(setData)
+      .catch(() => console.error('Failed to load dashboard'))
+      .finally(() => setLoading(false));
+  }, [authHeader]);
 
-        if (schoolId) {
-          const [metricsData, activityData] = await Promise.all([
-            getSchoolDashboardMetrics(schoolId, authHeader),
-            getSchoolActivity(schoolId, authHeader),
-          ]);
-
-          setMetrics(metricsData);
-          setActivity(activityData);
-        }
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, []);
-
-  // Build metrics array from API data
-  const displayMetrics = [
-    {
-      title: 'Placed Graduates',
-      value: metrics.placedGraduates?.toString() || '0',
-      change: metrics.placedGraduatesChange
-        ? `${metrics.placedGraduatesChange > 0 ? '+' : ''}${metrics.placedGraduatesChange}%`
-        : '0%',
-      changeDirection:
-        (metrics.placedGraduatesChange || 0) >= 0 ? ('up' as const) : ('down' as const),
-      description: 'Student-athletes placed in careers',
-      icon: <GraduationCap className="w-6 h-6" />,
-    },
-    {
-      title: 'NIL Compliance Rate',
-      value: metrics.nilComplianceRate ? `${metrics.nilComplianceRate}%` : '0%',
-      change: metrics.nilComplianceRateChange
-        ? `${metrics.nilComplianceRateChange > 0 ? '+' : ''}${metrics.nilComplianceRateChange}%`
-        : '0%',
-      changeDirection:
-        (metrics.nilComplianceRateChange || 0) >= 0 ? ('up' as const) : ('down' as const),
-      description: 'Compliance with NIL regulations',
-      icon: <Shield className="w-6 h-6" />,
-    },
-    {
-      title: 'Active Sponsors',
-      value: metrics.activeSponsors?.toString() || '0',
-      change: metrics.activeSponsorsChange
-        ? `${metrics.activeSponsorsChange > 0 ? '+' : ''}${metrics.activeSponsorsChange}`
-        : '0',
-      changeDirection:
-        (metrics.activeSponsorsChange || 0) >= 0 ? ('up' as const) : ('down' as const),
-      description: 'Current sponsorship partnerships',
-      icon: <Users className="w-6 h-6" />,
-    },
-    {
-      title: 'Community Members',
-      value: metrics.communityMembers?.toLocaleString() || '0',
-      change: metrics.communityMembersChange
-        ? `${metrics.communityMembersChange > 0 ? '+' : ''}${metrics.communityMembersChange}`
-        : '0',
-      changeDirection:
-        (metrics.communityMembersChange || 0) >= 0 ? ('up' as const) : ('down' as const),
-      description: 'Active alumni and students',
-      icon: <Users className="w-6 h-6" />,
-    },
-  ];
-
-  // Map activity data from API
-  const recentActivity: ActivityItem[] = activity.map((item) => ({
-    id: item.id || '',
-    title: item.title || 'Activity',
-    timestamp: item.timestamp || '-',
-    type: (item.type || 'info') as ActivityItem['type'],
-  }));
-
-  const quickActions = [
-    {
-      title: 'Add New Student',
-      icon: <Plus className="w-5 h-5" />,
-      onClick: () => {
-        // Mock action - opens student profile creation form
-        console.log('Opening student profile creation form...');
-      },
-    },
-    // {
-    //   title: 'Review NIL Deal',
-    //   icon: <Search className="w-5 h-5" />,
-    //   onClick: () => {
-    //     // Mock action - opens NIL Oversight module
-    //     console.log('Opening NIL Oversight module...');
-    //   },
-    // },
-    // {
-    //   title: 'Generate Report',
-    //   icon: <FileText className="w-5 h-5" />,
-    //   onClick: () => {
-    //     // Mock action - launches reporting tool
-    //     console.log('Launching reporting tool...');
-    //   },
-    // },
-    // {
-    //   title: 'Schedule Meeting',
-    //   icon: <Calendar className="w-5 h-5" />,
-    //   onClick: () => {
-    //     // Mock action - opens calendar integration
-    //     console.log('Opening calendar integration...');
-    //   },
-    // },
-  ];
-
-  if (loading) {
+  if (loading || !data) {
     return (
       <div className="school-dashboard">
         <div className="dashboard-container">
@@ -234,6 +95,36 @@ export const SchoolDashboard: React.FC = () => {
     );
   }
 
+  const gradsChange = calcChange(data.placedGraduates.currentMonth, data.placedGraduates.previousMonth);
+  const sponsorsChange = calcChange(data.activeSponsors.currentMonth, data.activeSponsors.previousMonth);
+
+  const displayMetrics = [
+    {
+      title: 'Placed Graduates',
+      value: data.placedGraduates.currentMonth.toString(),
+      change: gradsChange.text,
+      changeDirection: gradsChange.direction,
+      description: 'Student-athletes placed in careers this month',
+      icon: <GraduationCap className="w-6 h-6" />,
+    },
+    {
+      title: 'Active Sponsors',
+      value: data.activeSponsors.currentMonth.toString(),
+      change: sponsorsChange.text,
+      changeDirection: sponsorsChange.direction,
+      description: 'Current sponsorship partnerships',
+      icon: <Building2 className="w-6 h-6" />,
+    },
+    {
+      title: 'Total Students',
+      value: data.communityNumbers.totalStudents.toLocaleString(),
+      change: '-',
+      changeDirection: 'up' as const,
+      description: 'Active student-athletes',
+      icon: <Users className="w-6 h-6" />,
+    },
+  ];
+
   return (
     <div className="school-dashboard">
       <div className="dashboard-container">
@@ -244,7 +135,6 @@ export const SchoolDashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Overview Metrics */}
         <div className="overview-section">
           <div className="metrics-grid">
             {displayMetrics.map((metric, index) => (
@@ -254,27 +144,18 @@ export const SchoolDashboard: React.FC = () => {
         </div>
 
         <div className="dashboard-content">
-          {/* Recent Activity */}
           <div className="activity-section">
             <h2 className="section-title">Recent Activity</h2>
             <div className="activity-list">
-              {recentActivity.length > 0 ? (
-                recentActivity.map((item) => <ActivityItem key={item.id} item={item} />)
+              {data.recentActivity.length > 0 ? (
+                data.recentActivity.map((item) => (
+                  <ActivityItem key={item.activityId} item={item} />
+                ))
               ) : (
                 <p style={{ padding: '20px', color: 'var(--muted-foreground)' }}>
                   No recent activity
                 </p>
               )}
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="actions-section">
-            <h2 className="section-title">Quick Actions</h2>
-            <div className="quick-actions-grid">
-              {quickActions.map((action, index) => (
-                <QuickAction key={index} {...action} />
-              ))}
             </div>
           </div>
         </div>

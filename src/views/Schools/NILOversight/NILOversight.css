@@ -1,0 +1,221 @@
+.nil-oversight {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.nil-oversight-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nil-oversight-header {
+  margin-bottom: 2rem;
+}
+
+.nil-oversight-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.nil-oversight-subtitle {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* Metrics */
+.nil-metrics-section {
+  margin-bottom: 2rem;
+}
+
+.nil-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.nil-metric-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.nil-metric-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nil-metric-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.nil-metric-icon {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nil-metric-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.nil-metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.nil-metric-change {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.nil-change-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.nil-change-icon.up {
+  color: #10b981;
+}
+
+.nil-change-icon.down {
+  color: #ef4444;
+}
+
+.nil-change-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.nil-change-text.up {
+  color: #10b981;
+}
+
+.nil-change-text.down {
+  color: #ef4444;
+}
+
+/* Deals Table */
+.nil-deals-section {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.nil-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.nil-deals-table-wrapper {
+  overflow-x: auto;
+}
+
+.nil-deals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.nil-deals-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+.nil-deals-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.nil-deals-table tbody tr:hover {
+  background-color: var(--muted);
+}
+
+/* Status Badges */
+.nil-status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.nil-status-badge.accepted {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.nil-status-badge.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.nil-status-badge.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.nil-empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted-foreground);
+  font-size: 1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .nil-oversight {
+    padding: 1rem;
+  }
+
+  .nil-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .nil-oversight-title {
+    font-size: 1.5rem;
+  }
+
+  .nil-deals-table {
+    font-size: 0.8rem;
+  }
+
+  .nil-deals-table th,
+  .nil-deals-table td {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nil-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

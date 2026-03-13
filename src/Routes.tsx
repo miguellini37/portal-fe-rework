@@ -33,6 +33,9 @@ import { Messages } from './views/Messages';
 import { Conversation } from './views/Messages/Conversation';
 import { NewConversation } from './views/Messages/NewConversation';
 import { InstallPage } from './views/Install/InstallPage';
+import { CareerOutcomes } from './views/Schools/CareerOutcomes';
+import { UniversityCompanies } from './views/Schools/UniversityCompanies';
+import { NILOversight } from './views/Schools/NILOversight';
 
 type PageRoute = {
   path: string;
@@ -72,6 +75,9 @@ export const AppRoutes = () => {
     // School Pages
     { path: '/staff-directory', element: <StaffDirectory />, withSidebar: true },
     { path: '/current-students', element: <CurrentStudents />, withSidebar: true },
+    { path: '/school/career-outcomes', element: <CareerOutcomes />, withSidebar: true },
+    { path: '/school/companies', element: <UniversityCompanies />, withSidebar: true },
+    { path: '/school/nil-oversight', element: <NILOversight />, withSidebar: true },
 
     // Admin Pages
     { path: '/admin/users', element: <AdminUsers />, withSidebar: true },
