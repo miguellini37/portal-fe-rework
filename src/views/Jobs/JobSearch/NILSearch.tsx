@@ -40,8 +40,10 @@ export const NILSearch = ({
   };
 
   useEffect(() => {
-    fetchNILOpportunities();
-  }, []);
+    if (authHeader) {
+      fetchNILOpportunities();
+    }
+  }, [authHeader]);
 
   const handleViewNIL = (nil: IJobPayload) => {
     setSelectedNIL(nil);

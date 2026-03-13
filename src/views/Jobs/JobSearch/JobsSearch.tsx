@@ -41,8 +41,10 @@ export const JobSearch = ({
   };
 
   useEffect(() => {
-    fetchJobs();
-  }, []);
+    if (authHeader) {
+      fetchJobs();
+    }
+  }, [authHeader, additionalFilters]);
 
   const handleViewJob = (job: IJobPayload) => {
     setSelectedJob(job);
