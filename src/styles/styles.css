@@ -1,24 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 :root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(222.2 84% 4.9%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222.2 84% 4.9%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222.2 84% 4.9%);
-  --primary: hsl(221.2 83.2% 53.3%);
-  --primary-foreground: hsl(210 40% 98%);
-  --secondary: hsl(210 40% 96%);
-  --secondary-foreground: hsl(222.2 84% 4.9%);
-  --muted: hsl(210 40% 96%);
-  --muted-foreground: hsl(215.4 16.3% 46.9%);
-  --accent: hsl(210 40% 96%);
-  --accent-foreground: hsl(222.2 84% 4.9%);
+  --background: #f8fafc;
+  --foreground: #0a0f2e;
+  --card: #ffffff;
+  --card-foreground: #0a0f2e;
+  --popover: #ffffff;
+  --popover-foreground: #0a0f2e;
+  --primary: #046ee5;
+  --primary-foreground: #ffffff;
+  --secondary: #eef2f7;
+  --secondary-foreground: #0a0f2e;
+  --muted: #eef2f7;
+  --muted-foreground: #64748b;
+  --accent: #eef2f7;
+  --accent-foreground: #0a0f2e;
   --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(214.3 31.8% 91.4%);
-  --input: hsl(214.3 31.8% 91.4%);
-  --ring: hsl(221.2 83.2% 53.3%);
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #046ee5;
   --radius: 0.75rem;
+  --navy: #0a0f2e;
+  --navy-light: #111640;
+  --blue: #046ee5;
+  --blue-hover: #0358b8;
 }
 
 /* --- Shared Button Styles --- */
@@ -44,7 +50,7 @@
   box-shadow: 0 1px 2px rgba(59,130,246,0.08);
 }
 .btn-primary:hover:not(:disabled) {
-  background-color: hsl(221, 83%, 43%);
+  background-color: var(--blue-hover);
 }
 
 .btn-secondary {
@@ -86,7 +92,7 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: sans-serif;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
@@ -100,7 +106,7 @@ a:not(button a, .btn a, button > a, .btn > a) {
 }
 
 a:not(button a, .btn a, button > a, .btn > a):hover {
-  color: hsl(221, 83%, 43%);
+  color: var(--blue-hover);
   text-decoration: underline;
 }
 

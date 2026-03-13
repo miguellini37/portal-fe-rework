@@ -9,14 +9,14 @@
 
 /* Sidebar panel */
 .sidebar {
-  background-color: #ffffff;
+  background-color: var(--card);
   width: 210px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid #e5e7eb;
-  font-family: 'Inter', sans-serif;
+  border-right: 1px solid var(--border);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   position: fixed;
   height: 100vh;
   transition: width 0.3s ease;
@@ -46,14 +46,14 @@
   margin-bottom: 1rem;
   width: 100%;
   padding: 0.1rem .15rem 0.5rem 0.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border);
   background-color: none;
 }
 
 .sidebar h1 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1d4ed8;
+  color: var(--blue);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -91,8 +91,8 @@ button .collapse-button {
 }
 
 .collapse-button:hover {
-  background-color: #f3f4f6;
-  color: #1d4ed8;
+  background-color: var(--secondary);
+  color: var(--blue);
 }
 
 /* Collapse button for collapsed state */
@@ -109,8 +109,8 @@ button .collapse-button {
 }
 
 .collapse-button-collapsed:hover {
-  background-color: #f3f4f6;
-  color: #1d4ed8;
+  background-color: var(--secondary);
+  color: var(--blue);
 }
 
 /* Portal icon */
@@ -138,7 +138,7 @@ button .collapse-button {
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  color: #1f2937;
+  color: var(--foreground);
   padding: 10px 14px;
   border-radius: 10px;
   transition: background-color 0.2s, color 0.2s;
@@ -165,14 +165,14 @@ button .collapse-button {
 
 .sidebar a:hover,
 .sidebar button:hover {
-  background-color: #f0f4ff;
-  color: #1d4ed8;
+  background-color: var(--secondary);
+  color: var(--blue);
 }
 
 .sidebar a.active {
-  background-color: #e0e7ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
+  background-color: #dbeafe;
+  color: var(--blue);
+  border: 1px solid #93c5fd;
 }
 
 /* Color utility classes */
