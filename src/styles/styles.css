@@ -358,3 +358,208 @@ a:not(button a, .btn a, button > a, .btn > a):hover {
   border-bottom-right-radius: 0.375rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+/* ── Global dark mode overrides ─────────────────────────────────────────── */
+
+/* Inputs, selects, textareas */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--muted-foreground) !important;
+}
+
+/* Catch-all for white/light backgrounds on cards, containers, modals */
+.dark .metric-card,
+.dark .activity-section,
+.dark .activity-item,
+.dark .conversation-item,
+.dark .conversation-container,
+.dark .messages-container,
+.dark .message-input-form,
+.dark .new-conversation-container,
+.dark .profile-card,
+.dark .profile-section,
+.dark .section-card,
+.dark .card-container,
+.dark .modal-content,
+.dark .job-card,
+.dark .company-card,
+.dark .search-container,
+.dark .filter-container,
+.dark .table-container,
+.dark .env-tile,
+.dark .stat-card,
+.dark .overview-card,
+.dark .ep-section,
+.dark .ep-notice,
+.dark .ep-how-it-works,
+.dark .personal-info,
+.dark .completion-card,
+.dark .skills-card,
+.dark .academic-tab-container,
+.dark .athletics-tab-container,
+.dark .activity-page,
+.dark .activity-modal,
+.dark .card,
+.dark .comp-box,
+.dark .status-dropdown,
+.dark .messages-header,
+.dark .conversation-header,
+.dark .profile-form,
+.dark .recruiter-search-modal,
+.dark .user-item,
+.dark .company-stats,
+.dark .company-description,
+.dark .benefit-card {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+}
+
+/* Messages list area */
+.dark .messages-list {
+  background-color: var(--background) !important;
+}
+
+/* Received message bubbles */
+.dark .message-received .message-bubble {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Readonly/disabled field backgrounds */
+.dark .readonly-display,
+.dark .multiline-display,
+.dark .ep-readonly {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Secondary/outline buttons in dark mode */
+.dark .card-button-secondary,
+.dark .card-button-danger,
+.dark .action-btn.secondary,
+.dark .ep-btn-secondary {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Hover states */
+.dark .conversation-item:hover,
+.dark .user-item:hover,
+.dark .back-button:hover,
+.dark .activity-clickable:hover {
+  background-color: var(--muted) !important;
+}
+
+/* Dark mode text color overrides for hardcoded dark text */
+.dark .ep-title,
+.dark .ep-section-title,
+.dark .ep-how-title,
+.dark .conversation-name,
+.dark .conversation-header h2,
+.dark .messages-header h1,
+.dark .messages-empty h2,
+.dark .company-title,
+.dark .stat-number,
+.dark .activity-message,
+.dark .activity-primary,
+.dark .user-name,
+.dark .conversation-preview p.unread {
+  color: var(--foreground) !important;
+}
+
+/* Muted text in dark mode */
+.dark .ep-subtitle,
+.dark .ep-section-subtitle,
+.dark .ep-label,
+.dark .ep-toggle-label,
+.dark .ep-helper,
+.dark .conversation-date,
+.dark .conversation-preview p,
+.dark .conversation-user-affiliation,
+.dark .messages-loading,
+.dark .messages-empty p,
+.dark .no-messages,
+.dark .stat-label,
+.dark .company-industry,
+.dark .activity-date,
+.dark .activity-secondary,
+.dark .activity-meta,
+.dark .user-affiliation,
+.dark .field label,
+.dark .bio label,
+.dark .academic-label,
+.dark .athletics-label,
+.dark .new-conversation-form label,
+.dark .help-text,
+.dark .skills-description {
+  color: var(--muted-foreground) !important;
+}
+
+/* Skill tags and chips */
+.dark .skill-tag {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Privacy notice bar */
+.dark .conversation-privacy-notice {
+  background-color: var(--muted) !important;
+  border-color: var(--border) !important;
+}
+
+/* Border overrides */
+.dark .conversation-item,
+.dark .ep-section,
+.dark .users-list,
+.dark .activity-list-item {
+  border-color: var(--border) !important;
+}
+
+/* Tables */
+.dark table,
+.dark th,
+.dark td {
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.dark th {
+  background-color: var(--muted) !important;
+}
+
+.dark tr:hover {
+  background-color: var(--muted) !important;
+}
+
+/* Tabs */
+.dark .tab,
+.dark .tab-button,
+.dark [role="tab"] {
+  color: var(--muted-foreground) !important;
+}
+
+.dark .tab.active,
+.dark .tab-button.active,
+.dark [role="tab"][aria-selected="true"] {
+  color: var(--foreground) !important;
+}
+
+/* Badges and chips */
+.dark .badge,
+.dark .chip,
+.dark .tag {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+}
