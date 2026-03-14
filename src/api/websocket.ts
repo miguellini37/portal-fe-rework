@@ -9,10 +9,18 @@ export interface ISubscribeResponse {
 }
 
 let socket: Socket | null = null;
+let currentUserId: string | null = null;
 
 export const initializeSocket = (authToken: string): Socket => {
   if (socket && socket.connected) {
     return socket;
+  }
+
+  // Disconnect stale socket before creating new one
+  if (socket) {
+    socket.removeAllListeners();
+    socket.disconnect();
+    socket = null;
   }
 
   socket = io(url || '', {
@@ -24,6 +32,10 @@ export const initializeSocket = (authToken: string): Socket => {
     query: {
       token: authToken,
     },
+    reconnection: true,
+    reconnectionAttempts: 10,
+    reconnectionDelay: 2000,
+    reconnectionDelayMax: 30000,
   });
 
   return socket;
@@ -35,35 +47,41 @@ export const getSocket = (): Socket | null => {
 
 export const disconnectSocket = (): void => {
   if (socket) {
+    socket.removeAllListeners();
     socket.disconnect();
     socket = null;
   }
+  currentUserId = null;
 };
 
 export const subscribeToMessages = (
   userId: string,
-  callback: (response: ISubscribeResponse) => void
+  callback?: (response: ISubscribeResponse) => void
 ): void => {
   if (!socket) {
-    console.error('Socket not initialized');
     return;
   }
 
+  // Don't re-subscribe if already subscribed for this user
+  if (currentUserId === userId) {
+    return;
+  }
+
+  currentUserId = userId;
   socket.emit('subscribe', { userId }, callback);
 };
 
-export const unsubscribeFromMessages = (userId: string): void => {
-  if (!socket) {
-    console.error('Socket not initialized');
+export const unsubscribeFromMessages = (): void => {
+  if (!socket || !currentUserId) {
     return;
   }
 
-  socket.emit('unsubscribe', { userId });
+  socket.emit('unsubscribe', { userId: currentUserId });
+  currentUserId = null;
 };
 
 export const onNewMessage = (callback: (message: IMessage) => void): void => {
   if (!socket) {
-    console.error('Socket not initialized');
     return;
   }
 

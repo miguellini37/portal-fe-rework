@@ -6,6 +6,7 @@ import { getRecentMessages } from '../../api/message';
 import {
   initializeSocket,
   subscribeToMessages,
+  disconnectSocket,
   onNewMessage,
   offNewMessage,
 } from '../../api/websocket';
@@ -38,7 +39,7 @@ export const MessagesBell: FC<MessagesBellProps> = ({ isCollapsed, className }) 
     updateUnreadCount();
   }, [updateUnreadCount]);
 
-  // Initialize WebSocket and listen for new messages
+  // Initialize WebSocket connection (single point of initialization)
   useEffect(() => {
     if (!authHeader || !user?.id) {
       return;
@@ -47,30 +48,31 @@ export const MessagesBell: FC<MessagesBellProps> = ({ isCollapsed, className }) 
     const token = authHeader.replace('Bearer ', '');
     const socket = initializeSocket(token);
 
-    socket.on('connect', () => {
-      console.log('MessagesBell: Connected to WebSocket');
-      subscribeToMessages(user.id!, (response) => {
-        if (response.success) {
-          console.log('MessagesBell: Successfully subscribed to messages');
-        } else {
-          console.error('MessagesBell: Subscription failed:', response.error);
-        }
-      });
-    });
+    const handleConnect = () => {
+      subscribeToMessages(user.id!);
+    };
+
+    socket.on('connect', handleConnect);
+
+    // If already connected, subscribe immediately
+    if (socket.connected) {
+      subscribeToMessages(user.id!);
+    }
 
     const handleNewMessage = () => {
-      // Update unread count when a new message arrives
       updateUnreadCount();
     };
 
     onNewMessage(handleNewMessage);
 
     return () => {
+      socket.off('connect', handleConnect);
       offNewMessage(handleNewMessage);
+      disconnectSocket();
     };
   }, [authHeader, user?.id, updateUnreadCount]);
 
-  // Listen for message-read events from other components
+  // Listen for message-read events from Conversation component
   useEffect(() => {
     const handleMessageRead = () => {
       updateUnreadCount();

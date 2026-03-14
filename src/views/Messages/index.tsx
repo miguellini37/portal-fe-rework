@@ -1,21 +1,15 @@
 import { FC, useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IRecentConversation, getRecentMessages } from '../../api/message';
-import { useAuthHeader, useAuthUser, useIsStudentNotVerified } from '../../auth/hooks';
+import { useAuthHeader, useIsStudentNotVerified } from '../../auth/hooks';
 import { MessageSquare, Plus } from 'lucide-react';
-import {
-  initializeSocket,
-  subscribeToMessages,
-  onNewMessage,
-  offNewMessage,
-} from '../../api/websocket';
+import { onNewMessage, offNewMessage } from '../../api/websocket';
 import './Messages.css';
 
 export const Messages: FC = () => {
   const [conversations, setConversations] = useState<IRecentConversation[]>([]);
   const [loading, setLoading] = useState(true);
   const authHeader = useAuthHeader();
-  const user = useAuthUser();
   const navigate = useNavigate();
 
   const loadConversations = useCallback(async () => {
@@ -37,32 +31,9 @@ export const Messages: FC = () => {
     loadConversations();
   }, [loadConversations]);
 
-  // Initialize WebSocket
+  // Listen for new messages (socket initialized by Sidebar/MessagesBell)
   useEffect(() => {
-    if (!authHeader || !user?.id) {
-      return;
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    const socket = initializeSocket(token);
-
-    socket.on('connect', () => {
-      console.log('Connected to WebSocket');
-      subscribeToMessages(user.id!, (response) => {
-        if (response.success) {
-          console.log('Successfully subscribed to messages');
-        } else {
-          console.error('Subscription failed:', response.error);
-        }
-      });
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from WebSocket');
-    });
-
     const handleNewMessage = () => {
-      // Reload conversations when a new message arrives
       loadConversations();
     };
 
@@ -71,7 +42,7 @@ export const Messages: FC = () => {
     return () => {
       offNewMessage(handleNewMessage);
     };
-  }, [authHeader, user?.id, loadConversations]);
+  }, [loadConversations]);
 
   const isStudentNotVerified = useIsStudentNotVerified();
 

@@ -74,7 +74,7 @@ export const Conversation: FC = () => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  // Listen for new messages
+  // Listen for new messages via WebSocket
   useEffect(() => {
     const handleNewMessage = (message: IMessage) => {
       // Only add message if it's part of this conversation
@@ -82,13 +82,18 @@ export const Conversation: FC = () => {
         (message.fromUserId === otherUserId && message.toUserId === user?.id) ||
         (message.toUserId === otherUserId && message.fromUserId === user?.id)
       ) {
-        setMessages((prev) => [...prev, message]);
+        // Deduplicate — avoid adding if already in state (e.g. sender gets it from both API and socket)
+        setMessages((prev) => {
+          if (prev.some((m) => m.id === message.id)) {
+            return prev;
+          }
+          return [...prev, message];
+        });
 
         // Auto-mark as read if we're the recipient
         if (message.toUserId === user?.id && authHeader) {
           markMessageRead(authHeader, { messageId: message.id })
             .then(() => {
-              // Notify other components to refresh unread count
               window.dispatchEvent(new CustomEvent('message-read'));
             })
             .catch((error) => {
