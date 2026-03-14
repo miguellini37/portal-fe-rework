@@ -6,7 +6,6 @@ import { getRecentMessages } from '../../api/message';
 import {
   initializeSocket,
   subscribeToMessages,
-  disconnectSocket,
   onNewMessage,
   offNewMessage,
 } from '../../api/websocket';
@@ -68,7 +67,8 @@ export const MessagesBell: FC<MessagesBellProps> = ({ isCollapsed, className }) 
     return () => {
       socket.off('connect', handleConnect);
       offNewMessage(handleNewMessage);
-      disconnectSocket();
+      // Don't call disconnectSocket() here — it destroys all listeners
+      // including those registered by Conversation. Socket persists until logout.
     };
   }, [authHeader, user?.id, updateUnreadCount]);
 

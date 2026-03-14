@@ -11,6 +11,9 @@ export interface ISubscribeResponse {
 let socket: Socket | null = null;
 let currentUserId: string | null = null;
 
+// Registry of active message listeners so they survive socket recreation
+const messageListeners = new Set<(message: IMessage) => void>();
+
 export const initializeSocket = (authToken: string): Socket => {
   if (socket && socket.connected) {
     return socket;
@@ -36,6 +39,16 @@ export const initializeSocket = (authToken: string): Socket => {
     reconnectionAttempts: 10,
     reconnectionDelay: 2000,
     reconnectionDelayMax: 30000,
+  });
+
+  // Re-attach all registered message listeners to the new socket
+  messageListeners.forEach((listener) => {
+    socket!.on('newMessage', listener);
+  });
+
+  // Reset subscription state on disconnect so reconnection re-subscribes
+  socket.on('disconnect', () => {
+    currentUserId = null;
   });
 
   return socket;
@@ -81,17 +94,15 @@ export const unsubscribeFromMessages = (): void => {
 };
 
 export const onNewMessage = (callback: (message: IMessage) => void): void => {
-  if (!socket) {
-    return;
+  messageListeners.add(callback);
+  if (socket) {
+    socket.on('newMessage', callback);
   }
-
-  socket.on('newMessage', callback);
 };
 
 export const offNewMessage = (callback: (message: IMessage) => void): void => {
-  if (!socket) {
-    return;
+  messageListeners.delete(callback);
+  if (socket) {
+    socket.off('newMessage', callback);
   }
-
-  socket.off('newMessage', callback);
 };
