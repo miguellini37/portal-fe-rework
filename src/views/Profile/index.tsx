@@ -1,5 +1,6 @@
 import { isNil } from 'lodash';
 import { useMemo } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAuthUser, USER_PERMISSIONS } from '../../auth/hooks';
 import { AthleteProfile } from './Athlete';
 import { CompanyEmployeeProfile } from './CompanyEmployee';
@@ -10,6 +11,10 @@ export const ProfileEdit = () => {
   const user = useAuthUser();
 
   const permission = user?.permission;
+
+  if (permission === USER_PERMISSIONS.ADMIN) {
+    return <Navigate to="/admin/users" replace />;
+  }
 
   const showSetup = useMemo(() => {
     if (!user) {

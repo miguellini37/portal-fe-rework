@@ -24,6 +24,11 @@ export const RequireVerified: FC<RequireVerifiedProps> = ({ children, nilRoute =
     return <>{children}</>;
   }
 
+  // Admin users bypass all verification checks
+  if (user.permission === USER_PERMISSIONS.ADMIN) {
+    return <>{children}</>;
+  }
+
   const { permission, isVerified } = user;
 
   // Company or School accounts that are not verified: lock down to profile only
