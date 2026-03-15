@@ -36,6 +36,7 @@ import { InstallPage } from './views/Install/InstallPage';
 import { CareerOutcomes } from './views/Schools/CareerOutcomes';
 import { UniversityCompanies } from './views/Schools/UniversityCompanies';
 import { NILOversight } from './views/Schools/NILOversight';
+import { OrgAdminTab } from './views/Profile/OrgAdminTab';
 
 type PageRoute = {
   path: string;
@@ -78,6 +79,10 @@ export const AppRoutes = () => {
     { path: '/school/career-outcomes', element: <CareerOutcomes />, withSidebar: true },
     { path: '/school/companies', element: <UniversityCompanies />, withSidebar: true },
     { path: '/school/nil-oversight', element: <NILOversight />, withSidebar: true },
+
+    // Org owner admin pages
+    { path: '/school/users', element: <OrgAdminTab showAthletes />, withSidebar: true },
+    { path: '/company/users', element: <OrgAdminTab />, withSidebar: true },
 
     // Admin Pages
     { path: '/admin/users', element: <AdminUsers />, withSidebar: true },

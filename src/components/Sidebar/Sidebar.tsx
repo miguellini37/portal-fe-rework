@@ -179,6 +179,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                       <CalendarClock /> {!isCollapsed && <span>Interviews</span>}
                     </DisabledNavLink>
                   </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/company/users" title="Company Users Admin">
+                      <Shield /> {!isCollapsed && <span>Company Users Admin</span>}
+                    </DisabledNavLink>
+                  </li>
                 </>
               )}
               {/* School: Show navigation only when verified */}
@@ -223,6 +228,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <li className="mb-4">
                     <DisabledNavLink to="/jobs" title="Jobs">
                       <Briefcase /> {!isCollapsed && <span>Jobs</span>}
+                    </DisabledNavLink>
+                  </li>
+                  <li className="mb-4">
+                    <DisabledNavLink to="/school/users" title="School Users Admin">
+                      <Shield /> {!isCollapsed && <span>School Users Admin</span>}
                     </DisabledNavLink>
                   </li>
                 </>
