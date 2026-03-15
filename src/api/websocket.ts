@@ -16,6 +16,9 @@ const messageListeners = new Set<(message: IMessage) => void>();
 
 export const initializeSocket = (authToken: string): Socket => {
   if (socket && socket.connected) {
+    // Update auth so reconnection attempts use the fresh token
+    socket.auth = { token: authToken };
+    (socket.io.opts.query as Record<string, string>).token = authToken;
     return socket;
   }
 
