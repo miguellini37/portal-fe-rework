@@ -20,6 +20,7 @@
   position: fixed;
   height: 100vh;
   transition: width 0.3s ease;
+  overflow: hidden;
 }
 
 .sidebar-collapsed {
@@ -304,6 +305,36 @@ button .collapse-button {
 .theme-btn svg {
   width: 16px !important;
   height: 16px !important;
+}
+
+/* Scrollable nav area */
+.sidebar-nav-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+/* Hide scrollbar but keep functionality */
+.sidebar-nav-scroll::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Compact spacing on short screens */
+@media (max-height: 750px) {
+  .sidebar li {
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar a,
+  .sidebar button {
+    padding: 7px 14px;
+    font-size: 0.875rem;
+  }
+
+  .sidebar-header {
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* Dark mode overrides */
