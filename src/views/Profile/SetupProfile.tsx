@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthHeader, useAuthUser, USER_PERMISSIONS } from '../../auth/hooks';
 import { createProfile, ICreateUserInput } from '../../api/profile';
 import { SchoolDropdown } from '../../components/Dropdowns/SchoolDropdown';
+import keycloak from '../../config/keycloak';
 
 export const SetupProfile: React.FC = () => {
   const authHeader = useAuthHeader();
@@ -14,6 +15,7 @@ export const SetupProfile: React.FC = () => {
     setLoading(true);
     try {
       await createProfile(authHeader, profile);
+      await keycloak.updateToken(-1);
       window.location.reload();
     } catch {
       setLoading(false);
@@ -24,7 +26,8 @@ export const SetupProfile: React.FC = () => {
     setLoading(true);
     const minDelay = new Promise((resolve) => setTimeout(resolve, 3500));
     Promise.all([createProfile(authHeader, {}), minDelay])
-      .then(() => {
+      .then(async () => {
+        await keycloak.updateToken(-1);
         window.location.reload();
       })
       .catch(() => {
