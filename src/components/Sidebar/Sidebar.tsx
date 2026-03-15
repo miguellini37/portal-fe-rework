@@ -71,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   return (
     <div className="sidebar-container">
       <div className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
-        <div>
+        <div className="sidebar-nav-scroll">
           <div className="sidebar-header">
             <h1 className="portal-title">
               <img src="/App Icon192.png" alt="Portal Icon" className="portal-icon" />
