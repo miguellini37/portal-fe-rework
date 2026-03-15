@@ -181,7 +181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                   <li className="mb-4">
                     <DisabledNavLink to="/company/users" title="Company Users Admin">
-                      <Shield /> {!isCollapsed && <span>Company Users Admin</span>}
+                      <Shield /> {!isCollapsed && <span>Manage Users</span>}
                     </DisabledNavLink>
                   </li>
                 </>
@@ -232,7 +232,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   </li>
                   <li className="mb-4">
                     <DisabledNavLink to="/school/users" title="School Users Admin">
-                      <Shield /> {!isCollapsed && <span>School Users Admin</span>}
+                      <Shield /> {!isCollapsed && <span>Manage Users</span>}
                     </DisabledNavLink>
                   </li>
                 </>
