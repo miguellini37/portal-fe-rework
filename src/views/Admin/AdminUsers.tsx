@@ -1,8 +1,8 @@
-import { Check } from 'lucide-react';
+import { Check, KeyRound, ShieldOff, Ban } from 'lucide-react';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { whiteListUser } from '../../api/profile';
-import { getAllUsers, User } from '../../api/admin';
+import { getAllUsers, sendResetPasswordEmail, unverifyUser, blockUser, User } from '../../api/admin';
 import { useAuthHeader } from '../../auth/hooks';
 import '../../components/Table/Table.css';
 
@@ -24,6 +24,48 @@ export const AdminUsers: FC = () => {
       setLoading(false);
     }
   };
+
+  const handleResetPassword = useCallback(
+    async (user: User) => {
+      try {
+        await sendResetPasswordEmail(user.id, authHeader);
+        toast.success(`Password reset email sent to ${user.email}`);
+      } catch (error) {
+        toast.error('Failed to send password reset email');
+        console.error('Error sending reset password email:', error);
+      }
+    },
+    [authHeader]
+  );
+
+  const handleUnverify = useCallback(
+    async (user: User) => {
+      if (!confirm(`Remove verification for ${user.email}?`)) return;
+      try {
+        await unverifyUser(user.id, authHeader);
+        setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isVerified: false } : u)));
+        toast.success('User verification removed');
+      } catch (error) {
+        toast.error('Failed to remove verification');
+        console.error('Error unverifying user:', error);
+      }
+    },
+    [authHeader]
+  );
+
+  const handleBlock = useCallback(
+    async (user: User) => {
+      if (!confirm(`Block ${user.email}? They will not be able to log in.`)) return;
+      try {
+        await blockUser(user.id, true, authHeader);
+        toast.success(`${user.email} has been blocked`);
+      } catch (error) {
+        toast.error('Failed to block user');
+        console.error('Error blocking user:', error);
+      }
+    },
+    [authHeader]
+  );
 
   const handleVerify = useCallback(
     async (user: User) => {
@@ -92,6 +134,7 @@ export const AdminUsers: FC = () => {
                 <th className="th">School</th>
                 <th className="th">Company</th>
                 <th className="th">Verified</th>
+                <th className="th">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -127,11 +170,41 @@ export const AdminUsers: FC = () => {
                         </button>
                       )}
                     </td>
+                    <td className="td" style={{ textAlign: 'center' }}>
+                      <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+                        <button
+                          className="btn btn-primary"
+                          style={{ fontSize: '0.75rem', padding: '4px 8px' }}
+                          onClick={() => handleResetPassword(user)}
+                          title="Send password reset email"
+                        >
+                          <KeyRound size={14} />
+                        </button>
+                        {user.isVerified && (
+                          <button
+                            className="btn btn-primary"
+                            style={{ fontSize: '0.75rem', padding: '4px 8px', background: '#f59e0b' }}
+                            onClick={() => handleUnverify(user)}
+                            title="Remove verification"
+                          >
+                            <ShieldOff size={14} />
+                          </button>
+                        )}
+                        <button
+                          className="btn btn-primary"
+                          style={{ fontSize: '0.75rem', padding: '4px 8px', background: '#ef4444' }}
+                          onClick={() => handleBlock(user)}
+                          title="Block user"
+                        >
+                          <Ban size={14} />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="td table-empty">
+                  <td colSpan={8} className="td table-empty">
                     {searchTerm ? `No users found matching "${searchTerm}"` : 'No users available.'}
                   </td>
                 </tr>

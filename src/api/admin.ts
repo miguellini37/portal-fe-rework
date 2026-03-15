@@ -151,3 +151,49 @@ export const updateCompanyOwner = async (
 
   return response.data;
 };
+
+export const sendResetPasswordEmail = async (
+  userId: string,
+  authHeader: string | null
+): Promise<void> => {
+  await axios.post(
+    `${url}/sendResetPasswordEmail`,
+    { userId },
+    {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: authHeader,
+      },
+    }
+  );
+};
+
+export const unverifyUser = async (userId: string, authHeader: string | null): Promise<void> => {
+  await axios.post(
+    `${url}/unverifyUser`,
+    { userId },
+    {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: authHeader,
+      },
+    }
+  );
+};
+
+export const blockUser = async (
+  userId: string,
+  blocked: boolean,
+  authHeader: string | null
+): Promise<void> => {
+  await axios.post(
+    `${url}/blockUser`,
+    { userId, blocked },
+    {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: authHeader,
+      },
+    }
+  );
+};
