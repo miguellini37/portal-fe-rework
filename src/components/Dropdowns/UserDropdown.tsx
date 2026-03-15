@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActionMeta, SingleValue } from 'react-select';
 import Select from 'react-select';
 import { customDropdownStyle } from './DropdownStyle';
@@ -32,11 +32,23 @@ export const UserDropdown = ({
 }: UserDropdownProps) => {
   const [options, setOptions] = useState<UserOption[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const prevFilterRef = useRef<string | undefined>(undefined);
   const authHeader = useAuthHeader();
 
+  // Reset when filter changes
+  const filterKey = JSON.stringify(filter);
+  useEffect(() => {
+    if (prevFilterRef.current !== undefined && prevFilterRef.current !== filterKey) {
+      setOptions([]);
+      setLoaded(false);
+    }
+    prevFilterRef.current = filterKey;
+  }, [filterKey]);
+
   const fetchUsers = async (): Promise<void> => {
-    if (options.length > 0) {
-      return; // Don't fetch if already loaded
+    if (loaded) {
+      return;
     }
 
     setIsLoading(true);
@@ -51,6 +63,7 @@ export const UserDropdown = ({
           };
         })
       );
+      setLoaded(true);
     } finally {
       setIsLoading(false);
     }

@@ -73,6 +73,7 @@ export const ChangeOwnerModal: FC<ChangeOwnerModalProps> = ({
           borderRadius: '0.5rem',
           border: '1px solid var(--border)',
           backgroundColor: 'var(--card)',
+          overflow: 'visible',
         },
       }}
     >

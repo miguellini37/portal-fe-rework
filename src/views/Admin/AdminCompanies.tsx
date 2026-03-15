@@ -273,7 +273,6 @@ export const AdminCompanies: FC = () => {
         onSubmit={handleChangeOwnerSubmit}
         userFilter={{
           permission: USER_PERMISSIONS.COMPANY,
-          companyId: selectedCompanyId,
         }}
         title="Change Company Owner"
       />

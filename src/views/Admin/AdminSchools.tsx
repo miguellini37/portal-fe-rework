@@ -273,7 +273,6 @@ export const AdminSchools: FC = () => {
         onSubmit={handleChangeOwnerSubmit}
         userFilter={{
           permission: USER_PERMISSIONS.SCHOOL,
-          schoolId: selectedSchoolId,
         }}
         title="Change School Owner"
       />
