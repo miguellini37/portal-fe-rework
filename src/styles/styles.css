@@ -563,3 +563,105 @@ a:not(button a, .btn a, button > a, .btn > a):hover {
   background-color: var(--muted) !important;
   color: var(--foreground) !important;
 }
+
+/* ── Profile page dark mode fixes ──────────────────────────────────────── */
+
+/* Override hardcoded white/light backgrounds on profile inputs */
+.dark .field input,
+.dark .field input:not([readonly]),
+.dark .bio textarea,
+.dark .bio textarea:not([readonly]),
+.dark input.first-name,
+.dark input.last-name,
+.dark input.email,
+.dark input.first-name:disabled,
+.dark input.last-name:disabled,
+.dark input.email:disabled,
+.dark .ep-input,
+.dark .ep-select,
+.dark .ep-textarea,
+.dark .academic-input,
+.dark .athletics-input,
+.dark .academic-textarea,
+.dark .athletics-textarea,
+.dark .add-skill-input {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Profile labels */
+.dark .field label,
+.dark .bio label,
+.dark .academic-label,
+.dark .athletics-label,
+.dark .ep-label,
+.dark .ep-toggle-label,
+.dark .ep-helper,
+.dark .ep-notice,
+.dark .skills-description,
+.dark .ep-step span:last-child {
+  color: var(--muted-foreground) !important;
+}
+
+/* Profile headings */
+.dark .section-title,
+.dark .academic-section-title,
+.dark .athletics-section-title,
+.dark .ep-title,
+.dark .ep-section-title,
+.dark .ep-how-title,
+.dark .progress-header,
+.dark .progress-percent {
+  color: var(--foreground) !important;
+}
+
+/* Progress bar track */
+.dark .progress-bar {
+  background-color: var(--muted) !important;
+}
+
+/* Overview grid background */
+.dark .overview-grid {
+  background-color: var(--background) !important;
+}
+
+/* Employee profile sections */
+.dark .ep-notice {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+}
+
+.dark .ep-how-it-works {
+  background-color: var(--card) !important;
+}
+
+.dark .ep-btn-secondary {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Readonly displays */
+.dark .readonly-display,
+.dark .multiline-display,
+.dark .ep-readonly,
+.dark .academic-placeholder-mock,
+.dark .athletics-placeholder {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Skill tags */
+.dark .skill-tag {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.dark .skill-tag.selected {
+  background-color: hsl(217.2 32.6% 25%) !important;
+  color: hsl(224.3 76.3% 80%) !important;
+  border-color: hsl(217.2 32.6% 30%) !important;
+}
