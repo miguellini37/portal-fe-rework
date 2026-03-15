@@ -12,7 +12,7 @@ Currently, athletes auto-verify when their email domain matches a school domain,
 
 **Unified `org_domain` table** replaces both `school_domain` and `company.orgDomain`. Each row links a verified domain to either a school or a company (mutually exclusive foreign keys). Domains are admin-managed only.
 
-**Org owner** is a flag on the existing user record (`isOrgOwner: boolean`). Org owners can view, approve/deny, revoke, and whitelist employees on their org's domains. Athletes are unaffected -- they still join without approval.
+**Org owner** is determined by the existing `ownerId` field on School and Company entities. No new `isOrgOwner` flag is needed -- a user is an org owner if `school.ownerId === user.id` or `company.ownerId === user.id`. The existing `OrgOwnerGuard` already implements this check. Each org has exactly one owner (single `ownerId`).
 
 **Access control** restricts unverified users from seeing sensitive data (applications, talent pool, jobs, messages, NIL opportunities). Verification gates are enforced in both frontend (sidebar/route guards) and backend (API middleware).
 
@@ -49,36 +49,47 @@ CREATE TABLE org_domain (
 
 - Copy existing `school_domain` rows into `org_domain` with `school_id` set.
 - Copy existing `company.orgDomain` values into `org_domain` with `company_id` set.
-- Drop `school_domain` table and `company.orgDomain` column after migration.
+- **Conflict resolution**: If the same domain string exists in both `school_domain` and `company.orgDomain`, the migration fails with an error listing the conflicting domains. Admin must resolve manually before re-running (e.g., remove one of the duplicates). In practice this is unlikely since schools and companies use different email domains.
+- Drop `school_domain` table and `company.orgDomain` column after migration succeeds.
 
 ---
 
 ## 2. Org Owner Dashboard
 
-### User model changes
+### Org owner identity
 
-Add `isOrgOwner: boolean` (default false) to the User entity. Admins or the system can set this flag.
+Org ownership is determined by the existing `ownerId` field on School and Company entities. The existing `OrgOwnerGuard` checks `school.ownerId === jwt.sub` or `company.ownerId === jwt.sub`. No new user flag is needed.
+
+Each org has exactly one owner. To transfer ownership, the admin changes `ownerId` on the org.
+
+### Frontend: `isOrgOwner` JWT claim
+
+Add `isOrgOwner: boolean` as a Keycloak JWT claim. This is computed during token generation by checking if the user's ID matches any `school.ownerId` or `company.ownerId`. The frontend reads this from `IUserData` to conditionally show the "Members" sidebar tab. The backend uses the existing `OrgOwnerGuard` (not the JWT claim) for authorization.
 
 ### "Members" sidebar tab
 
-A new "Members" entry in the sidebar for school and company users who have `isOrgOwner = true`. Routes to `/school/members` or `/company/members`.
+A new "Members" entry in the sidebar for school and company users who have `isOrgOwner = true` in their JWT. Routes to `/school/members` or `/company/members`.
 
 ### Dashboard sections
 
-**Pending Approvals**: List of employees who registered with a matching domain but are not yet verified. Org owner can approve (sets `isVerified = true` in DB + Keycloak) or deny (deletes the user account or marks as denied).
+**Pending Approvals**: List of employees who registered with a matching domain but are not yet verified. Org owner can approve (sets `isVerified = true` in DB + Keycloak) or deny (sets `status = 'denied'` on user record -- user account is preserved but cannot access org features; they can re-register with a different org if desired).
 
-**Current Members**: List of verified employees. Org owner can revoke verification (sets `isVerified = false`).
+**Current Members**: List of verified employees. Org owner can revoke verification (sets `isVerified = false` in DB + Keycloak).
 
-**Whitelisted Emails**: List of pre-approved email addresses. When a user registers with a whitelisted email, they auto-verify without needing org owner approval. Org owner can add/remove emails from this list.
+**Whitelisted Emails**: Reuses the existing `EmailWhitelist` entity (fields: `id`, `orgId`, `email`, `isActive`, `createdAt`, `updatedAt`). `orgId` references either a `schoolId` or `companyId`. Org owner can add/remove emails. When a user registers with a whitelisted email, they auto-verify without needing org owner approval.
+
+### Keycloak sync mechanism
+
+Approve/deny/revoke actions update both the database and Keycloak attributes via the existing `keycloakService.updateUserAttributes()` method. This is a direct Keycloak Admin API call (already used in the codebase). Both updates happen in a single request handler -- if the Keycloak call fails, the DB transaction rolls back.
 
 ### API endpoints
 
-- `GET /org/members` -- returns pending, verified, and whitelisted lists
+- `GET /org/members` -- returns pending, verified, and whitelisted lists. Org is inferred from the caller's JWT: if the user has a `companyId`, returns members for that company's domains; if `schoolId`, returns members for that school's domains. Protected by `OrgOwnerGuard`.
 - `PUT /org/members/:userId/approve` -- approve pending employee
-- `PUT /org/members/:userId/deny` -- deny pending employee
+- `PUT /org/members/:userId/deny` -- deny pending employee (sets `status = 'denied'`)
 - `PUT /org/members/:userId/revoke` -- revoke verified employee
-- `POST /org/whitelist` -- add email to whitelist
-- `DELETE /org/whitelist/:email` -- remove email from whitelist
+- `POST /org/whitelist` -- add email to `EmailWhitelist` table
+- `DELETE /org/whitelist/:email` -- soft-delete (set `isActive = false`) from `EmailWhitelist`
 
 ---
 
@@ -95,11 +106,15 @@ A new "Members" entry in the sidebar for school and company users who have `isOr
 | Messages | Disabled | Disabled | Disabled |
 | Interviews | Hidden | Hidden | Hidden |
 
+Talent Pool is only accessible to company users (schools and athletes do not use it).
+
 ### Frontend enforcement
 
-- Sidebar: conditionally render nav items based on `isVerified` (already partially done for companies and schools, needs extension).
-- Route guards: redirect unverified users to a "pending verification" page.
-- Athletes with no `schoolId` see a "select your school" prompt instead.
+- Sidebar: conditionally render nav items based on `isVerified` (already partially done for companies and schools, needs extension to athletes).
+- Route guards: redirect unverified users to a verification status page showing:
+  - "Your account is pending verification by your organization." (for employees awaiting approval)
+  - "Your account has been denied. Contact your organization administrator." (for denied employees)
+  - Athletes with no `schoolId` see a "select your school" prompt instead (separate from verification).
 
 ### Backend enforcement
 
@@ -143,8 +158,8 @@ Same pattern on AdminCompanies page.
 
 ### When a new employee registers with a matching domain
 
-1. **Push notification** sent to org owner(s): "New employee registration: [name] ([email]) is awaiting approval."
-2. **Activity feed entry** created for org owner(s), linking to the Members dashboard.
+1. **Push notification** sent to org owner: "New employee registration: [name] ([email]) is awaiting approval."
+2. **Activity feed entry** created for org owner, linking to the Members dashboard.
 
 ### Implementation
 
@@ -163,9 +178,13 @@ User registers with email@example.com
 Domain "example.com" exists in org_domain?
   |-- No  --> User stays unverified, no org association
   |-- Yes --> Is user an athlete?
-                |-- Yes --> Auto-verify, set schoolId
-                |-- No  --> Is email whitelisted by org owner?
-                              |-- Yes --> Auto-verify
-                              |-- No  --> Stay unverified, notify org owner(s)
-                                          Org owner approves/denies from Members dashboard
+  |             |-- Yes --> Auto-verify, set schoolId to the school
+  |             |           that owns the matching domain
+  |             |-- No  --> Is email in EmailWhitelist for this org?
+  |                           |-- Yes --> Auto-verify, set companyId/schoolId
+  |                           |-- No  --> Stay unverified, set companyId/schoolId,
+  |                                       notify org owner
+  |                                       Org owner approves/denies from Members dashboard
 ```
+
+**Athlete school assignment**: When an athlete registers with a domain matching a school, the system auto-assigns `schoolId` to that school. The athlete does not manually select their school in this case. If no domain match exists, the athlete must select their school manually from a list.
