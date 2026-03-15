@@ -37,6 +37,7 @@ import { CareerOutcomes } from './views/Schools/CareerOutcomes';
 import { UniversityCompanies } from './views/Schools/UniversityCompanies';
 import { NILOversight } from './views/Schools/NILOversight';
 import { OrgAdminTab } from './views/Profile/OrgAdminTab';
+import { PrivacyPolicy } from './views/LandingPage/PrivacyPolicy';
 
 type PageRoute = {
   path: string;
@@ -95,6 +96,7 @@ export const AppRoutes = () => {
     { path: '/employers', element: <EmployersPage />, withSidebar: false, noAuth: true },
     { path: '/universities', element: <UniversitiesPage />, withSidebar: false, noAuth: true },
     { path: '/install', element: <InstallPage />, withSidebar: false, noAuth: true },
+    { path: '/privacy', element: <PrivacyPolicy />, withSidebar: false, noAuth: true },
     { path: '*', element: <LandingPage />, withSidebar: false, noAuth: true },
   ];
 
