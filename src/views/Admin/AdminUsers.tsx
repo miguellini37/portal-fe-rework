@@ -1,8 +1,14 @@
 import { Check, KeyRound, ShieldOff, Ban } from 'lucide-react';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { whiteListUser } from '../../api/profile';
-import { getAllUsers, sendResetPasswordEmail, unverifyUser, blockUser, User } from '../../api/admin';
+import {
+  getAllUsers,
+  sendResetPasswordEmail,
+  verifyUser,
+  unverifyUser,
+  blockUser,
+  User,
+} from '../../api/admin';
 import { useAuthHeader } from '../../auth/hooks';
 import '../../components/Table/Table.css';
 
@@ -40,7 +46,9 @@ export const AdminUsers: FC = () => {
 
   const handleUnverify = useCallback(
     async (user: User) => {
-      if (!confirm(`Remove verification for ${user.email}?`)) return;
+      if (!confirm(`Remove verification for ${user.email}?`)) {
+        return;
+      }
       try {
         await unverifyUser(user.id, authHeader);
         setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isVerified: false } : u)));
@@ -55,7 +63,9 @@ export const AdminUsers: FC = () => {
 
   const handleBlock = useCallback(
     async (user: User) => {
-      if (!confirm(`Block ${user.email}? They will not be able to log in.`)) return;
+      if (!confirm(`Block ${user.email}? They will not be able to log in.`)) {
+        return;
+      }
       try {
         await blockUser(user.id, true, authHeader);
         toast.success(`${user.email} has been blocked`);
@@ -69,9 +79,8 @@ export const AdminUsers: FC = () => {
 
   const handleVerify = useCallback(
     async (user: User) => {
-      const orgId = user.company?.id ?? user.school?.id ?? '';
       try {
-        await whiteListUser(authHeader, { email: user.email ?? '', orgId, isActive: true });
+        await verifyUser(user.id, authHeader);
         setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isVerified: true } : u)));
         toast.success('User verified successfully');
       } catch (error) {
@@ -183,7 +192,11 @@ export const AdminUsers: FC = () => {
                         {user.isVerified && (
                           <button
                             className="btn btn-primary"
-                            style={{ fontSize: '0.75rem', padding: '4px 8px', background: '#f59e0b' }}
+                            style={{
+                              fontSize: '0.75rem',
+                              padding: '4px 8px',
+                              background: '#f59e0b',
+                            }}
                             onClick={() => handleUnverify(user)}
                             title="Remove verification"
                           >

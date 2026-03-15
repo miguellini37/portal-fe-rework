@@ -168,6 +168,19 @@ export const sendResetPasswordEmail = async (
   );
 };
 
+export const verifyUser = async (userId: string, authHeader: string | null): Promise<void> => {
+  await axios.post(
+    `${url}/verifyUser`,
+    { userId },
+    {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: authHeader,
+      },
+    }
+  );
+};
+
 export const unverifyUser = async (userId: string, authHeader: string | null): Promise<void> => {
   await axios.post(
     `${url}/unverifyUser`,
