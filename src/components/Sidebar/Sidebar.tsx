@@ -61,7 +61,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         onClick={isLoggedIn ? undefined : (e) => e.preventDefault()}
         style={{
           textDecoration: 'none',
-          color: 'black',
         }}
       >
         {children}
