@@ -79,6 +79,9 @@ export const AdminUsers: FC = () => {
 
   const handleVerify = useCallback(
     async (user: User) => {
+      if (!confirm(`Verify ${user.email}? This will send them a verification email.`)) {
+        return;
+      }
       try {
         await verifyUser(user.id, authHeader);
         setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isVerified: true } : u)));
