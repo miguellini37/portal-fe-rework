@@ -40,6 +40,10 @@ export const CompanyProfile = () => {
     fetchCompany();
   }, [id]);
 
+  const isCompanyMember = useMemo(() => {
+    return user?.companyId === id;
+  }, [user, id]);
+
   const canEditPage = useMemo(() => {
     return user?.id === company.ownerId;
   }, [user, company]);
@@ -121,20 +125,24 @@ export const CompanyProfile = () => {
         <RecruitingTab company={company} editMode={editMode} setCompany={setCompany} />
       ),
     },
-    {
-      key: 'analytics',
-      label: 'Analytics',
-      component: (company: IUpdateCompanyEmployeePayload) => (
-        <AnalyticsTab company={company} editMode={editMode} setCompany={setCompany} />
-      ),
-    },
-    {
-      key: 'our-team',
-      label: 'Our Team',
-      component: (company: IUpdateCompanyEmployeePayload) => (
-        <CompanyEmployeeTab company={company} editMode={editMode} setCompany={setCompany} />
-      ),
-    },
+    ...(isCompanyMember
+      ? [
+          {
+            key: 'analytics',
+            label: 'Analytics',
+            component: (company: IUpdateCompanyEmployeePayload) => (
+              <AnalyticsTab company={company} editMode={editMode} setCompany={setCompany} />
+            ),
+          },
+          {
+            key: 'our-team',
+            label: 'Our Team',
+            component: (company: IUpdateCompanyEmployeePayload) => (
+              <CompanyEmployeeTab company={company} editMode={editMode} setCompany={setCompany} />
+            ),
+          },
+        ]
+      : []),
     ...(canEditPage
       ? [
           {
