@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import Modal from 'react-modal';
+import { toast } from 'react-toastify';
 import { UserDropdown, UserOption } from './Dropdowns/UserDropdown';
 import { SingleValue } from 'react-select';
 import { IGetAllUsersInput } from '../api/admin';
@@ -35,6 +36,7 @@ export const ChangeOwnerModal: FC<ChangeOwnerModalProps> = ({
       setSelectedUserId('');
       onClose();
     } catch (error) {
+      toast.error('Failed to change owner');
       console.error('Error changing owner:', error);
     } finally {
       setSubmitting(false);
